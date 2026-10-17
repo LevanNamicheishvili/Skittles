@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://team-ai-game.dev/schema/world.schema.json",
+  "title": "World",
+  "description": "A level document: grid, start, flag, entities and objectives. Semantics live in spec/rules.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "grid", "start", "flag", "entities", "objectives"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "grid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["w", "h"],
+      "properties": {
+        "w": { "type": "integer", "minimum": 2, "maximum": 40 },
+        "h": { "type": "integer", "minimum": 1, "maximum": 24 }
+      }
+    },
+    "start": { "$ref": "#/$defs/cell" },
+    "flag": { "$ref": "#/$defs/cell" },
+    "entities": { "type": "array", "maxItems": 200, "items": { "$ref": "#/$defs/entity" } },
+    "objectives": { "type": "array", "maxItems": 8, "items": { "$ref": "#/$defs/objective" } }
+  },
+  "$defs": {
+    "coord": { "type": "integer", "minimum": 0, "maximum": 39 },
+    "size": { "type": "integer", "minimum": 1, "maximum": 40 },
+    "cell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "$ref": "#/$defs/coord" },
+        "y": { "$ref": "#/$defs/coord" }
+      }
+    },
+    "id": {
+      "type": "string",
+      "description": "Recommended form <origin>:<counter>, e.g. p3:12. Fixtures use short readable ids.",
+      "pattern": "^[A-Za-z0-9_.:-]{1,40}$"
+    },
+    "color": { "enum": ["red", "blue", "gold"] },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": { "enum": ["player", "assistant", "mediator", "system"] },
+        "playerId": { "type": "string", "maxLength": 40 }
+      }
+    },
+    "label": { "type": "string", "maxLength": 40 },
+    "icon": { "type": "string", "maxLength": 32 },
+    "entity": {
+      "oneOf": [
+        { "$ref": "#/$defs/rectEntity" },
+        { "$ref": "#/$defs/castle" },
+        { "$ref": "#/$defs/itemEntity" },
+        { "$ref": "#/$defs/coloredCellEntity" }
+      ]
+    },
+    "rectEntity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "owner", "x", "y", "w", "h"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "enum": ["wall", "lava", "bridge"] },
+        "owner": { "$ref": "#/$defs/owner" },
+        "label": { "$ref": "#/$defs/label" },
+        "icon": { "$ref": "#/$defs/icon" },
+        "x": { "$ref": "#/$defs/coord" },
+        "y": { "$ref": "#/$defs/coord" },
+        "w": { "$ref": "#/$defs/size" },
+        "h": { "$ref": "#/$defs/size" }
+      }
+    },
+    "castle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "owner", "x", "y", "w", "h", "door"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "const": "castle" },
+        "owner": { "$ref": "#/$defs/owner" },
+        "label": { "$ref": "#/$defs/label" },
+        "icon": { "$ref": "#/$defs/icon" },
+        "x": { "$ref": "#/$defs/coord" },
+        "y": { "$ref": "#/$defs/coord" },
+        "w": { "type": "integer", "minimum": 3, "maximum": 40 },
+        "h": { "type": "integer", "minimum": 3, "maximum": 24 },
+        "door": { "$ref": "#/$defs/castleDoor" }
+      }
+    },
+    "castleDoor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["side", "offset", "color"],
+      "properties": {
+        "side": { "enum": ["left", "right", "top", "bottom"] },
+        "offset": { "type": "integer", "minimum": 0, "maximum": 37 },
+        "color": { "oneOf": [{ "$ref": "#/$defs/color" }, { "type": "null" }] }
+      }
+    },
+    "itemEntity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "owner", "x", "y"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "enum": ["treasure", "coin"] },
+        "owner": { "$ref": "#/$defs/owner" },
+        "label": { "$ref": "#/$defs/label" },
+        "icon": { "$ref": "#/$defs/icon" },
+        "x": { "$ref": "#/$defs/coord" },
+        "y": { "$ref": "#/$defs/coord" }
+      }
+    },
+    "coloredCellEntity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "owner", "x", "y", "color"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "enum": ["key", "door"] },
+        "owner": { "$ref": "#/$defs/owner" },
+        "label": { "$ref": "#/$defs/label" },
+        "icon": { "$ref": "#/$defs/icon" },
+        "x": { "$ref": "#/$defs/coord" },
+        "y": { "$ref": "#/$defs/coord" },
+        "color": { "$ref": "#/$defs/color" }
+      }
+    },
+    "objective": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "target"],
+          "properties": {
+            "type": { "const": "collect" },
+            "target": { "$ref": "#/$defs/id" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "item", "count"],
+          "properties": {
+            "type": { "const": "collect_count" },
+            "item": { "const": "coin" },
+            "count": { "type": "integer", "minimum": 1, "maximum": 8 }
+          }
+        }
+      ]
+    }
+  }
+}

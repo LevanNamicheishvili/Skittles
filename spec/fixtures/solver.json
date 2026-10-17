@@ -1,0 +1,347 @@
+{
+  "description": "Shared solver and rasterization fixtures. Every implementation must (1) accept each world under schema/world.schema.json, (2) render it to exactly the given ascii map, (3) return exactly the expected solver result. Ascii legend: . ground, # wall, ~ lava, = bridge, R/B/G door red/blue/gold, r/b/g key, T treasure, c coin, S start, F flag. S, F and items are drawn over the terrain under them. Expected values were derived by hand; see spec/fixtures/README.md.",
+  "cases": [
+    {
+      "name": "open-field",
+      "ascii": ["......", "S....F", "......"],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 6, "h": 3 }, "start": { "x": 0, "y": 1 }, "flag": { "x": 5, "y": 1 },
+        "entities": [], "objectives": []
+      },
+      "expect": { "solvable": true, "steps": 5, "unreachable": [] }
+    },
+    {
+      "name": "wall-detour",
+      "ascii": ["..#..", "S.#.F", "....."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 5, "h": 3 }, "start": { "x": 0, "y": 1 }, "flag": { "x": 4, "y": 1 },
+        "entities": [
+          { "id": "w1", "type": "wall", "owner": { "kind": "system" }, "x": 2, "y": 0, "w": 1, "h": 2 }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": true, "steps": 6, "unreachable": [] }
+    },
+    {
+      "name": "lava-blocks",
+      "ascii": ["...~...", "...~...", "S..~..F", "...~...", "...~..."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 7, "h": 5 }, "start": { "x": 0, "y": 2 }, "flag": { "x": 6, "y": 2 },
+        "entities": [
+          { "id": "l1", "type": "lava", "owner": { "kind": "player", "playerId": "A" }, "x": 3, "y": 0, "w": 1, "h": 5 }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": false, "unreachable": ["flag"] }
+    },
+    {
+      "name": "lava-bridge",
+      "ascii": ["...~...", "...~...", "S..~..F", "...~...", "...=..."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 7, "h": 5 }, "start": { "x": 0, "y": 2 }, "flag": { "x": 6, "y": 2 },
+        "entities": [
+          { "id": "l1", "type": "lava", "owner": { "kind": "player", "playerId": "A" }, "x": 3, "y": 0, "w": 1, "h": 5 },
+          { "id": "b1", "type": "bridge", "owner": { "kind": "mediator" }, "x": 3, "y": 4, "w": 1, "h": 1 }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": true, "steps": 10, "unreachable": [] }
+    },
+    {
+      "name": "door-with-key",
+      "ascii": [".r.#...", "S..R..F", "...#..."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 7, "h": 3 }, "start": { "x": 0, "y": 1 }, "flag": { "x": 6, "y": 1 },
+        "entities": [
+          { "id": "w1", "type": "wall", "owner": { "kind": "system" }, "x": 3, "y": 0, "w": 1, "h": 3 },
+          { "id": "d1", "type": "door", "owner": { "kind": "system" }, "x": 3, "y": 1, "color": "red" },
+          { "id": "k1", "type": "key", "owner": { "kind": "system" }, "x": 1, "y": 0, "color": "red" }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": true, "steps": 8, "unreachable": [] }
+    },
+    {
+      "name": "door-without-key",
+      "ascii": ["...#...", "S..R..F", "...#..."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 7, "h": 3 }, "start": { "x": 0, "y": 1 }, "flag": { "x": 6, "y": 1 },
+        "entities": [
+          { "id": "w1", "type": "wall", "owner": { "kind": "system" }, "x": 3, "y": 0, "w": 1, "h": 3 },
+          { "id": "d1", "type": "door", "owner": { "kind": "system" }, "x": 3, "y": 1, "color": "red" }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": false, "unreachable": ["flag"] }
+    },
+    {
+      "name": "key-behind-own-door",
+      "ascii": ["...#.r.", "S..R..F", "...#..."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 7, "h": 3 }, "start": { "x": 0, "y": 1 }, "flag": { "x": 6, "y": 1 },
+        "entities": [
+          { "id": "w1", "type": "wall", "owner": { "kind": "system" }, "x": 3, "y": 0, "w": 1, "h": 3 },
+          { "id": "d1", "type": "door", "owner": { "kind": "system" }, "x": 3, "y": 1, "color": "red" },
+          { "id": "k1", "type": "key", "owner": { "kind": "system" }, "x": 5, "y": 0, "color": "red" }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": false, "unreachable": ["flag"] }
+    },
+    {
+      "name": "two-colors",
+      "ascii": ["...#r.#..", "S..B..R.F", ".b.#..#.."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 9, "h": 3 }, "start": { "x": 0, "y": 1 }, "flag": { "x": 8, "y": 1 },
+        "entities": [
+          { "id": "w1", "type": "wall", "owner": { "kind": "system" }, "x": 3, "y": 0, "w": 1, "h": 3 },
+          { "id": "w2", "type": "wall", "owner": { "kind": "system" }, "x": 6, "y": 0, "w": 1, "h": 3 },
+          { "id": "d1", "type": "door", "owner": { "kind": "system" }, "x": 3, "y": 1, "color": "blue" },
+          { "id": "d2", "type": "door", "owner": { "kind": "system" }, "x": 6, "y": 1, "color": "red" },
+          { "id": "kb", "type": "key", "owner": { "kind": "system" }, "x": 1, "y": 2, "color": "blue" },
+          { "id": "kr", "type": "key", "owner": { "kind": "system" }, "x": 4, "y": 0, "color": "red" }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": true, "steps": 12, "unreachable": [] }
+    },
+    {
+      "name": "castle-story",
+      "ascii": [
+        "....~~......",
+        "..g.~~.####.",
+        "....~~.#..#.",
+        "S...==.G.T#F",
+        "....~~.#..#.",
+        "....~~.####.",
+        "....~~......"
+      ],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 12, "h": 7 }, "start": { "x": 0, "y": 3 }, "flag": { "x": 11, "y": 3 },
+        "entities": [
+          { "id": "l1", "type": "lava", "owner": { "kind": "player", "playerId": "A" }, "label": "ლავის მდინარე", "x": 4, "y": 0, "w": 2, "h": 7 },
+          { "id": "c1", "type": "castle", "owner": { "kind": "player", "playerId": "B" }, "label": "ციხე", "x": 7, "y": 1, "w": 4, "h": 5, "door": { "side": "left", "offset": 1, "color": "gold" } },
+          { "id": "t1", "type": "treasure", "owner": { "kind": "player", "playerId": "B" }, "x": 9, "y": 3 },
+          { "id": "b1", "type": "bridge", "owner": { "kind": "mediator" }, "x": 4, "y": 3, "w": 2, "h": 1 },
+          { "id": "k1", "type": "key", "owner": { "kind": "mediator" }, "x": 2, "y": 1, "color": "gold" }
+        ],
+        "objectives": [{ "type": "collect", "target": "t1" }]
+      },
+      "expect": { "solvable": true, "steps": 27, "unreachable": [] }
+    },
+    {
+      "name": "castle-story-blocked",
+      "ascii": [
+        "....~~......",
+        "....~~.####.",
+        "....~~.#..#.",
+        "S...~~.G.T#F",
+        "....~~.#..#.",
+        "....~~.####.",
+        "....~~......"
+      ],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 12, "h": 7 }, "start": { "x": 0, "y": 3 }, "flag": { "x": 11, "y": 3 },
+        "entities": [
+          { "id": "l1", "type": "lava", "owner": { "kind": "player", "playerId": "A" }, "x": 4, "y": 0, "w": 2, "h": 7 },
+          { "id": "c1", "type": "castle", "owner": { "kind": "player", "playerId": "B" }, "x": 7, "y": 1, "w": 4, "h": 5, "door": { "side": "left", "offset": 1, "color": "gold" } },
+          { "id": "t1", "type": "treasure", "owner": { "kind": "player", "playerId": "B" }, "x": 9, "y": 3 }
+        ],
+        "objectives": [{ "type": "collect", "target": "t1" }]
+      },
+      "expect": { "solvable": false, "unreachable": ["collect:t1", "flag"] }
+    },
+    {
+      "name": "treasure-unreachable",
+      "ascii": ["..#T#..", "S..#..F", "......."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 7, "h": 3 }, "start": { "x": 0, "y": 1 }, "flag": { "x": 6, "y": 1 },
+        "entities": [
+          { "id": "w1", "type": "wall", "owner": { "kind": "system" }, "x": 2, "y": 0, "w": 1, "h": 1 },
+          { "id": "w2", "type": "wall", "owner": { "kind": "system" }, "x": 4, "y": 0, "w": 1, "h": 1 },
+          { "id": "w3", "type": "wall", "owner": { "kind": "system" }, "x": 3, "y": 1, "w": 1, "h": 1 },
+          { "id": "t1", "type": "treasure", "owner": { "kind": "system" }, "x": 3, "y": 0 }
+        ],
+        "objectives": [{ "type": "collect", "target": "t1" }]
+      },
+      "expect": { "solvable": false, "unreachable": ["collect:t1"] }
+    },
+    {
+      "name": "coins-not-enough",
+      "ascii": [".c#c#..", "S..#..F", ".....c."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 7, "h": 3 }, "start": { "x": 0, "y": 1 }, "flag": { "x": 6, "y": 1 },
+        "entities": [
+          { "id": "w1", "type": "wall", "owner": { "kind": "system" }, "x": 2, "y": 0, "w": 1, "h": 1 },
+          { "id": "w2", "type": "wall", "owner": { "kind": "system" }, "x": 4, "y": 0, "w": 1, "h": 1 },
+          { "id": "w3", "type": "wall", "owner": { "kind": "system" }, "x": 3, "y": 1, "w": 1, "h": 1 },
+          { "id": "c1", "type": "coin", "owner": { "kind": "system" }, "x": 1, "y": 0 },
+          { "id": "c2", "type": "coin", "owner": { "kind": "system" }, "x": 5, "y": 2 },
+          { "id": "c3", "type": "coin", "owner": { "kind": "system" }, "x": 3, "y": 0 }
+        ],
+        "objectives": [{ "type": "collect_count", "item": "coin", "count": 3 }]
+      },
+      "expect": { "solvable": false, "unreachable": ["collect_count:coin"] }
+    },
+    {
+      "name": "coins-enough",
+      "ascii": [".c#c#..", "S..#..F", ".....c."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 7, "h": 3 }, "start": { "x": 0, "y": 1 }, "flag": { "x": 6, "y": 1 },
+        "entities": [
+          { "id": "w1", "type": "wall", "owner": { "kind": "system" }, "x": 2, "y": 0, "w": 1, "h": 1 },
+          { "id": "w2", "type": "wall", "owner": { "kind": "system" }, "x": 4, "y": 0, "w": 1, "h": 1 },
+          { "id": "w3", "type": "wall", "owner": { "kind": "system" }, "x": 3, "y": 1, "w": 1, "h": 1 },
+          { "id": "c1", "type": "coin", "owner": { "kind": "system" }, "x": 1, "y": 0 },
+          { "id": "c2", "type": "coin", "owner": { "kind": "system" }, "x": 5, "y": 2 },
+          { "id": "c3", "type": "coin", "owner": { "kind": "system" }, "x": 3, "y": 0 }
+        ],
+        "objectives": [{ "type": "collect_count", "item": "coin", "count": 2 }]
+      },
+      "expect": { "solvable": true, "steps": 10, "unreachable": [] }
+    },
+    {
+      "name": "start-enclosed",
+      "ascii": [".....", ".###.", ".#S#.", ".###.", "....F"],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 5, "h": 5 }, "start": { "x": 2, "y": 2 }, "flag": { "x": 4, "y": 4 },
+        "entities": [
+          { "id": "w1", "type": "wall", "owner": { "kind": "system" }, "x": 1, "y": 1, "w": 3, "h": 1 },
+          { "id": "w2", "type": "wall", "owner": { "kind": "system" }, "x": 1, "y": 3, "w": 3, "h": 1 },
+          { "id": "w3", "type": "wall", "owner": { "kind": "system" }, "x": 1, "y": 2, "w": 1, "h": 1 },
+          { "id": "w4", "type": "wall", "owner": { "kind": "system" }, "x": 3, "y": 2, "w": 1, "h": 1 }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": false, "unreachable": ["flag"] }
+    },
+    {
+      "name": "bridge-over-wall",
+      "ascii": ["..#..", "S.#.F", "..#.."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 5, "h": 3 }, "start": { "x": 0, "y": 1 }, "flag": { "x": 4, "y": 1 },
+        "entities": [
+          { "id": "w1", "type": "wall", "owner": { "kind": "system" }, "x": 2, "y": 0, "w": 1, "h": 3 },
+          { "id": "b1", "type": "bridge", "owner": { "kind": "system" }, "x": 2, "y": 1, "w": 1, "h": 1 }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": false, "unreachable": ["flag"] }
+    },
+    {
+      "name": "door-over-lava",
+      "ascii": ["r.~..", "S.R.F", "..~.."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 5, "h": 3 }, "start": { "x": 0, "y": 1 }, "flag": { "x": 4, "y": 1 },
+        "entities": [
+          { "id": "l1", "type": "lava", "owner": { "kind": "system" }, "x": 2, "y": 0, "w": 1, "h": 3 },
+          { "id": "d1", "type": "door", "owner": { "kind": "system" }, "x": 2, "y": 1, "color": "red" },
+          { "id": "k1", "type": "key", "owner": { "kind": "system" }, "x": 0, "y": 0, "color": "red" }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": true, "steps": 6, "unreachable": [] }
+    },
+    {
+      "name": "castle-open-doorway",
+      "ascii": ["........", "..####..", "..#..#..", "S...T#.F", "..#..#..", "..####..", "........"],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 8, "h": 7 }, "start": { "x": 0, "y": 3 }, "flag": { "x": 7, "y": 3 },
+        "entities": [
+          { "id": "c1", "type": "castle", "owner": { "kind": "system" }, "x": 2, "y": 1, "w": 4, "h": 5, "door": { "side": "left", "offset": 1, "color": null } },
+          { "id": "t1", "type": "treasure", "owner": { "kind": "system" }, "x": 4, "y": 3 }
+        ],
+        "objectives": [{ "type": "collect", "target": "t1" }]
+      },
+      "expect": { "solvable": true, "steps": 19, "unreachable": [] }
+    },
+    {
+      "name": "item-on-start",
+      "ascii": ["S..F"],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 4, "h": 1 }, "start": { "x": 0, "y": 0 }, "flag": { "x": 3, "y": 0 },
+        "entities": [
+          { "id": "c1", "type": "coin", "owner": { "kind": "system" }, "x": 0, "y": 0 }
+        ],
+        "objectives": [{ "type": "collect", "target": "c1" }]
+      },
+      "expect": { "solvable": true, "steps": 3, "unreachable": [] }
+    },
+    {
+      "name": "two-keys-same-color",
+      "ascii": ["r..#...", "S..R..F", "..r#..."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 7, "h": 3 }, "start": { "x": 0, "y": 1 }, "flag": { "x": 6, "y": 1 },
+        "entities": [
+          { "id": "w1", "type": "wall", "owner": { "kind": "system" }, "x": 3, "y": 0, "w": 1, "h": 3 },
+          { "id": "d1", "type": "door", "owner": { "kind": "system" }, "x": 3, "y": 1, "color": "red" },
+          { "id": "k1", "type": "key", "owner": { "kind": "system" }, "x": 0, "y": 0, "color": "red" },
+          { "id": "k2", "type": "key", "owner": { "kind": "system" }, "x": 2, "y": 2, "color": "red" }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": true, "steps": 8, "unreachable": [] }
+    },
+    {
+      "name": "adjacent-flag",
+      "ascii": ["SF"],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 2, "h": 1 }, "start": { "x": 0, "y": 0 }, "flag": { "x": 1, "y": 0 },
+        "entities": [], "objectives": []
+      },
+      "expect": { "solvable": true, "steps": 1, "unreachable": [] }
+    },
+    {
+      "name": "later-door-wins",
+      "ascii": ["SrB.F"],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 5, "h": 1 }, "start": { "x": 0, "y": 0 }, "flag": { "x": 4, "y": 0 },
+        "entities": [
+          { "id": "d1", "type": "door", "owner": { "kind": "system" }, "x": 2, "y": 0, "color": "red" },
+          { "id": "d2", "type": "door", "owner": { "kind": "system" }, "x": 2, "y": 0, "color": "blue" },
+          { "id": "k1", "type": "key", "owner": { "kind": "system" }, "x": 1, "y": 0, "color": "red" }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": false, "unreachable": ["flag"] }
+    },
+    {
+      "name": "castle-top-door",
+      "ascii": [".......", ".###G#.", ".#...#.", ".#.F.#.", ".#####.", "S.....g"],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 7, "h": 6 }, "start": { "x": 0, "y": 5 }, "flag": { "x": 3, "y": 3 },
+        "entities": [
+          { "id": "c1", "type": "castle", "owner": { "kind": "system" }, "x": 1, "y": 1, "w": 5, "h": 4, "door": { "side": "top", "offset": 2, "color": "gold" } },
+          { "id": "k1", "type": "key", "owner": { "kind": "system" }, "x": 6, "y": 5, "color": "gold" }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": true, "steps": 17, "unreachable": [] }
+    },
+    {
+      "name": "castle-bottom-doorway",
+      "ascii": ["###", "#S#", "#.#", ".F."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 3, "h": 4 }, "start": { "x": 1, "y": 1 }, "flag": { "x": 1, "y": 3 },
+        "entities": [
+          { "id": "c1", "type": "castle", "owner": { "kind": "system" }, "x": 0, "y": 0, "w": 3, "h": 3, "door": { "side": "bottom", "offset": 0, "color": null } }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": true, "steps": 2, "unreachable": [] }
+    },
+    {
+      "name": "castle-right-door-key-on-start",
+      "ascii": ["###..", "#SR.F", "###.."],
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 5, "h": 3 }, "start": { "x": 1, "y": 1 }, "flag": { "x": 4, "y": 1 },
+        "entities": [
+          { "id": "c1", "type": "castle", "owner": { "kind": "system" }, "x": 0, "y": 0, "w": 3, "h": 3, "door": { "side": "right", "offset": 0, "color": "red" } },
+          { "id": "k1", "type": "key", "owner": { "kind": "system" }, "x": 1, "y": 1, "color": "red" }
+        ],
+        "objectives": []
+      },
+      "expect": { "solvable": true, "steps": 3, "unreachable": [] }
+    }
+  ]
+}

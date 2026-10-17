@@ -1,0 +1,86 @@
+{
+  "description": "Shared Play-mode fixtures (spec/rules.md section 4). worldRef names a case in solver.json; world gives a world inline. Apply inputs in order from the initial state and compare the final state. keys and collected are sorted ascending.",
+  "cases": [
+    {
+      "name": "basic-move",
+      "worldRef": "open-field",
+      "inputs": ["right", "right", "right"],
+      "expect": { "x": 3, "y": 1, "keys": [], "collected": [], "deaths": 0, "won": false }
+    },
+    {
+      "name": "wall-bump",
+      "worldRef": "wall-detour",
+      "inputs": ["right", "right"],
+      "expect": { "x": 1, "y": 1, "keys": [], "collected": [], "deaths": 0, "won": false }
+    },
+    {
+      "name": "lava-death",
+      "worldRef": "lava-blocks",
+      "inputs": ["right", "right", "right"],
+      "expect": { "x": 0, "y": 2, "keys": [], "collected": [], "deaths": 1, "won": false }
+    },
+    {
+      "name": "key-door-win",
+      "worldRef": "door-with-key",
+      "inputs": ["right", "up", "down", "right", "right", "right", "right", "right"],
+      "expect": { "x": 6, "y": 1, "keys": ["red"], "collected": [], "deaths": 0, "won": true }
+    },
+    {
+      "name": "locked-door",
+      "worldRef": "door-without-key",
+      "inputs": ["right", "right", "right"],
+      "expect": { "x": 2, "y": 1, "keys": [], "collected": [], "deaths": 0, "won": false }
+    },
+    {
+      "name": "win-freezes-input",
+      "worldRef": "adjacent-flag",
+      "inputs": ["right", "left"],
+      "expect": { "x": 1, "y": 0, "keys": [], "collected": [], "deaths": 0, "won": true }
+    },
+    {
+      "name": "flag-without-objective",
+      "worldRef": "treasure-unreachable",
+      "inputs": ["down", "right", "right", "right", "right", "right", "right", "up"],
+      "expect": { "x": 6, "y": 1, "keys": [], "collected": [], "deaths": 0, "won": false }
+    },
+    {
+      "name": "out-of-bounds",
+      "worldRef": "open-field",
+      "inputs": ["left", "up", "up"],
+      "expect": { "x": 0, "y": 0, "keys": [], "collected": [], "deaths": 0, "won": false }
+    },
+    {
+      "name": "death-restores-items",
+      "world": {
+        "schemaVersion": 1, "grid": { "w": 5, "h": 2 }, "start": { "x": 0, "y": 0 }, "flag": { "x": 4, "y": 1 },
+        "entities": [
+          { "id": "c1", "type": "coin", "owner": { "kind": "system" }, "x": 1, "y": 0 },
+          { "id": "l1", "type": "lava", "owner": { "kind": "system" }, "x": 2, "y": 0, "w": 1, "h": 1 }
+        ],
+        "objectives": []
+      },
+      "inputs": ["right", "right", "right"],
+      "expect": { "x": 1, "y": 0, "keys": [], "collected": ["c1"], "deaths": 1, "won": false }
+    },
+    {
+      "name": "spawn-pickup-and-door",
+      "worldRef": "castle-right-door-key-on-start",
+      "inputs": ["right", "right", "right"],
+      "expect": { "x": 4, "y": 1, "keys": ["red"], "collected": [], "deaths": 0, "won": true }
+    },
+    {
+      "name": "castle-story-full-run",
+      "worldRef": "castle-story",
+      "inputs": [
+        "up", "up", "right", "right",
+        "right", "down", "down",
+        "right", "right", "right", "right", "right", "right",
+        "left", "left", "left",
+        "up", "up", "up",
+        "right", "right", "right", "right", "right",
+        "down", "down", "down"
+      ],
+      "expect": { "x": 11, "y": 3, "keys": ["gold"], "collected": ["t1"], "deaths": 0, "won": true }
+    }
+  ]
+}

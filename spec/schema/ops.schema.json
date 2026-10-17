@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://team-ai-game.dev/schema/ops.schema.json",
+  "title": "OpBatch",
+  "description": "A batch of document operations a client submits. The server applies a batch atomically or rejects it whole. See spec/protocol.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["clientSeq", "ops"],
+  "properties": {
+    "clientSeq": { "type": "integer", "minimum": 0 },
+    "ops": { "type": "array", "minItems": 1, "maxItems": 50, "items": { "$ref": "#/$defs/op" } }
+  },
+  "$defs": {
+    "op": {
+      "oneOf": [
+        { "$ref": "#/$defs/create" },
+        { "$ref": "#/$defs/update" },
+        { "$ref": "#/$defs/delete" },
+        { "$ref": "#/$defs/setWorld" },
+        { "$ref": "#/$defs/setObjectives" }
+      ]
+    },
+    "create": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "entity"],
+      "properties": {
+        "op": { "const": "create" },
+        "entity": { "$ref": "world.schema.json#/$defs/entity" }
+      }
+    },
+    "update": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "id", "set"],
+      "properties": {
+        "op": { "const": "update" },
+        "id": { "$ref": "world.schema.json#/$defs/id" },
+        "set": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "description": "Top-level properties to overwrite. Each property is last-writer-wins on its own.",
+          "properties": {
+            "x": { "$ref": "world.schema.json#/$defs/coord" },
+            "y": { "$ref": "world.schema.json#/$defs/coord" },
+            "w": { "$ref": "world.schema.json#/$defs/size" },
+            "h": { "$ref": "world.schema.json#/$defs/size" },
+            "color": { "$ref": "world.schema.json#/$defs/color" },
+            "door": { "$ref": "world.schema.json#/$defs/castleDoor" },
+            "label": { "$ref": "world.schema.json#/$defs/label" },
+            "icon": { "$ref": "world.schema.json#/$defs/icon" }
+          }
+        }
+      }
+    },
+    "delete": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "id"],
+      "properties": {
+        "op": { "const": "delete" },
+        "id": { "$ref": "world.schema.json#/$defs/id" }
+      }
+    },
+    "setWorld": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "set"],
+      "properties": {
+        "op": { "const": "set_world" },
+        "set": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "start": { "$ref": "world.schema.json#/$defs/cell" },
+            "flag": { "$ref": "world.schema.json#/$defs/cell" }
+          }
+        }
+      }
+    },
+    "setObjectives": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "objectives"],
+      "properties": {
+        "op": { "const": "set_objectives" },
+        "objectives": {
+          "type": "array",
+          "maxItems": 8,
+          "items": { "$ref": "world.schema.json#/$defs/objective" }
+        }
+      }
+    }
+  }
+}
