@@ -1,11 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:team_ai_game/main.dart';
 
 void main() {
-  testWidgets('shows the phase 0 placeholder', (WidgetTester tester) async {
-    await tester.pumpWidget(const TeamAiGameApp());
+  testWidgets('opens the editor on the sample level at the minimum window size', (tester) async {
+    tester.view.physicalSize = const Size(1280, 720);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
 
-    expect(find.text('ერთად მოიფიქრე, მაშინვე ითამაშე'), findsOneWidget);
+    await tester.pumpWidget(const ErtadApp());
+
+    expect(find.text('Ertad'), findsOneWidget);
+    expect(find.text('Castle Story'), findsWidgets);
+    expect(find.textContaining('Winnable'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }

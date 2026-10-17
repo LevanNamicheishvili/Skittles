@@ -1,42 +1,23 @@
 import 'package:flutter/material.dart';
 
+import 'editor/editor_screen.dart';
+import 'ui/theme.dart';
+
 void main() {
-  runApp(const TeamAiGameApp());
+  runApp(const ErtadApp());
 }
 
-/// Phase 0 shell. The editor itself starts in phase 2 (see docs and spec/).
-class TeamAiGameApp extends StatelessWidget {
-  const TeamAiGameApp({super.key});
+class ErtadApp extends StatelessWidget {
+  const ErtadApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Team AI Game',
+      title: appName,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorSchemeSeed: const Color(0xFF2F6FDB)),
-      darkTheme: ThemeData(colorSchemeSeed: const Color(0xFF2F6FDB), brightness: Brightness.dark),
-      home: const PlaceholderScreen(),
-    );
-  }
-}
-
-class PlaceholderScreen extends StatelessWidget {
-  const PlaceholderScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('ერთად მოიფიქრე, მაშინვე ითამაშე', style: text.headlineMedium),
-            const SizedBox(height: 8),
-            Text('ეტაპი 0: საფუძველი მზადდება', style: text.bodyLarge),
-          ],
-        ),
-      ),
+      theme: buildTheme(Brightness.light),
+      darkTheme: buildTheme(Brightness.dark),
+      home: const EditorScreen(),
     );
   }
 }
