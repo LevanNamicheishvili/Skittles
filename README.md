@@ -95,7 +95,7 @@ cd web && npm install && npm run build
 cd server && PORT=3001 npm start
 ```
 
-Then open three windows:
+`http://localhost:3001/` is the landing page; you can join from there. Or open three windows directly:
 
 - `http://localhost:3001/?role=author&name=Nino`
 - `http://localhost:3001/?role=author&name=Giorgi`
@@ -104,6 +104,8 @@ Then open three windows:
 Add `http://localhost:3001/?role=stage` for the projector; it has a **Reset demo** button. Voice input needs Chrome or Edge.
 
 For development, run `npm run dev` in `server/` (restarts on change, port 3000) and `npm run dev` in `web/` (Vite on 5173, proxied to the server).
+
+If port 3000 is taken, start the server with `PORT=3001 npm run dev` and Vite with `SKITTLES_ROOM=http://localhost:3001 npm run dev`.
 
 | Variable | Meaning |
 | --- | --- |

@@ -4,6 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Skittles</title>
+    <script>
+      // Sets data-theme before first paint: ?theme=light|dark|system (remembered), else dark.
+      (() => {
+        const root = document.documentElement;
+        const media = matchMedia("(prefers-color-scheme: dark)");
+        const asked = new URLSearchParams(location.search).get("theme");
+        try {
+          if (asked === "light" || asked === "dark" || asked === "system") localStorage.setItem("skittles-theme", asked);
+        } catch {}
+        const apply = () => {
+          let pref = "dark";
+          try {
+            pref = localStorage.getItem("skittles-theme") || "dark";
+          } catch {}
+          root.dataset.theme = pref === "system" ? (media.matches ? "dark" : "light") : pref;
+        };
+        apply();
+        media.addEventListener("change", apply);
+      })();
+    </script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='3' fill='%23ef4f23'/><rect x='3' y='9' width='10' height='3' fill='%239a6b3f'/></svg>" />
   </head>
   <body>

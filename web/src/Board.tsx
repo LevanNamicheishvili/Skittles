@@ -29,6 +29,8 @@ type Props = {
   spots?: Cell[];
   runner?: Runner;
   cursors?: Cursor[];
+  // Caps how often the board redraws. The landing page's demo uses 30; the room draws every frame.
+  maxFps?: number;
 };
 
 const INK: Record<Color, string> = { red: "#dc2626", blue: "#2563eb", gold: "#eab308" };
@@ -93,9 +95,19 @@ export function Board(props: Props) {
     const observer = new ResizeObserver(resize);
     observer.observe(wrap.current!);
     resize();
+    // Nothing is drawn while the board is scrolled out of view.
+    let visible = true;
+    const sight = new IntersectionObserver(([entry]) => (visible = entry?.isIntersecting ?? true));
+    sight.observe(wrap.current!);
+    let drawn = 0;
 
     const draw = (now: number): void => {
       const p = latest.current;
+      if (!visible || (p.maxFps && now - drawn < 1000 / p.maxFps - 2)) {
+        frame = requestAnimationFrame(draw);
+        return;
+      }
+      drawn = now;
       const a = anim.current;
       const dt = Math.min(0.05, a.last ? (now - a.last) / 1000 : 0.016);
       a.last = now;
@@ -324,8 +336,10 @@ export function Board(props: Props) {
       ctx.globalCompositeOperation = "source-over";
 
       // Agents' cursors on top of everything.
+      // Idle cursors park along the bottom edge, 170px apart, closer together when the board is small.
+      const spacing = Math.min(170, (grid.w * cell - 20) / Math.max(1, (p.cursors ?? []).length));
       (p.cursors ?? []).forEach((c, i) => {
-        const park = { x: grid.w * cell - 190 - i * 170, y: grid.h * cell - 40 };
+        const park = { x: grid.w * cell - 20 - (i + 1) * spacing, y: grid.h * cell - 40 };
         // Agents aiming at the same spot stack their labels instead of overlapping.
         const goal = c.target ? { x: c.target.x * cell + cell * 0.7, y: c.target.y * cell + cell * 0.7 + i * 26 } : park;
         const pos = a.cursors.get(c.id) ?? { ...park };
@@ -342,6 +356,7 @@ export function Board(props: Props) {
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
+      sight.disconnect();
     };
   }, []);
 

@@ -1,16 +1,65 @@
+/*
+ * Skittles UI, built on the Conductor design system (see docs/design-system.md).
+ * Warm neutrals, 1px borders, small radii, system type, mono for machine-ish text,
+ * one quiet accent. The canvas (Board.tsx) is the only loud thing on screen.
+ */
+
+/* Tokens ------------------------------------------------------------------ */
+
 :root {
-  --bg: #f4f1ea;
-  --panel: #ffffff;
-  --ink: #1d2230;
-  --muted: #6b7280;
-  --line: #e4dfd4;
-  --ok: #15803d;
-  --bad: #dc2626;
+  --background: #fff;
+  --foreground: #2c2826;
+  --muted: #fafaf9;
+  --muted-foreground: #756f6c;
+  --border: #eae8e6;
+  --secondary: #fafaf9;
+  --highlight: #faf7f5;
+  --highlight-foreground: #594545;
+  --tip-secondary: #f8f7f6;
+  --tip-secondary-border: #f3ece7;
+  --tip-muted: #7d5e59;
+  --positive: #16a249;
+  --destructive: #dc2626;
+  --warning: #b45309;
+  /* Skittles identity colours: shared with what the canvas draws. */
   --mediator: #7c3aed;
-  --accent: #e8481f;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
-  color: var(--ink);
-  background: var(--bg);
+  --brand: #ef4f23;
+  --bronze: #9a6b3f;
+  --terminal-bg: #12100f;
+
+  --ring: color-mix(in oklab, var(--foreground) 35%, transparent);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  color-scheme: light;
+  font-family: var(--font-sans);
+  color: var(--foreground);
+  background: var(--background);
+}
+
+:root[data-theme="dark"],
+.dark {
+  --background: #141110;
+  --foreground: #eae8e6;
+  --muted: #211e1c;
+  --muted-foreground: #a5a09c;
+  --border: #ffffff1a;
+  --secondary: #211e1c;
+  --highlight: #2a1e1d;
+  --highlight-foreground: #f3ece7;
+  --tip-secondary: #795f5d;
+  --tip-secondary-border: #a4847f;
+  --tip-muted: #f0edea;
+  --positive: #16a249;
+  --destructive: #f87171;
+  --warning: #fbbf24;
+  --mediator: #a78bfa;
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+  color-scheme: dark;
 }
 
 * {
@@ -19,95 +68,1116 @@
 
 body {
   margin: 0;
-  min-width: 1100px;
+  background: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Controls ---------------------------------------------------------------- */
 
 button {
   font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: var(--foreground);
+  color: var(--background);
+  white-space: nowrap;
   cursor: pointer;
-  border: 0;
-  border-radius: 8px;
-  padding: 8px 14px;
-  background: var(--ink);
-  color: #fff;
-  font-weight: 600;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s,
+    opacity 0.15s;
+}
+
+button:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--foreground) 90%, transparent);
+}
+
+button:focus-visible,
+input:focus-visible,
+.status:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
 button:disabled {
-  opacity: 0.45;
+  opacity: 0.5;
   cursor: default;
 }
 
 button.secondary {
-  background: #fff;
-  color: var(--ink);
-  border: 1px solid var(--line);
+  background: color-mix(in oklab, var(--background) 50%, transparent);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+
+button.secondary:hover:not(:disabled) {
+  background: var(--secondary);
 }
 
 button.ghost {
   background: transparent;
-  color: var(--muted);
+  color: color-mix(in oklab, var(--foreground) 70%, transparent);
+}
+
+button.ghost:hover:not(:disabled) {
+  background: transparent;
+  color: var(--foreground);
 }
 
 input {
   font: inherit;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 9px 12px;
-  background: #fff;
-  color: var(--ink);
+  font-size: 14px;
+  height: 36px;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0 12px;
+  background: var(--background);
+  color: var(--foreground);
   outline: none;
+  transition: border-color 0.15s;
 }
 
-input:focus {
-  border-color: var(--ink);
+input::placeholder {
+  color: var(--muted-foreground);
 }
 
-/* Join */
+input:hover:not(:disabled):not([type="range"]),
+input:focus:not([type="range"]) {
+  border-color: color-mix(in oklab, var(--foreground) 30%, transparent);
+}
 
-.join {
-  height: 100vh;
+kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--muted);
+  color: var(--foreground);
+  font: 500 11px var(--font-mono);
+}
+
+.muted {
+  color: var(--muted-foreground);
+}
+
+.spacer {
+  flex: 1;
+}
+
+/* Landing ----------------------------------------------------------------- */
+
+/* Laid out like conductor.build: always dark, a 1200px frame, a narrow hero column, 768px feature sections. */
+.landing {
+  min-height: 100vh;
+  overflow-x: clip;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 14px;
+}
+
+.landing a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 56px;
+  padding: 0 max(16px, calc((100% - 1200px) / 2));
+  border-bottom: 1px solid var(--border);
+  /* Nearly opaque instead of a backdrop blur: a blur over the animated sky had to be redone every frame. */
+  background: color-mix(in oklab, var(--background) 94%, transparent);
+}
+
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.site-header nav {
+  margin-left: auto;
+  display: flex;
+  gap: 24px;
+}
+
+.site-header nav a {
+  color: color-mix(in oklab, var(--foreground) 75%, transparent);
+  transition: color 0.15s;
+}
+
+.site-header nav a:hover {
+  color: var(--foreground);
+}
+
+/* Hero */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-top: 64px;
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 92%);
+  mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 92%);
+}
+
+/* Two columns: the pitch on the left, the join card on the right. Wide and short, so the app window shows early. */
+.hero-copy {
+  max-width: 1128px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 56px;
+  align-items: center;
+  animation: card-in 0.5s cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+.hero-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hero-copy h1 {
+  margin: 0;
+  font-size: 44px;
+  line-height: 48px;
+  font-weight: 600;
+  letter-spacing: -1.2px;
+  color: #fff;
+}
+
+.hero-join {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--background) 92%, transparent);
+  box-shadow: 0 20px 50px -20px rgb(0 0 0 / 0.6);
+}
+
+.hero-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.accent {
+  color: var(--brand);
+}
+
+.hero-copy .hero-lede {
+  margin: 0;
+  color: rgb(255 255 255 / 0.72);
+  font-size: 15px;
+  line-height: 24px;
+  text-wrap: pretty;
+}
+
+.hero-copy input {
+  height: 40px;
+  background: color-mix(in oklab, var(--background) 70%, transparent);
+}
+
+.hero-copy button,
+.cta button {
+  height: 40px;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+/* The arrow nudges right on hover, as on Conductor's calls to action. */
+.hero-copy button::after,
+.cta button::after {
+  content: "→";
+  transition: transform 0.2s;
+}
+
+.hero-copy button:hover:not(:disabled)::after,
+.cta button:hover:not(:disabled)::after {
+  transform: translateX(4px);
+}
+
+/* The crowd: people join one by one, each face carrying a spark for its agent. */
+.crowd {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 32px;
+  margin-top: 4px;
+}
+
+.crowd-stack {
+  display: inline-flex;
+  padding-left: 6px;
+}
+
+.crowd-face {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  margin-left: -6px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--background);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  animation: pop-in 0.35s cubic-bezier(0.2, 0, 0, 1.4) both;
+}
+
+.crowd-face i {
+  position: absolute;
+  right: -5px;
+  bottom: -4px;
+  width: 15px;
+  height: 15px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--background);
+  color: var(--brand);
+  font-size: 9px;
+  font-style: normal;
+  line-height: 1;
+}
+
+.crowd-text {
+  color: rgb(255 255 255 / 0.7);
+  font-size: 13px;
+  animation: msg-in 0.3s ease-out both;
+}
+
+.crowd-text b {
+  color: #fff;
+  font-weight: 600;
+}
+
+.hero-copy .hero-links {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+
+.hero-copy button.link {
+  display: inline;
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: color-mix(in oklab, var(--foreground) 85%, transparent);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 3px;
+}
+
+.hero-copy button.link::after {
+  content: none;
+}
+
+.hero-copy button.link:hover:not(:disabled) {
+  background: none;
+  color: var(--foreground);
+  text-decoration-color: currentColor;
+}
+
+.hero-copy blockquote {
+  margin: 4px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  color: rgb(255 255 255 / 0.7);
+}
+
+.hero-copy blockquote p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 24px;
+  font-style: italic;
+}
+
+.hero-copy blockquote footer {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.hero-copy blockquote b {
+  font-weight: 500;
+}
+
+.hero-window {
+  max-width: 1272px;
+  margin: 44px auto 56px;
+  padding: 0 24px;
+  scroll-margin-top: 72px;
+}
+
+/* The showcase: the real board in an app window. */
+.window {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--background);
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.4),
+    0 30px 80px -20px rgb(0 0 0 / 0.7);
+}
+
+.window-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.window-bar .brand {
+  font-size: 14px;
+}
+
+.window-dots {
+  display: inline-flex;
+  gap: 8px;
+  margin-right: 4px;
+}
+
+.window-dots i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff5f57;
+}
+
+.window-dots i:nth-child(2) {
+  background: #febc2e;
+}
+
+.window-dots i:nth-child(3) {
+  background: #28c840;
+}
+
+/* The real app's three columns: Nino's agent, the board with its history, Giorgi's agent and the mediator. */
+.window-body {
+  height: clamp(460px, 38vw, 560px);
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr) 290px;
+  gap: 12px;
+  padding: 12px;
+  background: var(--muted);
+}
+
+.window .msg {
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.window .empty {
+  font-size: 13px;
+}
+
+.window-center,
+.window-right {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.window .stage-area {
+  padding: 10px;
+}
+
+.window-history {
+  flex-shrink: 0;
+  display: flex;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.history-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--background);
+  font-size: 12px;
+  white-space: nowrap;
+  animation: msg-in 0.3s ease-out both;
+}
+
+.history-chip code {
+  color: var(--muted-foreground);
+  font: 11px var(--font-mono);
+}
+
+.history-chip i {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  color: #fff;
+  font: normal 600 9px var(--font-sans);
+}
+
+.showcase-mediator {
+  width: 100%;
+  flex-shrink: 0;
+  font-size: 12.5px;
+  animation: card-in 0.5s cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+.showcase-mediator .opt {
+  padding: 8px 10px;
+}
+
+/* The story bar: five steps of the mission, the current one lit in the brand colour. */
+.story {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--border);
+}
+
+.story li {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  border-top: 2px solid transparent;
+  margin-top: -1px;
+  opacity: 0.45;
+  transition:
+    opacity 0.3s,
+    border-color 0.3s;
+}
+
+.story li + li {
+  border-left: 1px solid var(--border);
+}
+
+.story li.done {
+  opacity: 0.75;
+  border-top-color: var(--bronze);
+}
+
+.story li.now {
+  opacity: 1;
+  border-top-color: var(--brand);
+}
+
+.story .num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  font: 600 11px var(--font-mono);
+}
+
+.story li.now .num {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+
+.story b {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.story small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted-foreground);
+  font-size: 12px;
+}
+
+/* Mission: two fine changes that break the goal together. */
+.mission {
+  max-width: 1000px;
+  margin: 24px auto 0;
+  padding: 0 24px 40px;
+  text-align: center;
+}
+
+.mission h2 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.mission > p {
+  max-width: 680px;
+  margin: 12px auto 32px;
+  color: var(--muted-foreground);
+  font-size: 15px;
+  line-height: 24px;
+  text-wrap: pretty;
+}
+
+.equation {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  text-align: left;
+}
+
+.eq-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--muted) 60%, var(--background));
+}
+
+.eq-card.bad {
+  border-color: color-mix(in oklab, var(--destructive) 50%, var(--border));
+  background: color-mix(in oklab, var(--destructive) 8%, var(--background));
+}
+
+.eq-who {
+  color: var(--muted-foreground);
+  font: 500 12px var(--font-mono);
+}
+
+.eq-card b {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.eq-ok,
+.eq-bad {
+  font: 12px var(--font-mono);
+}
+
+.eq-ok {
+  color: var(--positive);
+}
+
+.eq-bad {
+  color: var(--destructive);
+}
+
+.eq-op {
+  align-self: center;
+  color: var(--muted-foreground);
+  font-size: 24px;
+  font-weight: 300;
+}
+
+/* Stats, in place of Conductor's "trusted by" row. */
+.stats {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 24px;
+  text-align: center;
+}
+
+.stats h2,
+.feature h2,
+.cta h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.stats-grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.stats-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stats-grid strong {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--brand);
+}
+
+.stats-grid span {
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+
+/* Features */
+
+.features {
+  max-width: 816px;
+  margin: 0 auto;
+  padding: 72px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 112px;
+  scroll-margin-top: 56px;
+}
+
+.feature p {
+  margin: 8px 0 24px;
+  color: var(--muted-foreground);
+  font-size: 15px;
+  line-height: 24px;
+}
+
+.feature em {
+  color: var(--foreground);
+}
+
+.demo {
+  min-height: 300px;
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--muted) 60%, var(--background));
+}
+
+.presence {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  padding-left: 18%;
+}
+
+.presence-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 28px;
+  animation: msg-in 0.3s ease-out both;
+}
+
+.presence .avatar {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.presence .avatar b {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--positive);
+  box-shadow: 0 0 0 2px var(--background);
+}
+
+.presence .name {
+  flex-shrink: 0;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.presence .bubble {
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  font-size: 13px;
+  animation: msg-in 0.3s ease-out both;
+}
+
+.terminal {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--terminal-bg);
+  font: 12.5px/1.5 var(--font-mono);
+}
+
+.log-line {
+  display: grid;
+  grid-template-columns: 40px 64px 1fr auto;
+  gap: 12px;
+}
+
+.log-line .by {
+  font-weight: 600;
+}
+
+.log-line.muted,
+.log-line .rev {
+  color: var(--muted-foreground);
+}
+
+.log-line.ok .result {
+  color: var(--positive);
+}
+
+.log-line.bad .result {
+  color: var(--destructive);
+}
+
+.cursor-line {
+  display: block;
+}
+
+.mediator {
   display: grid;
   place-items: center;
 }
 
-.join-card {
-  width: 380px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 32px;
-}
-
-.join-card h1,
-.brand {
-  margin: 0;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-}
-
-.join-card h1 span,
-.brand span {
-  color: var(--accent);
-}
-
-.join-card p {
-  margin: 0;
-  color: var(--muted);
-}
-
-.join-roles {
+.card-tone {
+  width: min(460px, 100%);
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 16px;
+  border: 1px solid color-mix(in oklab, var(--mediator) 45%, var(--border));
+  border-radius: 12px;
+  background: var(--background);
 }
 
-/* Layout */
+.card-tone p {
+  margin: 0 0 4px;
+  line-height: 1.5;
+}
+
+.card-label {
+  color: var(--mediator);
+  font: 500 11px var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.opt {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition:
+    border-color 0.3s,
+    background-color 0.3s;
+}
+
+.opt small {
+  color: var(--muted-foreground);
+  font-size: 12px;
+}
+
+.opt.agent {
+  border-left: 3px solid var(--brand);
+}
+
+.opt.cancel {
+  border-style: dashed;
+  color: var(--muted-foreground);
+}
+
+.opt.picked {
+  border-color: var(--positive);
+  background: color-mix(in oklab, var(--positive) 12%, transparent);
+}
+
+.approval {
+  margin-top: 4px;
+  color: var(--positive);
+  font: 12px var(--font-mono);
+}
+
+.playtest {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.devbar-mini {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 36px;
+  padding: 0 10px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--muted-foreground);
+  font: 12px var(--font-mono);
+}
+
+.playtest .tag {
+  display: inline-block;
+  min-width: 64px;
+  margin-right: 12px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--warning) 16%, transparent);
+  color: var(--warning);
+  font: 500 11px var(--font-mono);
+  text-align: center;
+}
+
+.trail-line {
+  font-size: 14px;
+  animation: msg-in 0.3s ease-out both;
+}
+
+/* Call to action and footer */
+
+.cta {
+  max-width: 816px;
+  margin: 128px auto 0;
+  padding: 56px 24px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.cta p {
+  margin: 8px 0 24px;
+  color: var(--muted-foreground);
+  font-size: 15px;
+}
+
+.cta button {
+  width: 220px;
+}
+
+.site-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px max(16px, calc((100% - 1200px) / 2));
+  border-top: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+
+.site-footer .site-brand {
+  color: var(--foreground);
+  font-size: 14px;
+}
+
+.site-footer a:hover {
+  color: var(--foreground);
+}
+
+@media (max-width: 960px) {
+  .hero-copy {
+    max-width: 640px;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  /* The board takes the full width on top; the two agents sit side by side below it. */
+  .window-body {
+    height: auto;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "center center"
+      "left right";
+  }
+
+  .window-body > .chat {
+    grid-area: left;
+  }
+
+  .window-center {
+    grid-area: center;
+    height: 400px;
+  }
+
+  /* Giorgi's chat keeps its height; the column grows for the mediator card, and Nino's chat stretches to match. */
+  .window-right {
+    grid-area: right;
+  }
+
+  .window-right .chat {
+    height: 280px;
+    flex: none;
+  }
+
+  .story small {
+    display: none;
+  }
+}
+
+@media (min-width: 961px) and (max-width: 1100px) {
+  .window-body {
+    grid-template-columns: 230px minmax(0, 1fr) 240px;
+  }
+
+  .story small {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .window-body {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "center"
+      "left"
+      "right";
+  }
+
+  .window-body > .chat {
+    height: 240px;
+  }
+
+  .window-right {
+    height: auto;
+  }
+
+  .window-right .chat {
+    height: 240px;
+    flex: none;
+  }
+
+  .window-center {
+    height: 300px;
+  }
+
+  .story {
+    grid-template-columns: 1fr;
+  }
+
+  .story li + li {
+    border-left: 0;
+  }
+
+  .equation {
+    flex-direction: column;
+  }
+
+  .mission h2 {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .site-header nav a:not(:last-child) {
+    display: none;
+  }
+
+  .hero {
+    padding-top: 56px;
+  }
+
+  .hero-copy {
+    padding: 0 16px;
+  }
+
+  .hero-copy h1 {
+    font-size: min(2.25rem, calc(8.4vw - 2px));
+    line-height: 1.12;
+  }
+
+  .hero-join {
+    padding: 16px;
+  }
+
+  .hero-window {
+    padding: 0 12px;
+  }
+
+  .window-bar .chip,
+  .window-bar .version {
+    display: none;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .demo {
+    padding: 20px 16px;
+  }
+
+  .presence {
+    padding-left: 16px;
+  }
+
+  .log-line {
+    grid-template-columns: 32px 52px 1fr;
+  }
+
+  .log-line .result {
+    grid-column: 2 / -1;
+  }
+
+  .site-footer {
+    flex-wrap: wrap;
+  }
+}
+
+/* Layout ------------------------------------------------------------------ */
 
 .app {
+  min-width: 1100px;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -121,11 +1191,18 @@ input:focus {
   padding: 16px;
 }
 
+/* The stage is a window: muted surface, hairline border. Padding lives here, not on .board,
+   because the board sizes its canvas from its own box. */
 .stage-area {
   position: relative;
   flex: 1;
   min-width: 0;
   display: flex;
+  padding: 16px;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .board {
@@ -136,9 +1213,10 @@ input:focus {
 }
 
 .board canvas {
-  border-radius: 12px;
-  background: #3f6b34;
-  box-shadow: 0 0 0 6px #2b2f3a, 0 18px 50px rgba(20, 24, 33, 0.35);
+  border-radius: 8px;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--foreground) 14%, transparent),
+    var(--shadow-lg);
 }
 
 .side {
@@ -154,71 +1232,120 @@ input:focus {
   width: 460px;
 }
 
-/* Top bar */
+/* Top bar ----------------------------------------------------------------- */
 
 .topbar {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 16px;
-  background: var(--panel);
-  border-bottom: 1px solid var(--line);
+  height: 56px;
+  padding: 0 16px;
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
 }
 
 .brand {
-  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   margin-right: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
 }
 
 .status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--background);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  font-weight: 700;
-  font-size: 14px;
-  padding: 5px 12px;
-  border-radius: 999px;
+  transition: background-color 0.15s;
 }
 
-.status.ok {
-  background: #dcfce7;
-  color: var(--ok);
+.status:hover {
+  background: var(--muted);
+}
+
+/* A live dot, like Conductor's "live" cloud state. */
+.status::before,
+.waiting::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--positive);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--positive) 20%, transparent);
+  animation: live 2s ease-in-out infinite;
 }
 
 .status.bad {
-  background: #fee2e2;
-  color: var(--bad);
+  color: var(--destructive);
 }
 
+.status.bad::before {
+  background: var(--destructive);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--destructive) 20%, transparent);
+}
+
+/* Versions read like Conductor's changelog badges. */
 .version {
-  font-family: ui-monospace, Menlo, monospace;
-  font-size: 13px;
-  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 4px;
+  border: 1px solid var(--tip-secondary-border);
+  border-radius: 2px;
+  background: var(--tip-secondary);
+  color: var(--tip-muted);
+  font: 500 12px/1.3 var(--font-mono);
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
 }
 
 .waiting {
-  font-size: 13px;
-  font-weight: 600;
-  color: #b45309;
-  background: #fef3c7;
-  padding: 4px 10px;
-  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--tip-secondary-border);
+  border-radius: 6px;
+  background: var(--highlight);
+  color: var(--highlight-foreground);
+  font-size: 12px;
+  font-weight: 500;
 }
 
-.spacer {
-  flex: 1;
+.waiting::before {
+  background: var(--warning);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--warning) 20%, transparent);
 }
 
 .toggle {
-  background: #fff;
-  color: var(--ink);
-  border: 1px solid var(--line);
-  padding: 5px 12px;
-  font-size: 13px;
+  height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+  background: transparent;
+  color: var(--foreground);
+  border-color: var(--border);
 }
 
-.toggle.on {
-  background: #dcfce7;
-  border-color: #86efac;
-  color: var(--ok);
+.toggle:hover:not(:disabled) {
+  background: var(--muted);
+}
+
+.toggle.on,
+.toggle.on:hover:not(:disabled) {
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
 }
 
 .members {
@@ -229,12 +1356,15 @@ input:focus {
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  border: 2px solid;
+  gap: 8px;
+  height: 28px;
+  padding: 0 10px 0 3px;
+  border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 2px 10px 2px 2px;
+  background: var(--background);
+  color: var(--muted-foreground);
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .chip i,
@@ -247,48 +1377,63 @@ input:focus {
   border-radius: 50%;
   color: #fff;
   font-style: normal;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 600;
   flex-shrink: 0;
 }
 
-.dot {
-  width: 10px;
-  height: 10px;
+/* Presence: everyone in this list is connected. */
+.chip i {
+  position: relative;
+}
+
+.chip i::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--bad);
+  background: var(--positive);
+  box-shadow: 0 0 0 2px var(--background);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--destructive);
 }
 
 .dot.on {
-  background: var(--ok);
+  background: var(--positive);
 }
 
-/* Chat */
+/* Chat -------------------------------------------------------------------- */
 
 .chat {
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  background: var(--panel);
-  border: 1px solid var(--line);
+  background: var(--background);
+  border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
 }
 
 .chat-head,
 .history-head {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 14px;
-  font-weight: 700;
-  font-size: 14px;
-  border-bottom: 1px solid var(--line);
-}
-
-.chat-head {
-  border-top: 4px solid;
+  height: 40px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
 }
 
 .messages {
@@ -301,76 +1446,109 @@ input:focus {
 }
 
 .empty {
-  color: var(--muted);
+  color: var(--muted-foreground);
   font-size: 14px;
   margin: auto 0;
   text-align: center;
+  text-wrap: pretty;
 }
 
 .msg {
   max-width: 88%;
   padding: 8px 12px;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.5;
   white-space: pre-wrap;
+  animation: msg-in 0.3s ease-out both;
 }
 
+/* Yours: the warm highlight bubble, right-aligned. */
 .msg.you {
   align-self: flex-end;
-  background: var(--ink);
-  color: #fff;
+  background: var(--highlight);
+  color: var(--highlight-foreground);
 }
 
+/* Your agent: a quiet muted surface. */
 .msg.agent {
   align-self: flex-start;
-  background: #f1efe9;
+  background: var(--muted);
 }
 
 .msg.thinking {
-  color: var(--muted);
-  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted-foreground);
+  font-style: normal;
+}
+
+.msg.thinking::before {
+  content: "";
+  flex-shrink: 0;
+  width: 4px;
+  height: 4px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow:
+    8px 0 0 currentColor,
+    16px 0 0 currentColor;
+  animation: typing 1.2s ease-in-out infinite;
 }
 
 .msg.system {
   align-self: center;
   max-width: 100%;
   background: transparent;
-  color: var(--muted);
-  font-size: 13px;
+  color: var(--muted-foreground);
+  font-size: 12px;
   text-align: center;
 }
 
 .msg.mediator {
   align-self: stretch;
   max-width: 100%;
-  background: #f5f3ff;
-  color: #4c1d95;
+  background: color-mix(in oklab, var(--mediator) 8%, var(--background));
+  color: var(--foreground);
 }
 
+/* Cards: mediator, playtest report, suggested fix. One shape, a tone per kind. */
 .card {
-  border: 2px solid var(--mediator);
+  --tone: var(--mediator);
+  border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 10px 12px;
-  background: #faf8ff;
+  padding: 12px;
+  background: var(--background);
   font-size: 14px;
+  animation: card-in 0.5s cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+.card.report {
+  --tone: var(--warning);
+}
+
+.card.suggestion {
+  --tone: var(--positive);
 }
 
 .card p {
   margin: 6px 0;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .card-head {
-  font-size: 12px;
-  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 6px;
+  border: 1px solid color-mix(in oklab, var(--tone) 28%, var(--background));
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--tone) 10%, var(--background));
+  color: var(--tone);
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--mediator);
-}
-
-.muted {
-  color: var(--muted);
 }
 
 .options {
@@ -381,70 +1559,82 @@ input:focus {
 }
 
 .option {
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: flex-start;
   gap: 2px;
+  padding: 10px 12px;
   text-align: left;
-  background: #fff;
-  color: var(--ink);
-  border: 1px solid #ddd6fe;
+  white-space: normal;
+  line-height: 1.4;
   font-weight: 400;
+  background: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 8px;
 }
 
 .option:hover:not(:disabled) {
-  border-color: var(--mediator);
-  background: #f5f3ff;
+  background: var(--muted);
+  border-color: color-mix(in oklab, var(--foreground) 30%, transparent);
 }
 
 .option strong {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .option span {
   font-size: 13px;
-  color: var(--muted);
+  color: var(--muted-foreground);
 }
 
 .option em {
   font-size: 12px;
   font-style: normal;
-  font-weight: 600;
-  color: #b45309;
+  font-weight: 500;
+  color: var(--warning);
 }
 
 .option.cancel {
   border-style: dashed;
 }
 
+.option.agent {
+  border-left: 3px solid;
+}
+
 .approve {
   display: flex;
   gap: 8px;
-}
-
-.approve button:first-child {
-  background: var(--mediator);
+  margin-top: 8px;
 }
 
 .composer {
+  flex-shrink: 0;
   display: flex;
   gap: 8px;
   padding: 10px;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border);
 }
 
 .composer input {
   flex: 1;
 }
 
-/* History */
+.composer button {
+  flex-shrink: 0;
+}
+
+/* History ----------------------------------------------------------------- */
 
 .history {
   max-height: 38%;
   display: flex;
   flex-direction: column;
-  background: var(--panel);
-  border: 1px solid var(--line);
+  background: var(--background);
+  border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -461,20 +1651,28 @@ input:focus {
   align-items: flex-start;
   gap: 8px;
   padding: 6px 8px;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 13px;
+  line-height: 1.4;
+  animation: msg-in 0.3s ease-out both;
 }
 
 .history li.current {
-  background: #f1efe9;
+  background: var(--muted);
+}
+
+.history .who {
+  width: 20px;
+  height: 20px;
+  font-size: 10px;
 }
 
 .history .rev {
-  font-family: ui-monospace, Menlo, monospace;
-  color: var(--muted);
   width: 30px;
   flex-shrink: 0;
-  padding-top: 3px;
+  padding-top: 2px;
+  color: var(--muted-foreground);
+  font: 500 12px/1.4 var(--font-mono);
 }
 
 .history .what {
@@ -482,34 +1680,40 @@ input:focus {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding-top: 3px;
+  padding-top: 1px;
 }
 
 .history small {
   color: var(--mediator);
+  font-size: 12px;
 }
 
 .restore {
-  background: transparent;
-  color: var(--muted);
-  border: 1px solid var(--line);
-  padding: 2px 8px;
+  height: 24px;
+  padding: 0 8px;
   font-size: 12px;
-  font-weight: 600;
+  background: transparent;
+  color: var(--muted-foreground);
+  border-color: var(--border);
 }
 
-.restore:hover {
-  color: var(--ink);
-  border-color: var(--ink);
+.restore:hover:not(:disabled) {
+  background: var(--muted);
+  color: var(--foreground);
 }
 
 .reset {
   background: transparent;
-  color: var(--muted);
-  border: 1px dashed var(--line);
+  color: var(--muted-foreground);
+  border: 1px dashed var(--border);
 }
 
-/* Player */
+.reset:hover:not(:disabled) {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+/* Player ------------------------------------------------------------------ */
 
 .hud {
   position: absolute;
@@ -518,12 +1722,14 @@ input:focus {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 8px 14px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 6px 12px;
+  background: color-mix(in oklab, var(--background) 90%, transparent);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 3;
 }
 
 .key {
@@ -548,81 +1754,97 @@ input:focus {
 }
 
 .won {
-  color: var(--ok);
+  color: var(--positive);
 }
 
+/* Toasts are inverted tooltips, as on Conductor's avatars. */
 .toast {
   position: absolute;
   top: 16px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--ink);
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background: var(--foreground);
+  color: var(--background);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: var(--shadow-md);
+  animation: toast-in 0.2s ease-out both;
 }
 
 .hint {
-  text-align: center;
-  color: var(--muted);
-  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  color: var(--muted-foreground);
+  font-size: 12px;
   padding: 0 0 12px;
 }
 
-/* Playtest dev mode */
+.hint kbd + kbd {
+  margin-left: -2px;
+}
+
+/* Playtest dev mode ------------------------------------------------------- */
 
 .devbar {
   display: flex;
   align-items: center;
   gap: 16px;
+  height: 40px;
   margin: 12px 16px 0;
-  padding: 8px 12px;
-  border-radius: 10px;
-  background: #111827;
-  color: #d1d5db;
-  font-family: ui-monospace, Menlo, monospace;
-  font-size: 13px;
+  padding: 0 8px 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  font: 12px var(--font-mono);
 }
 
 .devbar b {
-  color: #fbbf24;
+  padding: 3px 6px;
+  border: 1px solid color-mix(in oklab, var(--warning) 28%, var(--background));
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--warning) 10%, var(--background));
+  color: var(--warning);
+  font-weight: 500;
   letter-spacing: 0.08em;
 }
 
 .devbar button {
-  font-family: inherit;
-  font-size: 13px;
-  background: #fbbf24;
-  color: #111827;
-  padding: 5px 12px;
+  height: 26px;
+  font-size: 12px;
 }
 
 .report-panel {
   position: absolute;
-  right: 24px;
-  top: 24px;
+  right: 16px;
+  top: 16px;
+  z-index: 5;
   width: 380px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  background: var(--panel);
-  border: 2px solid #d97706;
-  border-radius: 14px;
-  padding: 16px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  gap: 12px;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: var(--shadow-lg);
+  animation: dialog-in 0.2s ease-out both;
 }
 
 .report-panel h3 {
   margin: 0;
   font-size: 16px;
+  font-weight: 600;
 }
 
 .report-panel p {
   margin: 0;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .report-panel .quick {
@@ -632,8 +1854,8 @@ input:focus {
 }
 
 .report-panel .quick button {
+  height: 28px;
   font-size: 13px;
-  padding: 6px 10px;
 }
 
 .report-panel form {
@@ -645,89 +1867,67 @@ input:focus {
   flex: 1;
 }
 
-.card.report {
-  border-color: #d97706;
-  background: #fffbeb;
-}
-
-.card.report .card-head {
-  color: #b45309;
-}
-
-.card.suggestion {
-  border-color: #0f766e;
-  background: #f0fdfa;
-}
-
-.card.suggestion .card-head {
-  color: #0f766e;
-}
-
-.card.suggestion .approve button:first-child {
-  background: #0f766e;
-}
-
 .facts {
-  margin: 4px 0;
+  margin: 6px 0;
   padding-left: 18px;
   font-size: 13px;
-  color: #92400e;
-}
-
-.option.agent {
-  border-left: 5px solid;
-  background: #fff;
+  color: var(--muted-foreground);
 }
 
 .negotiating {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--mediator);
   animation: pulse 1.2s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  50% {
-    opacity: 0.45;
-  }
-}
-
-/* Voice */
+/* Voice ------------------------------------------------------------------- */
 
 .lang {
   display: flex;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  overflow: hidden;
   flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .lang button {
-  background: #fff;
-  color: var(--muted);
+  height: 34px;
+  padding: 0 8px;
+  background: var(--background);
+  color: var(--muted-foreground);
+  border: 0;
   border-radius: 0;
-  padding: 6px 8px;
   font-size: 12px;
 }
 
-.lang button.on {
-  background: var(--ink);
-  color: #fff;
+.lang button:hover:not(:disabled) {
+  background: var(--muted);
+}
+
+.lang button.on,
+.lang button.on:hover:not(:disabled) {
+  background: var(--foreground);
+  color: var(--background);
 }
 
 .mic {
-  display: grid;
-  place-items: center;
-  padding: 8px 10px;
-  background: #fff;
-  color: var(--ink);
-  border: 1px solid var(--line);
+  width: 36px;
+  padding: 0;
+  background: var(--background);
+  color: var(--foreground);
+  border-color: var(--border);
 }
 
-.mic.on {
-  background: #dc2626;
+.mic:hover:not(:disabled) {
+  background: var(--muted);
+}
+
+.mic.on,
+.mic.on:hover:not(:disabled) {
+  background: var(--destructive);
   color: #fff;
-  border-color: #dc2626;
+  border-color: var(--destructive);
   animation: pulse 1s ease-in-out infinite;
 }
 
@@ -735,22 +1935,11 @@ input:focus {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #9ca3af;
-}
-
-.devbar .lang {
-  border-color: #374151;
 }
 
 .devbar .lang button {
-  background: #1f2937;
-  color: #9ca3af;
+  height: 24px;
   font-family: inherit;
-}
-
-.devbar .lang button.on {
-  background: #fbbf24;
-  color: #111827;
 }
 
 .listening {
@@ -761,98 +1950,105 @@ input:focus {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #dc2626;
-  color: #fff;
-  padding: 10px 18px;
+  padding: 8px 16px;
   border-radius: 999px;
-  font-weight: 700;
-  box-shadow: 0 10px 30px rgba(220, 38, 38, 0.4);
+  background: var(--destructive);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
 }
 
-/* Time travel */
+/* Time travel ------------------------------------------------------------- */
 
 .travel-btn {
-  background: var(--ink);
+  height: 24px;
+  padding: 0 10px;
   font-size: 12px;
-  padding: 4px 10px;
 }
 
 .scrub {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 14px;
-  border-bottom: 1px solid var(--line);
-  font-size: 12px;
-  font-family: ui-monospace, Menlo, monospace;
-  color: var(--muted);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font: 12px var(--font-mono);
 }
 
 .scrub input {
   flex: 1;
-  accent-color: var(--accent);
+  height: auto;
   padding: 0;
+  accent-color: var(--foreground);
 }
 
 .travel-banner {
   position: absolute;
-  top: 12px;
+  top: 16px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(17, 24, 39, 0.92);
-  color: #e5e7eb;
-  padding: 8px 10px 8px 16px;
+  padding: 6px 8px 6px 14px;
   border-radius: 999px;
-  font-size: 14px;
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 13px;
   white-space: nowrap;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
 }
 
 .travel-banner b {
-  color: #fbbf24;
+  padding: 3px 6px;
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--background) 18%, transparent);
+  font: 500 11px/1 var(--font-mono);
   letter-spacing: 0.08em;
 }
 
 .travel-banner i {
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .travel-banner button {
-  background: #fbbf24;
-  color: #111827;
-  padding: 4px 12px;
-  font-size: 13px;
+  height: 24px;
+  padding: 0 10px;
+  font-size: 12px;
+  background: var(--background);
+  color: var(--foreground);
 }
 
-/* Nerd console */
+/* Nerd console: always a terminal, whatever the theme. -------------------- */
 
 .nerd {
   position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 4;
   max-height: 46%;
   overflow: hidden;
-  background: rgba(10, 12, 18, 0.92);
-  color: #a7f3d0;
+  background: color-mix(in oklab, var(--terminal-bg) 94%, transparent);
+  color: #eae8e6;
+  border: 1px solid #ffffff1a;
   border-radius: 12px;
   padding: 10px 14px;
-  font-family: ui-monospace, Menlo, monospace;
-  font-size: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  font: 12px var(--font-mono);
+  box-shadow: var(--shadow-lg);
+  animation: dialog-in 0.2s ease-out both;
 }
 
 .nerd-head {
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
-  color: #fbbf24;
+  color: #a5a09c;
   padding-bottom: 6px;
-  border-bottom: 1px solid #1f2937;
+  border-bottom: 1px solid #ffffff1a;
   margin-bottom: 6px;
 }
 
@@ -881,6 +2077,7 @@ input:focus {
 
 .nerd b {
   color: #fbbf24;
+  font-weight: 500;
 }
 
 .nerd i {
@@ -891,4 +2088,70 @@ input:focus {
 .nerd em {
   color: #c4b5fd;
   font-style: normal;
+}
+
+/* Motion ------------------------------------------------------------------ */
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+/* Cards arrive the way Conductor's panels do: rise, sharpen, settle. */
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 4px);
+  }
+}
+
+@keyframes live {
+  50% {
+    box-shadow: 0 0 0 5px transparent;
+  }
+}
+
+@keyframes typing {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

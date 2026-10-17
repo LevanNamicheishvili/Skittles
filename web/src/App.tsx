@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } 
 import type { Cell, Direction, World } from "../../server/src/game/types.ts";
 import type { Op } from "../../server/src/room/ops.ts";
 import { Board, type Cursor, type Ghost, type Runner } from "./Board.tsx";
+import { BrandMark, Landing } from "./Landing.tsx";
 import { blockedAt, previewWorld, routeOf } from "./sim.ts";
 import { loadLang, saveLang, useSpeech, type Lang } from "./speech.ts";
 import { play as playSound, setSound, soundOn } from "./sound.ts";
@@ -107,7 +108,7 @@ export function App() {
 
   if (!store.you || !store.state) {
     return (
-      <JoinScreen
+      <Landing
         busy={pending}
         onJoin={async (name, role) => {
           setPending(true);
@@ -124,37 +125,6 @@ export function App() {
   if (store.you.role === "player") return <PlayerView store={store} />;
   if (store.you.role === "stage") return <StageView store={store} />;
   return <AuthorView store={store} />;
-}
-
-function JoinScreen({ onJoin, busy }: { onJoin: (name: string, role: Role) => void; busy: boolean }) {
-  const [name, setName] = useState("");
-  const pick = (role: Role) => (e: FormEvent) => {
-    e.preventDefault();
-    if (role !== "stage" && !name.trim()) return;
-    onJoin(name.trim() || "Stage", role);
-  };
-  return (
-    <div className="join">
-      <form className="join-card">
-        <h1>
-          SKIT<span>TLES</span>
-        </h1>
-        <p>Two people, two agents, one live game.</p>
-        <input autoFocus placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
-        <div className="join-roles">
-          <button disabled={busy} onClick={pick("author")}>
-            Join as author
-          </button>
-          <button disabled={busy} className="secondary" onClick={pick("player")}>
-            Join as player
-          </button>
-          <button disabled={busy} className="ghost" onClick={pick("stage")}>
-            Stage screen
-          </button>
-        </div>
-      </form>
-    </div>
-  );
 }
 
 // The middle of what a batch touches, where an agent's cursor goes.
@@ -277,7 +247,8 @@ function TopBar({ store, showRoute, onToggleRoute, onToggleConsole }: { store: S
   return (
     <header className="topbar">
       <div className="brand">
-        SKIT<span>TLES</span>
+        <BrandMark />
+        Skittles
       </div>
       <div className={`status ${s.solve.solvable ? "ok" : "bad"}`} onClick={replayRunner} title="Run the validator's route again">
         {s.solve.solvable ? `Winnable · ${s.solve.steps} steps` : `Blocked · ${s.solve.unreachable.join(", ")} unreachable`}
@@ -306,7 +277,7 @@ function TopBar({ store, showRoute, onToggleRoute, onToggleConsole }: { store: S
         {store.members
           .filter((m) => m.role !== "stage")
           .map((m) => (
-            <span key={m.id} className="chip" style={{ borderColor: m.color }}>
+            <span key={m.id} className="chip">
               <i style={{ background: m.color }}>{m.letter}</i>
               {m.name}
             </span>
@@ -459,7 +430,12 @@ function PlayerView({ store }: { store: Store }) {
           )}
         </section>
       </main>
-      <footer className="hint">Arrow keys or WASD to move · R to restart · F to report a problem · hold V to say it</footer>
+      <footer className="hint">
+        <kbd>↑</kbd>
+        <kbd>←</kbd>
+        <kbd>↓</kbd>
+        <kbd>→</kbd> or <kbd>WASD</kbd> to move · <kbd>R</kbd> to restart · <kbd>F</kbd> to report a problem · hold <kbd>V</kbd> to say it
+      </footer>
     </div>
   );
 }
@@ -570,7 +546,7 @@ function Chat({ store, author, canAct }: { store: Store; author: Member; canAct:
 
   return (
     <div className="chat">
-      <div className="chat-head" style={{ borderColor: author.color }}>
+      <div className="chat-head">
         <i style={{ background: author.color }}>{author.letter}</i>
         {canAct ? "Your agent" : `${author.name}'s agent`}
       </div>
