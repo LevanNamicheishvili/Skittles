@@ -3,17 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Room server and reference game rules for the team AI game editor.",
+  "description": "LIVEFORGE room server and reference game rules.",
   "engines": {
     "node": ">=24"
   },
   "scripts": {
     "test": "node --test \"test/**/*.test.ts\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "dev": "node --env-file-if-exists=.env --watch src/index.ts",
+    "start": "node --env-file-if-exists=.env src/index.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
-    "ajv": "^8.20.0",
+    "socket.io-client": "^4.8.4",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.135.0",
+    "ajv": "^8.20.0",
+    "socket.io": "^4.8.4"
   }
 }
