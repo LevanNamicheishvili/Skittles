@@ -3,7 +3,7 @@
 let ctx: AudioContext | undefined;
 let enabled = (() => {
   try {
-    return localStorage.getItem("liveforge-sound") !== "off";
+    return localStorage.getItem("skittles-sound") !== "off";
   } catch {
     return true;
   }
@@ -14,7 +14,7 @@ export const soundOn = (): boolean => enabled;
 export function setSound(on: boolean): void {
   enabled = on;
   try {
-    localStorage.setItem("liveforge-sound", on ? "on" : "off");
+    localStorage.setItem("skittles-sound", on ? "on" : "off");
   } catch {
     // A convenience only.
   }

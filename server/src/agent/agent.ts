@@ -16,7 +16,7 @@ import type { Proposal as Conflict, Room } from "../room/room.ts";
 import type { AgentHandler } from "../server.ts";
 import { levelContext, toOps, type ChangeInput } from "./context.ts";
 
-const RULES = `You are a personal level-design agent inside LIVEFORGE, a live 2D grid game that two human authors edit at the same time, each through their own agent, while a third person plays it.
+const RULES = `You are a personal level-design agent inside Skittles, a live 2D grid game that two human authors edit at the same time, each through their own agent, while a third person plays it.
 
 The level: a grid of cells, x grows to the right from 0, y grows down from 0. The player walks one cell at a time from the start S to the flag F.
 Objects you can create:
@@ -102,8 +102,8 @@ type Effort = "low" | "medium" | "high";
 
 export function apiBackend(options: { client?: MessagesClient; model?: string; effort?: Effort } = {}): Backend {
   const client = options.client ?? new Anthropic();
-  const model = options.model ?? process.env.LIVEFORGE_MODEL ?? "claude-sonnet-5-5";
-  const effort = options.effort ?? (process.env.LIVEFORGE_EFFORT as Effort | undefined) ?? "low";
+  const model = options.model ?? process.env.SKITTLES_MODEL ?? "claude-sonnet-5-5";
+  const effort = options.effort ?? (process.env.SKITTLES_EFFORT as Effort | undefined) ?? "low";
   const call = (messages: Anthropic.MessageParam[]): Promise<Anthropic.Message> =>
     client.messages.create({
       model,
@@ -146,9 +146,9 @@ export type Runner = (args: string[], stdin: string) => Promise<string>;
 const runClaude: Runner = (args, stdin) =>
   new Promise((resolve, reject) => {
     // A clean working directory, so no project instructions or settings leak into the agent.
-    const cwd = join(tmpdir(), "liveforge-agent");
+    const cwd = join(tmpdir(), "skittles-agent");
     mkdirSync(cwd, { recursive: true });
-    const child = spawn(process.env.LIVEFORGE_CLAUDE_BIN ?? "claude", args, { cwd, env: process.env });
+    const child = spawn(process.env.SKITTLES_CLAUDE_BIN ?? "claude", args, { cwd, env: process.env });
     let out = "";
     let err = "";
     const timer = setTimeout(() => child.kill(), 60_000);
@@ -165,8 +165,8 @@ const runClaude: Runner = (args, stdin) =>
 
 export function cliBackend(options: { run?: Runner; model?: string; effort?: Effort } = {}): Backend {
   const run = options.run ?? runClaude;
-  const model = options.model ?? process.env.LIVEFORGE_CLI_MODEL ?? "sonnet";
-  const effort = options.effort ?? (process.env.LIVEFORGE_EFFORT as Effort | undefined) ?? "low";
+  const model = options.model ?? process.env.SKITTLES_CLI_MODEL ?? "sonnet";
+  const effort = options.effort ?? (process.env.SKITTLES_EFFORT as Effort | undefined) ?? "low";
   const args = [
     "-p",
     "--model", model,

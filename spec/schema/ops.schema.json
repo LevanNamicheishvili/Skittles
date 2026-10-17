@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://team-ai-game.dev/schema/ops.schema.json",
+  "$id": "https://github.com/LevanNamicheishvili/Skittles/blob/main/spec/schema/ops.schema.json",
   "title": "OpBatch",
   "description": "A batch of document operations a client submits. The server applies a batch atomically or rejects it whole. See spec/protocol.md.",
   "type": "object",

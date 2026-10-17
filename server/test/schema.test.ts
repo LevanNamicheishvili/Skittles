@@ -6,8 +6,8 @@ import { loadJson, playCases, solverCases } from "./fixtures.ts";
 const ajv = new Ajv2020({ allErrors: true, strict: true });
 ajv.addSchema(loadJson("schema/world.schema.json"));
 ajv.addSchema(loadJson("schema/ops.schema.json"));
-const worldSchema = ajv.getSchema("https://team-ai-game.dev/schema/world.schema.json")!;
-const opsSchema = ajv.getSchema("https://team-ai-game.dev/schema/ops.schema.json")!;
+const worldSchema = ajv.getSchema("https://github.com/LevanNamicheishvili/Skittles/blob/main/spec/schema/world.schema.json")!;
+const opsSchema = ajv.getSchema("https://github.com/LevanNamicheishvili/Skittles/blob/main/spec/schema/ops.schema.json")!;
 
 describe("world schema", () => {
   const worlds = [

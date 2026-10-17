@@ -23,7 +23,7 @@ export type Lang = "en-US" | "ka-GE";
 
 export function loadLang(): Lang {
   try {
-    return localStorage.getItem("liveforge-lang") === "ka-GE" ? "ka-GE" : "en-US";
+    return localStorage.getItem("skittles-lang") === "ka-GE" ? "ka-GE" : "en-US";
   } catch {
     return "en-US";
   }
@@ -31,7 +31,7 @@ export function loadLang(): Lang {
 
 export function saveLang(lang: Lang): void {
   try {
-    localStorage.setItem("liveforge-lang", lang);
+    localStorage.setItem("skittles-lang", lang);
   } catch {
     // Remembering the language is a convenience only.
   }

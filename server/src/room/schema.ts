@@ -9,7 +9,7 @@ const load = (path: string): object => JSON.parse(readFileSync(join(specDir, pat
 
 const ajv = new Ajv2020({ strict: true });
 ajv.addSchema(load("schema/world.schema.json"));
-const worldValidator = ajv.getSchema("https://team-ai-game.dev/schema/world.schema.json")!;
+const worldValidator = ajv.getSchema("https://github.com/LevanNamicheishvili/Skittles/blob/main/spec/schema/world.schema.json")!;
 
 // Returns null when the world matches the schema, otherwise a short reason.
 export function checkWorldShape(world: unknown): string | null {

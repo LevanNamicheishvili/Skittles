@@ -4,11 +4,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:team_ai_game/game/model.dart';
-import 'package:team_ai_game/game/play.dart';
-import 'package:team_ai_game/game/raster.dart';
-import 'package:team_ai_game/game/solver.dart';
-import 'package:team_ai_game/game/validate.dart';
+import 'package:skittles/game/model.dart';
+import 'package:skittles/game/play.dart';
+import 'package:skittles/game/raster.dart';
+import 'package:skittles/game/solver.dart';
+import 'package:skittles/game/validate.dart';
 
 Map<String, dynamic> _load(String name) =>
     jsonDecode(File('../spec/fixtures/$name').readAsStringSync()) as Map<String, dynamic>;

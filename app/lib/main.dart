@@ -4,11 +4,11 @@ import 'editor/editor_screen.dart';
 import 'ui/theme.dart';
 
 void main() {
-  runApp(const ErtadApp());
+  runApp(const SkittlesApp());
 }
 
-class ErtadApp extends StatelessWidget {
-  const ErtadApp({super.key});
+class SkittlesApp extends StatelessWidget {
+  const SkittlesApp({super.key});
 
   @override
   Widget build(BuildContext context) {

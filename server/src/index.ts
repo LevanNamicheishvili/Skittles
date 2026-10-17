@@ -9,12 +9,12 @@ import { createRoomServer, type AgentHandler, type NegotiateHandler, type Sugges
 const port = Number(process.env.PORT ?? 3000);
 const staticDir = join(import.meta.dirname, "..", "..", "web", "dist");
 
-// The API when a key is set, otherwise the signed-in Claude Code CLI. LIVEFORGE_AGENT=api|cli forces one.
+// The API when a key is set, otherwise the signed-in Claude Code CLI. SKITTLES_AGENT=api|cli forces one.
 async function loadAgent(): Promise<{ agent: AgentHandler; suggester: SuggestHandler; negotiator: NegotiateHandler } | undefined> {
   const { apiBackend, cliBackend, createAgent, createNegotiator, createSuggester } = await import("./agent/agent.ts");
-  const choice = process.env.LIVEFORGE_AGENT ?? (process.env.ANTHROPIC_API_KEY ? "api" : "cli");
+  const choice = process.env.SKITTLES_AGENT ?? (process.env.ANTHROPIC_API_KEY ? "api" : "cli");
   if (choice === "api" && !process.env.ANTHROPIC_API_KEY) {
-    console.warn("LIVEFORGE_AGENT=api but ANTHROPIC_API_KEY is not set: agents will not answer.");
+    console.warn("SKITTLES_AGENT=api but ANTHROPIC_API_KEY is not set: agents will not answer.");
     return undefined;
   }
   const backend = choice === "api" ? apiBackend() : cliBackend();
@@ -25,4 +25,4 @@ async function loadAgent(): Promise<{ agent: AgentHandler; suggester: SuggestHan
 const room = new Room(demoLevel());
 const agents = await loadAgent();
 const { http } = createRoomServer({ room, staticDir: existsSync(staticDir) ? staticDir : undefined, ...agents });
-http.listen(port, () => console.log(`LIVEFORGE room on http://localhost:${port}`));
+http.listen(port, () => console.log(`Skittles room on http://localhost:${port}`));

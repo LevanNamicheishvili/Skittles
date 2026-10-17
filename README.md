@@ -1,10 +1,10 @@
-# LIVEFORGE
+# Skittles
 
 **Two people, two AI agents, one live game.** Two authors each talk to their own agent and change the same level while a third person plays it. The agents see what the other author changed. A single-writer room checks every change with a deterministic solver. When two valid changes together would break the level, nothing goes live: a mediator offers fixes the solver has already checked, the other author's agent negotiates a compromise, and the humans decide.
 
 Built for **Hacktoberfest Georgia 2026, Track 02: Multiplayer agentic experiences** ("two people work on one thing together, each through their own agent; agents know what the other changed; no conflicts; live like Figma").
 
-> **ქართულად.** ორი ავტორი, თითო თავისი აგენტით, ერთ ცოცხალ თამაშს ცვლის, სანამ მესამე თამაშობს. ოთახი ყველა ცვლილებას სოლვერით ამოწმებს. თუ ორი სწორი ცვლილება ერთად თამაშს ტეხს, მედიატორი შემოწმებულ გამოსავლებს სთავაზობს, მეორე ავტორის აგენტი კომპრომისზე ვაჭრობს, გადაწყვეტილებას კი ადამიანები იღებენ. კვლევა და დასაბუთება: [docs/research.ka.md](docs/research.ka.md). სამუშაო გეგმა, დემოს სცენარი და შემდეგი ნაბიჯები: [docs/liveforge-plan.md](docs/liveforge-plan.md).
+> **ქართულად.** ორი ავტორი, თითო თავისი აგენტით, ერთ ცოცხალ თამაშს ცვლის, სანამ მესამე თამაშობს. ოთახი ყველა ცვლილებას სოლვერით ამოწმებს. თუ ორი სწორი ცვლილება ერთად თამაშს ტეხს, მედიატორი შემოწმებულ გამოსავლებს სთავაზობს, მეორე ავტორის აგენტი კომპრომისზე ვაჭრობს, გადაწყვეტილებას კი ადამიანები იღებენ. კვლევა და დასაბუთება: [docs/research.ka.md](docs/research.ka.md). სამუშაო გეგმა, დემოს სცენარი და შემდეგი ნაბიჯები: [docs/skittles-plan.md](docs/skittles-plan.md).
 
 ## The problem
 
@@ -77,6 +77,7 @@ With real agents, the whole scenario runs in about 47 seconds of machine time (`
 | Web client (Vite, React, canvas) | `web/src/` |
 | Normative rules, JSON schemas, shared fixtures | `spec/` |
 | Rehearsal and test scripts | `server/scripts/` |
+| macOS level editor (Flutter, Dart port of the rules and solver) | `app/` |
 
 ## Run it
 
@@ -108,11 +109,11 @@ For development, run `npm run dev` in `server/` (restarts on change, port 3000) 
 | --- | --- |
 | `PORT` | Server port, default 3000 |
 | `ANTHROPIC_API_KEY` | If set, agents use the Claude API directly (put it in `server/.env`, which git ignores) |
-| `LIVEFORGE_AGENT` | `api` or `cli` to force an engine; default is `api` with a key, otherwise `cli` |
-| `LIVEFORGE_MODEL` | API model, default `claude-sonnet-5-5` |
-| `LIVEFORGE_CLI_MODEL` | CLI model alias, default `sonnet` |
-| `LIVEFORGE_EFFORT` | `low` (default), `medium` or `high` |
-| `LIVEFORGE_CLAUDE_BIN` | Path to the `claude` binary if it is not on `PATH` |
+| `SKITTLES_AGENT` | `api` or `cli` to force an engine; default is `api` with a key, otherwise `cli` |
+| `SKITTLES_MODEL` | API model, default `claude-sonnet-5-5` |
+| `SKITTLES_CLI_MODEL` | CLI model alias, default `sonnet` |
+| `SKITTLES_EFFORT` | `low` (default), `medium` or `high` |
+| `SKITTLES_CLAUDE_BIN` | Path to the `claude` binary if it is not on `PATH` |
 
 ## Rehearsal tools
 
@@ -125,6 +126,7 @@ cd server && node scripts/demo-run.ts http://localhost:3001
 ## Tests and measurements
 
 - 96 tests (`cd server && npm test`): the shared rule fixtures, ops, room, mediator, approvals, safe point, revert and replay, socket server, agents with fake engines, negotiation, and playtest dev mode.
+- 43 tests in the Flutter app (`cd app && flutter test`): the same shared rule fixtures against the Dart port, the editor controller, and the editor screen.
 - 10 real agent requests: 9 changes done correctly and 1 correctly declined (no enemies in v1), 3.9 to 8 s each, 5.7 s on average. A Georgian request got a Georgian answer in 3.8 s. The first request after a cold start takes about 10 s.
 - Validator time per version: about 0.2 ms.
 
@@ -134,7 +136,7 @@ cd server && node scripts/demo-run.ts http://localhost:3001
 - We have not interviewed users; the problem is supported by how existing tools avoid it, not by user research.
 - Agents are not deterministic. In one run Giorgi's agent avoided the conflict by itself, which the demo script covers.
 - v1 has walls, lava, bridges, castles with doors, doors, keys, treasure, coins, start and flag. No enemies or physics.
-- `app/` holds an earlier Flutter prototype of the editor. LIVEFORGE does not use it.
+- `app/` is a separate macOS level editor in Flutter. Its Dart rules pass the same shared fixtures as the server, but the live demo runs in the browser and does not use it.
 
 ## Status and next steps
 

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:team_ai_game/editor/editor_controller.dart';
-import 'package:team_ai_game/game/model.dart';
+import 'package:skittles/editor/editor_controller.dart';
+import 'package:skittles/game/model.dart';
 
 void main() {
   test('the sample level is winnable', () {

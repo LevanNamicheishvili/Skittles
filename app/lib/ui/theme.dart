@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../game/model.dart';
 
-const appName = 'Ertad';
+const appName = 'Skittles';
 
 class Palette {
   const Palette._({

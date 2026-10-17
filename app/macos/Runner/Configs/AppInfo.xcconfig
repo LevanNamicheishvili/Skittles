@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = Ertad
+PRODUCT_NAME = Skittles
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = dev.teamaigame.teamAiGame
+PRODUCT_BUNDLE_IDENTIFIER = dev.skittles.skittles
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2026 dev.teamaigame. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 dev.skittles. All rights reserved.

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://team-ai-game.dev/schema/world.schema.json",
+  "$id": "https://github.com/LevanNamicheishvili/Skittles/blob/main/spec/schema/world.schema.json",
   "title": "World",
   "description": "A level document: grid, start, flag, entities and objectives. Semantics live in spec/rules.md.",
   "type": "object",

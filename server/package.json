@@ -1,9 +1,9 @@
 {
-  "name": "team-ai-game-server",
+  "name": "skittles-server",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "LIVEFORGE room server and reference game rules.",
+  "description": "Skittles room server and reference game rules.",
   "engines": {
     "node": ">=24"
   },

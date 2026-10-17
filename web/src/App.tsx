@@ -137,7 +137,7 @@ function JoinScreen({ onJoin, busy }: { onJoin: (name: string, role: Role) => vo
     <div className="join">
       <form className="join-card">
         <h1>
-          LIVE<span>FORGE</span>
+          SKIT<span>TLES</span>
         </h1>
         <p>Two people, two agents, one live game.</p>
         <input autoFocus placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
@@ -277,7 +277,7 @@ function TopBar({ store, showRoute, onToggleRoute, onToggleConsole }: { store: S
   return (
     <header className="topbar">
       <div className="brand">
-        LIVE<span>FORGE</span>
+        SKIT<span>TLES</span>
       </div>
       <div className={`status ${s.solve.solvable ? "ok" : "bad"}`} onClick={replayRunner} title="Run the validator's route again">
         {s.solve.solvable ? `Winnable · ${s.solve.steps} steps` : `Blocked · ${s.solve.unreachable.join(", ")} unreachable`}
