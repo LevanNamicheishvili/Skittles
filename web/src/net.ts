@@ -62,7 +62,10 @@ export function useStore(): Store {
   );
 }
 
-const socket = io({ transports: ["websocket"] });
+// The room server: ?server=https://… in the link, otherwise VITE_SKITTLES_SERVER from the build, otherwise this
+// site's own origin (the server serves the site in development and when self-hosted).
+export const roomServer = new URLSearchParams(location.search).get("server") ?? (import.meta.env.VITE_SKITTLES_SERVER as string | undefined) ?? undefined;
+const socket = roomServer ? io(roomServer, { transports: ["websocket"] }) : io({ transports: ["websocket"] });
 let joined: { name: string; role: Role } | null = null;
 
 function applySnapshot(s: Snapshot): void {
