@@ -6,6 +6,10 @@ Built for **Hacktoberfest Georgia 2026, Track 02: Multiplayer agentic experience
 
 > **ქართულად.** ორი ავტორი, თითო თავისი აგენტით, ერთ ცოცხალ თამაშს ცვლის, სანამ მესამე თამაშობს. ოთახი ყველა ცვლილებას სოლვერით ამოწმებს. თუ ორი სწორი ცვლილება ერთად თამაშს ტეხს, მედიატორი შემოწმებულ გამოსავლებს სთავაზობს, მეორე ავტორის აგენტი კომპრომისზე ვაჭრობს, გადაწყვეტილებას კი ადამიანები იღებენ. კვლევა და დასაბუთება: [docs/research.ka.md](docs/research.ka.md). სამუშაო გეგმა, დემოს სცენარი და შემდეგი ნაბიჯები: [docs/skittles-plan.md](docs/skittles-plan.md).
 
+## Documentation
+
+The user guide and reference, in English and Georgian, are at `/docs` on a running server (for example `http://localhost:3001/docs`), and on GitHub: [docs/guide/en.md](docs/guide/en.md) · [docs/guide/ka.md](docs/guide/ka.md) (ქართულად).
+
 ## The problem
 
 Syncing bytes between people is solved: Figma, Google Docs, CRDTs. Syncing **intent** is not. When two people edit one artifact through their own agents, the dangerous conflict is not two edits to the same line. It is two edits that are each correct but together break the goal. Nino adds a lava river with one crossing; Giorgi puts a statue in the middle of the map. Each change is fine. Together, the player can no longer reach the flag. Git and CRDTs see no conflict at all.

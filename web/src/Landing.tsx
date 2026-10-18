@@ -10,17 +10,23 @@ import { Board, type Cursor, type Ghost, type Runner } from "./Board.tsx";
 import type { Member, Role } from "./net.ts";
 import { blockedAt, previewWorld, routeOf } from "./sim.ts";
 
-const REPO = "https://github.com/LevanNamicheishvili/Skittles";
+export const REPO = "https://github.com/LevanNamicheishvili/Skittles";
 // The two colours of the Skittles mark: red-orange and bronze.
 const BRAND = [239, 79, 35] as const;
 const BRONZE = [154, 107, 63] as const;
 
-// The favicon, as the brand mark.
-export function BrandMark({ size = 20 }: { size?: number }) {
+// The mark: an S drawn as a route through a 3×3 level, from the runner's start (round) to the goal cell (square),
+// the shortest path the solver proves. With draw, the route traces itself in once, like the ghost runner.
+export function BrandMark({ size = 20, draw = false }: { size?: number; draw?: boolean }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 16 16" aria-hidden>
-      <rect width="16" height="16" rx="3" fill="#ef4f23" />
-      <rect x="3" y="9" width="10" height="3" fill="#9a6b3f" />
+    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden className={draw ? "mark mark-draw" : "mark"}>
+      <rect width="32" height="32" rx="8" fill="#ef4f23" />
+      <g fill="#fff" fillOpacity="0.14">
+        {[5, 13, 21].flatMap((y) => [5, 13, 21].map((x) => <rect key={`${x},${y}`} x={x} y={y} width="6" height="6" rx="1.6" />))}
+      </g>
+      <path className="mark-route" pathLength={1} d="M24 8H8v8h16v8H8" fill="none" stroke="#fff4ea" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
+      <rect className="mark-goal" x="5.6" y="21.6" width="4.8" height="4.8" rx="1.2" fill="#9a6b3f" stroke="#fff4ea" strokeWidth="1.4" />
+      <circle className="mark-start" cx="24" cy="8" r="3" fill="#9a6b3f" stroke="#fff4ea" strokeWidth="1.4" />
     </svg>
   );
 }
@@ -654,15 +660,13 @@ export function Landing({ onJoin, busy }: { onJoin: (name: string, role: Role) =
     <div className="landing dark">
       <header className="site-header">
         <a className="site-brand" href="#top" onClick={openRoom}>
-          <BrandMark size={22} />
+          <BrandMark size={24} draw />
           Skittles
         </a>
         <nav>
           <a href="#how">How it works</a>
           <a href="#demo">Demo</a>
-          <a href={`${REPO}/blob/main/docs/research.ka.md`} target="_blank" rel="noreferrer">
-            Research
-          </a>
+          <a href="/docs">Docs</a>
           <a href={REPO} target="_blank" rel="noreferrer">
             GitHub
           </a>
@@ -773,6 +777,7 @@ export function Landing({ onJoin, busy }: { onJoin: (name: string, role: Role) =
         </span>
         <span>Built for Hacktoberfest Georgia 2026, Track 02: multiplayer agentic experiences.</span>
         <span className="spacer" />
+        <a href="/docs">Docs</a>
         <a href={REPO} target="_blank" rel="noreferrer">
           GitHub
         </a>

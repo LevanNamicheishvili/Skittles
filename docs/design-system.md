@@ -21,7 +21,7 @@ copy, photos, avatars or animated assets. The Skittles mark is our favicon.
 
 ## Tokens
 
-Defined once on `:root`, overridden on `:root[data-theme="dark"]`. Components never use raw colours.
+The source of truth is `design/tokens.json`, shared with the Flutter app. `node design/build.ts` generates `app/lib/ui/tokens.dart` and fails if the values below drift from it. In CSS they are defined once on `:root`, overridden on `:root[data-theme="dark"]`. Components never use raw colours.
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
@@ -59,6 +59,7 @@ Author colours come from the room and are never tokens. `--brand` and `--termina
 | Option | `.option`, `.option.agent`, `.option.cancel` | Outlined row; agent proposals get a 3 px left edge in the author's colour; cancel is dashed. |
 | History row | `.history li` | Mono revision, avatar, summary. Current row is `--muted`. |
 | Landing | `Landing.tsx`, `.landing` | Conductor's homepage layout, always dark: sticky header, hero (live glyph sky, headline with a scrambling second line, lede, join form, quote), the app window running the scripted demo with a 5-step story bar, the mission ("two fine changes, broken together"), measured numbers, four feature sections with looping demos, a call to action, footer. Shown to anyone without `?role=`. |
+| Docs | `Docs.tsx`, `.docs`, `.prose` | `/docs`: Conductor's docs layout, always dark. Page list on the left (a select on phones), a 720 px article, "On this page" on wide screens, EN / ქარ switch, previous and next. The text is `docs/guide/{en,ka}.md`, split into pages at `<!-- page: id; group: name -->` markers and rendered with `marked`. Georgian labels stay in sans. |
 | Live sky | `LiveSky` in `Landing.tsx` | Digits and symbols drift and flicker in the brand colours, bronze `#9a6b3f` at the edges and red-orange `#ef4f23` where clouds are thick, over twinkling stars. Drawn from a glyph sheet at about 20 fps, paused off screen, static under reduced motion. No source art. |
 | Toast | `.toast` | Inverted tooltip. |
 | Dialog | `.report-panel` | `8px` radius, `--shadow-lg`, scales in from 95%. |

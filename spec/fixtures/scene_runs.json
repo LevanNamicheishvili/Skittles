@@ -1,0 +1,1065 @@
+{
+ "$comment": "Shared cases for spec/scene-play.md: each run is replayed step by step; after each check's number of steps the state must match (numbers within 1e-6). A run shorter than a check is padded with no input.",
+ "cases": [
+  {
+   "name": "standing still: the player lands and stays",
+   "scene": {
+    "format": "skittles-scene",
+    "version": 1,
+    "name": "case",
+    "template": "platformer",
+    "size": {
+     "w": 1600,
+     "h": 900
+    },
+    "theme": "forest",
+    "physics": {
+     "gravity": 1800
+    },
+    "objects": [
+     {
+      "id": "ground",
+      "name": "ground",
+      "type": "platform",
+      "x": 0,
+      "y": 820,
+      "w": 1600,
+      "h": 80
+     },
+     {
+      "id": "player",
+      "name": "player",
+      "type": "player",
+      "x": 100,
+      "y": 772,
+      "w": 32,
+      "h": 48,
+      "behaviours": {
+       "controller": {
+        "speed": 260,
+        "jump": 640
+       }
+      }
+     }
+    ],
+    "ui": {
+     "score": true
+    }
+   },
+   "run": [
+    [
+     120,
+     0
+    ]
+   ],
+   "checks": [
+    {
+     "after": 1,
+     "expect": {
+      "frame": 1,
+      "x": 100.0,
+      "y": 772,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true
+     }
+    },
+    {
+     "after": 120,
+     "expect": {
+      "frame": 120,
+      "x": 100.0,
+      "y": 772,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true
+     }
+    }
+   ],
+   "notes": "Feet start on the ground's top (772 + 48 = 820), so every step lands again: y stays 772, vy 0."
+  },
+  {
+   "name": "running right for a second covers the run speed",
+   "scene": {
+    "format": "skittles-scene",
+    "version": 1,
+    "name": "case",
+    "template": "platformer",
+    "size": {
+     "w": 1600,
+     "h": 900
+    },
+    "theme": "forest",
+    "physics": {
+     "gravity": 1800
+    },
+    "objects": [
+     {
+      "id": "ground",
+      "name": "ground",
+      "type": "platform",
+      "x": 0,
+      "y": 820,
+      "w": 1600,
+      "h": 80
+     },
+     {
+      "id": "player",
+      "name": "player",
+      "type": "player",
+      "x": 100,
+      "y": 772,
+      "w": 32,
+      "h": 48,
+      "behaviours": {
+       "controller": {
+        "speed": 260,
+        "jump": 640
+       }
+      }
+     }
+    ],
+    "ui": {
+     "score": true
+    }
+   },
+   "run": [
+    [
+     120,
+     2
+    ]
+   ],
+   "checks": [
+    {
+     "after": 120,
+     "expect": {
+      "frame": 120,
+      "x": 360.0000000000004,
+      "y": 772,
+      "vx": 260,
+      "vy": 0,
+      "grounded": true
+     }
+    }
+   ],
+   "notes": "260 px/s for 1 s: x goes from 100 to about 360."
+  },
+  {
+   "name": "a jump in place peaks at the jump height and lands",
+   "scene": {
+    "format": "skittles-scene",
+    "version": 1,
+    "name": "case",
+    "template": "platformer",
+    "size": {
+     "w": 1600,
+     "h": 900
+    },
+    "theme": "forest",
+    "physics": {
+     "gravity": 1800
+    },
+    "objects": [
+     {
+      "id": "ground",
+      "name": "ground",
+      "type": "platform",
+      "x": 0,
+      "y": 820,
+      "w": 1600,
+      "h": 80
+     },
+     {
+      "id": "player",
+      "name": "player",
+      "type": "player",
+      "x": 100,
+      "y": 772,
+      "w": 32,
+      "h": 48,
+      "behaviours": {
+       "controller": {
+        "speed": 260,
+        "jump": 640
+       }
+      }
+     }
+    ],
+    "ui": {
+     "score": true
+    }
+   },
+   "run": [
+    [
+     2,
+     0
+    ],
+    [
+     1,
+     4
+    ],
+    [
+     120,
+     0
+    ]
+   ],
+   "checks": [
+    {
+     "after": 45,
+     "expect": {
+      "frame": 45,
+      "x": 100.0,
+      "y": 658.229166666665,
+      "vx": 0,
+      "vy": 5.0,
+      "grounded": false
+     }
+    },
+    {
+     "after": 88,
+     "expect": {
+      "frame": 88,
+      "x": 100.0,
+      "y": 772,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true
+     }
+    },
+    {
+     "after": 130,
+     "expect": {
+      "frame": 130,
+      "x": 100.0,
+      "y": 772,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true
+     }
+    }
+   ],
+   "notes": "Take-off on step 3. The peak is v/g = 0.356 s = about 43 steps later, 640²/3600 = 113.8 px up: y near 658.2. Back down about 86 steps after take-off."
+  },
+  {
+   "name": "running into a wall stops at its side",
+   "scene": {
+    "format": "skittles-scene",
+    "version": 1,
+    "name": "case",
+    "template": "platformer",
+    "size": {
+     "w": 1600,
+     "h": 900
+    },
+    "theme": "forest",
+    "physics": {
+     "gravity": 1800
+    },
+    "objects": [
+     {
+      "id": "ground",
+      "name": "ground",
+      "type": "platform",
+      "x": 0,
+      "y": 820,
+      "w": 1600,
+      "h": 80
+     },
+     {
+      "id": "wall",
+      "name": "wall",
+      "type": "platform",
+      "x": 300,
+      "y": 600,
+      "w": 40,
+      "h": 220
+     },
+     {
+      "id": "player",
+      "name": "player",
+      "type": "player",
+      "x": 100,
+      "y": 772,
+      "w": 32,
+      "h": 48,
+      "behaviours": {
+       "controller": {
+        "speed": 260,
+        "jump": 640
+       }
+      }
+     }
+    ],
+    "ui": {
+     "score": true
+    }
+   },
+   "run": [
+    [
+     120,
+     2
+    ]
+   ],
+   "checks": [
+    {
+     "after": 120,
+     "expect": {
+      "frame": 120,
+      "x": 268,
+      "y": 772,
+      "vx": 260,
+      "vy": 0,
+      "grounded": true
+     }
+    }
+   ],
+   "notes": "The wall's left side is at 300, so the player's x stops at 300 − 32 = 268."
+  },
+  {
+   "name": "a running jump lands on a ledge 80 px up",
+   "scene": {
+    "format": "skittles-scene",
+    "version": 1,
+    "name": "case",
+    "template": "platformer",
+    "size": {
+     "w": 1600,
+     "h": 900
+    },
+    "theme": "forest",
+    "physics": {
+     "gravity": 1800
+    },
+    "objects": [
+     {
+      "id": "ground",
+      "name": "ground",
+      "type": "platform",
+      "x": 0,
+      "y": 820,
+      "w": 1600,
+      "h": 80
+     },
+     {
+      "id": "ledge",
+      "name": "ledge",
+      "type": "platform",
+      "x": 200,
+      "y": 740,
+      "w": 200,
+      "h": 24
+     },
+     {
+      "id": "player",
+      "name": "player",
+      "type": "player",
+      "x": 100,
+      "y": 772,
+      "w": 32,
+      "h": 48,
+      "behaviours": {
+       "controller": {
+        "speed": 260,
+        "jump": 640
+       }
+      }
+     }
+    ],
+    "ui": {
+     "score": true
+    }
+   },
+   "run": [
+    [
+     2,
+     0
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     80,
+     2
+    ]
+   ],
+   "checks": [
+    {
+     "after": 73,
+     "expect": {
+      "frame": 73,
+      "x": 253.83333333333283,
+      "y": 692,
+      "vx": 260,
+      "vy": 0,
+      "grounded": true
+     }
+    }
+   ],
+   "notes": "Landing 80 px higher takes (640 + √(640² − 2·1800·80)) / 1800 = 0.549 s = 66 steps; x is about 100 + 143 = 243, over the ledge (200..400), so it stands at y = 740 − 48 = 692. Then it runs on to the right."
+  },
+  {
+   "name": "walking off the world: fall, die, start again",
+   "scene": {
+    "format": "skittles-scene",
+    "version": 1,
+    "name": "case",
+    "template": "platformer",
+    "size": {
+     "w": 1600,
+     "h": 900
+    },
+    "theme": "forest",
+    "physics": {
+     "gravity": 1800
+    },
+    "objects": [
+     {
+      "id": "ground",
+      "name": "ground",
+      "type": "platform",
+      "x": 0,
+      "y": 820,
+      "w": 200,
+      "h": 80
+     },
+     {
+      "id": "player",
+      "name": "player",
+      "type": "player",
+      "x": 100,
+      "y": 772,
+      "w": 32,
+      "h": 48,
+      "behaviours": {
+       "controller": {
+        "speed": 260,
+        "jump": 640
+       }
+      }
+     }
+    ],
+    "ui": {
+     "score": true
+    }
+   },
+   "run": [
+    [
+     200,
+     2
+    ]
+   ],
+   "checks": [
+    {
+     "after": 60,
+     "expect": {
+      "frame": 60,
+      "x": 229.9999999999996,
+      "y": 784.25,
+      "vx": 260,
+      "vy": 210.0,
+      "grounded": false,
+      "deaths": 0
+     }
+    },
+    {
+     "after": 110,
+     "expect": {
+      "frame": 110,
+      "x": 139.0,
+      "y": 772,
+      "vx": 260,
+      "vy": 0,
+      "grounded": true,
+      "deaths": 1
+     }
+    }
+   ],
+   "notes": "It leaves the ground when x passes 200 (about 47 steps), then falls 80 px below the scene's bottom (y > 900) in about 0.38 s = 46 steps: dead near step 93, back at x = 100."
+  },
+  {
+   "name": "a coin counts once",
+   "scene": {
+    "format": "skittles-scene",
+    "version": 1,
+    "name": "case",
+    "template": "platformer",
+    "size": {
+     "w": 1600,
+     "h": 900
+    },
+    "theme": "forest",
+    "physics": {
+     "gravity": 1800
+    },
+    "objects": [
+     {
+      "id": "ground",
+      "name": "ground",
+      "type": "platform",
+      "x": 0,
+      "y": 820,
+      "w": 1600,
+      "h": 80
+     },
+     {
+      "id": "coin",
+      "name": "coin",
+      "type": "coin",
+      "x": 200,
+      "y": 780,
+      "w": 24,
+      "h": 24,
+      "behaviours": {
+       "collectible": {
+        "points": 25
+       }
+      }
+     },
+     {
+      "id": "player",
+      "name": "player",
+      "type": "player",
+      "x": 100,
+      "y": 772,
+      "w": 32,
+      "h": 48,
+      "behaviours": {
+       "controller": {
+        "speed": 260,
+        "jump": 640
+       }
+      }
+     }
+    ],
+    "ui": {
+     "score": true
+    }
+   },
+   "run": [
+    [
+     80,
+     2
+    ],
+    [
+     80,
+     1
+    ]
+   ],
+   "checks": [
+    {
+     "after": 80,
+     "expect": {
+      "score": 25,
+      "coins": [
+       "coin"
+      ]
+     }
+    },
+    {
+     "after": 160,
+     "expect": {
+      "score": 25,
+      "coins": [
+       "coin"
+      ],
+      "x": 100.00000000000001
+     }
+    }
+   ],
+   "notes": "Running through the coin and back: 25 points, not 50."
+  },
+  {
+   "name": "an enemy sends the player back to the start, then a second of safety",
+   "scene": {
+    "format": "skittles-scene",
+    "version": 1,
+    "name": "case",
+    "template": "platformer",
+    "size": {
+     "w": 1600,
+     "h": 900
+    },
+    "theme": "forest",
+    "physics": {
+     "gravity": 1800
+    },
+    "objects": [
+     {
+      "id": "ground",
+      "name": "ground",
+      "type": "platform",
+      "x": 0,
+      "y": 820,
+      "w": 1600,
+      "h": 80
+     },
+     {
+      "id": "enemy",
+      "name": "enemy",
+      "type": "enemy",
+      "x": 300,
+      "y": 784,
+      "w": 40,
+      "h": 36,
+      "behaviours": {
+       "patrol": {
+        "from": 60,
+        "to": 300,
+        "speed": 120
+       }
+      }
+     },
+     {
+      "id": "player",
+      "name": "player",
+      "type": "player",
+      "x": 120,
+      "y": 772,
+      "w": 32,
+      "h": 48,
+      "behaviours": {
+       "controller": {
+        "speed": 260,
+        "jump": 640
+       }
+      }
+     }
+    ],
+    "ui": {
+     "score": true
+    }
+   },
+   "run": [
+    [
+     100,
+     0
+    ],
+    [
+     40,
+     2
+    ],
+    [
+     200,
+     0
+    ]
+   ],
+   "checks": [
+    {
+     "after": 60,
+     "expect": {
+      "deaths": 0,
+      "x": 120.0,
+      "enemies": {
+       "enemy": 240.0
+      }
+     }
+    },
+    {
+     "after": 200,
+     "expect": {
+      "deaths": 1,
+      "x": 171.99999999999983,
+      "y": 772,
+      "enemies": {
+       "enemy": 100.0
+      }
+     }
+    },
+    {
+     "after": 340,
+     "expect": {
+      "deaths": 2,
+      "x": 120.0,
+      "enemies": {
+       "enemy": 160.0
+      }
+     }
+    }
+   ],
+   "notes": "The enemy starts at 300, the right end of its patrol, so it turns at once and walks left at 120 px/s. At step 60 it is at 240. The player stands until step 100, then runs right into it: they meet when the enemy's x is under the player's right side, and the player is back at 120 with one death. For the next 120 steps the enemy passes through the standing player harmlessly; it turns at 60 at t = 2 s and comes back, and once the safe second is over it catches the player again."
+  },
+  {
+   "name": "touching the finish wins and stops the clock",
+   "scene": {
+    "format": "skittles-scene",
+    "version": 1,
+    "name": "case",
+    "template": "platformer",
+    "size": {
+     "w": 1600,
+     "h": 900
+    },
+    "theme": "forest",
+    "physics": {
+     "gravity": 1800
+    },
+    "objects": [
+     {
+      "id": "ground",
+      "name": "ground",
+      "type": "platform",
+      "x": 0,
+      "y": 820,
+      "w": 1600,
+      "h": 80
+     },
+     {
+      "id": "finish",
+      "name": "finish",
+      "type": "finish",
+      "x": 300,
+      "y": 700,
+      "w": 60,
+      "h": 120
+     },
+     {
+      "id": "player",
+      "name": "player",
+      "type": "player",
+      "x": 100,
+      "y": 772,
+      "w": 32,
+      "h": 48,
+      "behaviours": {
+       "controller": {
+        "speed": 260,
+        "jump": 640
+       }
+      }
+     }
+    ],
+    "ui": {
+     "score": true
+    }
+   },
+   "run": [
+    [
+     300,
+     2
+    ]
+   ],
+   "checks": [
+    {
+     "after": 120,
+     "expect": {
+      "won": true,
+      "frame": 78
+     }
+    },
+    {
+     "after": 300,
+     "expect": {
+      "won": true,
+      "frame": 78,
+      "x": 268.9999999999996
+     }
+    }
+   ],
+   "notes": "The finish starts at 300: the player touches it when x passes 268, after about 77 steps. The frame stays there."
+  },
+  {
+   "name": "a jump just after walking off an edge still works",
+   "scene": {
+    "format": "skittles-scene",
+    "version": 1,
+    "name": "case",
+    "template": "platformer",
+    "size": {
+     "w": 1600,
+     "h": 900
+    },
+    "theme": "forest",
+    "physics": {
+     "gravity": 1800
+    },
+    "objects": [
+     {
+      "id": "ground",
+      "name": "ground",
+      "type": "platform",
+      "x": 0,
+      "y": 820,
+      "w": 200,
+      "h": 80
+     },
+     {
+      "id": "player",
+      "name": "player",
+      "type": "player",
+      "x": 100,
+      "y": 772,
+      "w": 32,
+      "h": 48,
+      "behaviours": {
+       "controller": {
+        "speed": 260,
+        "jump": 640
+       }
+      }
+     }
+    ],
+    "ui": {
+     "score": true
+    }
+   },
+   "run": [
+    [
+     51,
+     2
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     10,
+     2
+    ]
+   ],
+   "checks": [
+    {
+     "after": 52,
+     "expect": {
+      "vy": -625.0,
+      "grounded": false
+     }
+    },
+    {
+     "after": 62,
+     "expect": {
+      "vy": -475.0,
+      "y": 722.4583333333329
+     }
+    }
+   ],
+   "notes": "It leaves the ground near step 47; a press at step 52 is within the 10 steps of grace, so vy becomes −640 + 15."
+  },
+  {
+   "name": "a jump long after walking off an edge does nothing",
+   "scene": {
+    "format": "skittles-scene",
+    "version": 1,
+    "name": "case",
+    "template": "platformer",
+    "size": {
+     "w": 1600,
+     "h": 900
+    },
+    "theme": "forest",
+    "physics": {
+     "gravity": 1800
+    },
+    "objects": [
+     {
+      "id": "ground",
+      "name": "ground",
+      "type": "platform",
+      "x": 0,
+      "y": 820,
+      "w": 200,
+      "h": 80
+     },
+     {
+      "id": "player",
+      "name": "player",
+      "type": "player",
+      "x": 100,
+      "y": 772,
+      "w": 32,
+      "h": 48,
+      "behaviours": {
+       "controller": {
+        "speed": 260,
+        "jump": 640
+       }
+      }
+     }
+    ],
+    "ui": {
+     "score": true
+    }
+   },
+   "run": [
+    [
+     65,
+     2
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     5,
+     2
+    ]
+   ],
+   "checks": [
+    {
+     "after": 66,
+     "expect": {
+      "vy": 300.0,
+      "grounded": false
+     }
+    }
+   ],
+   "notes": "Pressed about 19 steps after leaving the ground: too late, it keeps falling (vy > 0)."
+  },
+  {
+   "name": "a press just before landing jumps on landing",
+   "scene": {
+    "format": "skittles-scene",
+    "version": 1,
+    "name": "case",
+    "template": "platformer",
+    "size": {
+     "w": 1600,
+     "h": 900
+    },
+    "theme": "forest",
+    "physics": {
+     "gravity": 1800
+    },
+    "objects": [
+     {
+      "id": "ground",
+      "name": "ground",
+      "type": "platform",
+      "x": 0,
+      "y": 820,
+      "w": 1600,
+      "h": 80
+     },
+     {
+      "id": "player",
+      "name": "player",
+      "type": "player",
+      "x": 100,
+      "y": 700,
+      "w": 32,
+      "h": 48,
+      "behaviours": {
+       "controller": {
+        "speed": 260,
+        "jump": 640
+       }
+      }
+     }
+    ],
+    "ui": {
+     "score": true
+    }
+   },
+   "run": [
+    [
+     25,
+     0
+    ],
+    [
+     1,
+     4
+    ],
+    [
+     20,
+     0
+    ]
+   ],
+   "checks": [
+    {
+     "after": 26,
+     "expect": {
+      "grounded": false,
+      "vy": 390.0
+     }
+    },
+    {
+     "after": 40,
+     "expect": {
+      "vy": -550.0,
+      "grounded": false
+     }
+    }
+   ],
+   "notes": "Dropped from 72 px above the ground it lands after about 34 steps. The press at step 26 is held for 12 steps, so it takes off right after landing: by step 40 vy is negative."
+  },
+  {
+   "name": "the head bumps a low ceiling",
+   "scene": {
+    "format": "skittles-scene",
+    "version": 1,
+    "name": "case",
+    "template": "platformer",
+    "size": {
+     "w": 1600,
+     "h": 900
+    },
+    "theme": "forest",
+    "physics": {
+     "gravity": 1800
+    },
+    "objects": [
+     {
+      "id": "ground",
+      "name": "ground",
+      "type": "platform",
+      "x": 0,
+      "y": 820,
+      "w": 1600,
+      "h": 80
+     },
+     {
+      "id": "roof",
+      "name": "roof",
+      "type": "platform",
+      "x": 0,
+      "y": 700,
+      "w": 400,
+      "h": 24
+     },
+     {
+      "id": "player",
+      "name": "player",
+      "type": "player",
+      "x": 100,
+      "y": 772,
+      "w": 32,
+      "h": 48,
+      "behaviours": {
+       "controller": {
+        "speed": 260,
+        "jump": 640
+       }
+      }
+     }
+    ],
+    "ui": {
+     "score": true
+    }
+   },
+   "run": [
+    [
+     2,
+     0
+    ],
+    [
+     1,
+     4
+    ],
+    [
+     30,
+     0
+    ]
+   ],
+   "checks": [
+    {
+     "after": 33,
+     "expect": {
+      "y": 749.0,
+      "vy": 300.0
+     }
+    }
+   ],
+   "notes": "The roof's bottom is at 724; the head (y) stops there and vy goes to 0, then the player falls back."
+  }
+ ]
+}

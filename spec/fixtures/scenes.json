@@ -1,0 +1,1614 @@
+{
+  "$comment": "Shared cases for spec/scene.md. Expectations were worked out by hand; see each case's notes.",
+  "cases": [
+    {
+      "name": "the starter forest is playable",
+      "scene": {
+        "format": "skittles-scene",
+        "version": 1,
+        "name": "Forest platformer",
+        "template": "platformer",
+        "size": {
+          "w": 1600,
+          "h": 900
+        },
+        "theme": "forest",
+        "physics": {
+          "gravity": 1800
+        },
+        "objects": [
+          {
+            "id": "ground-1",
+            "name": "Ground",
+            "type": "platform",
+            "x": 0,
+            "y": 820,
+            "w": 640,
+            "h": 80
+          },
+          {
+            "id": "ground-2",
+            "name": "Ground",
+            "type": "platform",
+            "x": 760,
+            "y": 820,
+            "w": 840,
+            "h": 80
+          },
+          {
+            "id": "ledge-a",
+            "name": "Ledge A",
+            "type": "platform",
+            "x": 300,
+            "y": 720,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "ledge-b",
+            "name": "Ledge B",
+            "type": "platform",
+            "x": 560,
+            "y": 620,
+            "w": 180,
+            "h": 24
+          },
+          {
+            "id": "ledge-c",
+            "name": "Ledge C",
+            "type": "platform",
+            "x": 840,
+            "y": 540,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "coin-1",
+            "name": "Coin",
+            "type": "coin",
+            "x": 380,
+            "y": 660,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "coin-2",
+            "name": "Coin",
+            "type": "coin",
+            "x": 900,
+            "y": 480,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "enemy-1",
+            "name": "Enemy",
+            "type": "enemy",
+            "x": 1000,
+            "y": 784,
+            "w": 40,
+            "h": 36,
+            "behaviours": {
+              "patrol": {
+                "from": 900,
+                "to": 1300,
+                "speed": 90
+              }
+            }
+          },
+          {
+            "id": "finish",
+            "name": "Finish",
+            "type": "finish",
+            "x": 1480,
+            "y": 700,
+            "w": 60,
+            "h": 120
+          },
+          {
+            "id": "player",
+            "name": "Player",
+            "type": "player",
+            "x": 80,
+            "y": 772,
+            "w": 32,
+            "h": 48,
+            "behaviours": {
+              "controller": {
+                "speed": 260,
+                "jump": 640
+              }
+            }
+          }
+        ],
+        "ui": {
+          "score": true
+        }
+      },
+      "expect": {
+        "errors": [],
+        "warnings": [],
+        "finishReachable": true
+      },
+      "notes": "H = 113.8; ground-1 to ground-2 is a 120 gap at reach(0) = 166.4; ground-1 to A rises 100 with no gap; A to B rises 100, gap 60, reach 112.2; B to C rises 80, gap 100, reach 128.5."
+    },
+    {
+      "name": "a finish on a ledge nobody can reach",
+      "scene": {
+        "format": "skittles-scene",
+        "version": 1,
+        "name": "High ledge",
+        "template": "platformer",
+        "size": {
+          "w": 1600,
+          "h": 900
+        },
+        "theme": "forest",
+        "physics": {
+          "gravity": 1800
+        },
+        "objects": [
+          {
+            "id": "ground-1",
+            "name": "Ground",
+            "type": "platform",
+            "x": 0,
+            "y": 820,
+            "w": 640,
+            "h": 80
+          },
+          {
+            "id": "ground-2",
+            "name": "Ground",
+            "type": "platform",
+            "x": 760,
+            "y": 820,
+            "w": 840,
+            "h": 80
+          },
+          {
+            "id": "ledge-a",
+            "name": "Ledge A",
+            "type": "platform",
+            "x": 300,
+            "y": 720,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "ledge-b",
+            "name": "Ledge B",
+            "type": "platform",
+            "x": 560,
+            "y": 620,
+            "w": 180,
+            "h": 24
+          },
+          {
+            "id": "ledge-c",
+            "name": "Ledge C",
+            "type": "platform",
+            "x": 840,
+            "y": 540,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "coin-1",
+            "name": "Coin",
+            "type": "coin",
+            "x": 380,
+            "y": 660,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "coin-2",
+            "name": "Coin",
+            "type": "coin",
+            "x": 900,
+            "y": 480,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "enemy-1",
+            "name": "Enemy",
+            "type": "enemy",
+            "x": 1000,
+            "y": 784,
+            "w": 40,
+            "h": 36,
+            "behaviours": {
+              "patrol": {
+                "from": 900,
+                "to": 1300,
+                "speed": 90
+              }
+            }
+          },
+          {
+            "id": "finish",
+            "name": "Finish",
+            "type": "finish",
+            "x": 1360,
+            "y": 480,
+            "w": 60,
+            "h": 120
+          },
+          {
+            "id": "player",
+            "name": "Player",
+            "type": "player",
+            "x": 80,
+            "y": 772,
+            "w": 32,
+            "h": 48,
+            "behaviours": {
+              "controller": {
+                "speed": 260,
+                "jump": 640
+              }
+            }
+          },
+          {
+            "id": "ledge-d",
+            "name": "Ledge D",
+            "type": "platform",
+            "x": 1300,
+            "y": 600,
+            "w": 160,
+            "h": 24
+          }
+        ],
+        "ui": {
+          "score": true
+        }
+      },
+      "expect": {
+        "errors": [
+          "finish_unreachable"
+        ],
+        "warnings": [],
+        "finishReachable": false
+      },
+      "notes": "Ledge D rises 220 from the ground (more than H); from C it is 60 lower but 260 away, reach(-60) = 186.0."
+    },
+    {
+      "name": "a gap too wide to jump",
+      "scene": {
+        "format": "skittles-scene",
+        "version": 1,
+        "name": "Wide gap",
+        "template": "platformer",
+        "size": {
+          "w": 1600,
+          "h": 900
+        },
+        "theme": "forest",
+        "physics": {
+          "gravity": 1800
+        },
+        "objects": [
+          {
+            "id": "ground-1",
+            "name": "Ground",
+            "type": "platform",
+            "x": 0,
+            "y": 820,
+            "w": 600,
+            "h": 80
+          },
+          {
+            "id": "ground-2",
+            "name": "Ground",
+            "type": "platform",
+            "x": 800,
+            "y": 820,
+            "w": 800,
+            "h": 80
+          },
+          {
+            "id": "finish",
+            "name": "Finish",
+            "type": "finish",
+            "x": 1480,
+            "y": 700,
+            "w": 60,
+            "h": 120
+          },
+          {
+            "id": "player",
+            "name": "Player",
+            "type": "player",
+            "x": 80,
+            "y": 772,
+            "w": 32,
+            "h": 48,
+            "behaviours": {
+              "controller": {
+                "speed": 260,
+                "jump": 640
+              }
+            }
+          }
+        ],
+        "ui": {
+          "score": true
+        }
+      },
+      "expect": {
+        "errors": [
+          "finish_unreachable"
+        ],
+        "warnings": [],
+        "finishReachable": false
+      },
+      "notes": "Gap 200 at reach(0) = 166.4."
+    },
+    {
+      "name": "dropping to a lower ledge reaches farther than a flat jump",
+      "scene": {
+        "format": "skittles-scene",
+        "version": 1,
+        "name": "Drop",
+        "template": "platformer",
+        "size": {
+          "w": 1600,
+          "h": 900
+        },
+        "theme": "forest",
+        "physics": {
+          "gravity": 1800
+        },
+        "objects": [
+          {
+            "id": "high",
+            "name": "High ground",
+            "type": "platform",
+            "x": 0,
+            "y": 700,
+            "w": 400,
+            "h": 200
+          },
+          {
+            "id": "low",
+            "name": "Low ground",
+            "type": "platform",
+            "x": 590,
+            "y": 820,
+            "w": 1010,
+            "h": 80
+          },
+          {
+            "id": "finish",
+            "name": "Finish",
+            "type": "finish",
+            "x": 1480,
+            "y": 700,
+            "w": 60,
+            "h": 120
+          },
+          {
+            "id": "player",
+            "name": "Player",
+            "type": "player",
+            "x": 80,
+            "y": 652,
+            "w": 32,
+            "h": 48,
+            "behaviours": {
+              "controller": {
+                "speed": 260,
+                "jump": 640
+              }
+            }
+          }
+        ],
+        "ui": {
+          "score": true
+        }
+      },
+      "expect": {
+        "errors": [],
+        "warnings": [],
+        "finishReachable": true
+      },
+      "notes": "Gap 190, the low ground is 120 lower: reach(-120) = 202.4, while reach(0) = 166.4 would not do."
+    },
+    {
+      "name": "no player",
+      "scene": {
+        "format": "skittles-scene",
+        "version": 1,
+        "name": "No player",
+        "template": "platformer",
+        "size": {
+          "w": 1600,
+          "h": 900
+        },
+        "theme": "forest",
+        "physics": {
+          "gravity": 1800
+        },
+        "objects": [
+          {
+            "id": "ground-1",
+            "name": "Ground",
+            "type": "platform",
+            "x": 0,
+            "y": 820,
+            "w": 640,
+            "h": 80
+          },
+          {
+            "id": "ground-2",
+            "name": "Ground",
+            "type": "platform",
+            "x": 760,
+            "y": 820,
+            "w": 840,
+            "h": 80
+          },
+          {
+            "id": "ledge-a",
+            "name": "Ledge A",
+            "type": "platform",
+            "x": 300,
+            "y": 720,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "ledge-b",
+            "name": "Ledge B",
+            "type": "platform",
+            "x": 560,
+            "y": 620,
+            "w": 180,
+            "h": 24
+          },
+          {
+            "id": "ledge-c",
+            "name": "Ledge C",
+            "type": "platform",
+            "x": 840,
+            "y": 540,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "coin-1",
+            "name": "Coin",
+            "type": "coin",
+            "x": 380,
+            "y": 660,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "coin-2",
+            "name": "Coin",
+            "type": "coin",
+            "x": 900,
+            "y": 480,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "enemy-1",
+            "name": "Enemy",
+            "type": "enemy",
+            "x": 1000,
+            "y": 784,
+            "w": 40,
+            "h": 36,
+            "behaviours": {
+              "patrol": {
+                "from": 900,
+                "to": 1300,
+                "speed": 90
+              }
+            }
+          },
+          {
+            "id": "finish",
+            "name": "Finish",
+            "type": "finish",
+            "x": 1480,
+            "y": 700,
+            "w": 60,
+            "h": 120
+          }
+        ],
+        "ui": {
+          "score": true
+        }
+      },
+      "expect": {
+        "errors": [
+          "no_player"
+        ],
+        "warnings": [],
+        "finishReachable": false
+      },
+      "notes": "Reachability does not run."
+    },
+    {
+      "name": "two players",
+      "scene": {
+        "format": "skittles-scene",
+        "version": 1,
+        "name": "Two players",
+        "template": "platformer",
+        "size": {
+          "w": 1600,
+          "h": 900
+        },
+        "theme": "forest",
+        "physics": {
+          "gravity": 1800
+        },
+        "objects": [
+          {
+            "id": "ground-1",
+            "name": "Ground",
+            "type": "platform",
+            "x": 0,
+            "y": 820,
+            "w": 640,
+            "h": 80
+          },
+          {
+            "id": "ground-2",
+            "name": "Ground",
+            "type": "platform",
+            "x": 760,
+            "y": 820,
+            "w": 840,
+            "h": 80
+          },
+          {
+            "id": "ledge-a",
+            "name": "Ledge A",
+            "type": "platform",
+            "x": 300,
+            "y": 720,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "ledge-b",
+            "name": "Ledge B",
+            "type": "platform",
+            "x": 560,
+            "y": 620,
+            "w": 180,
+            "h": 24
+          },
+          {
+            "id": "ledge-c",
+            "name": "Ledge C",
+            "type": "platform",
+            "x": 840,
+            "y": 540,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "coin-1",
+            "name": "Coin",
+            "type": "coin",
+            "x": 380,
+            "y": 660,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "coin-2",
+            "name": "Coin",
+            "type": "coin",
+            "x": 900,
+            "y": 480,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "enemy-1",
+            "name": "Enemy",
+            "type": "enemy",
+            "x": 1000,
+            "y": 784,
+            "w": 40,
+            "h": 36,
+            "behaviours": {
+              "patrol": {
+                "from": 900,
+                "to": 1300,
+                "speed": 90
+              }
+            }
+          },
+          {
+            "id": "finish",
+            "name": "Finish",
+            "type": "finish",
+            "x": 1480,
+            "y": 700,
+            "w": 60,
+            "h": 120
+          },
+          {
+            "id": "player",
+            "name": "Player",
+            "type": "player",
+            "x": 80,
+            "y": 772,
+            "w": 32,
+            "h": 48,
+            "behaviours": {
+              "controller": {
+                "speed": 260,
+                "jump": 640
+              }
+            }
+          },
+          {
+            "id": "player-2",
+            "name": "Player",
+            "type": "player",
+            "x": 200,
+            "y": 772,
+            "w": 32,
+            "h": 48,
+            "behaviours": {
+              "controller": {
+                "speed": 260,
+                "jump": 640
+              }
+            }
+          }
+        ],
+        "ui": {
+          "score": true
+        }
+      },
+      "expect": {
+        "errors": [
+          "many_players"
+        ],
+        "warnings": [],
+        "finishReachable": false
+      },
+      "notes": "Reachability does not run."
+    },
+    {
+      "name": "a player over the gap falls out of the world",
+      "scene": {
+        "format": "skittles-scene",
+        "version": 1,
+        "name": "Falling",
+        "template": "platformer",
+        "size": {
+          "w": 1600,
+          "h": 900
+        },
+        "theme": "forest",
+        "physics": {
+          "gravity": 1800
+        },
+        "objects": [
+          {
+            "id": "ground-1",
+            "name": "Ground",
+            "type": "platform",
+            "x": 0,
+            "y": 820,
+            "w": 640,
+            "h": 80
+          },
+          {
+            "id": "ground-2",
+            "name": "Ground",
+            "type": "platform",
+            "x": 760,
+            "y": 820,
+            "w": 840,
+            "h": 80
+          },
+          {
+            "id": "ledge-a",
+            "name": "Ledge A",
+            "type": "platform",
+            "x": 300,
+            "y": 720,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "ledge-c",
+            "name": "Ledge C",
+            "type": "platform",
+            "x": 840,
+            "y": 540,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "coin-1",
+            "name": "Coin",
+            "type": "coin",
+            "x": 380,
+            "y": 660,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "coin-2",
+            "name": "Coin",
+            "type": "coin",
+            "x": 900,
+            "y": 480,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "enemy-1",
+            "name": "Enemy",
+            "type": "enemy",
+            "x": 1000,
+            "y": 784,
+            "w": 40,
+            "h": 36,
+            "behaviours": {
+              "patrol": {
+                "from": 900,
+                "to": 1300,
+                "speed": 90
+              }
+            }
+          },
+          {
+            "id": "finish",
+            "name": "Finish",
+            "type": "finish",
+            "x": 1480,
+            "y": 700,
+            "w": 60,
+            "h": 120
+          },
+          {
+            "id": "player",
+            "name": "Player",
+            "type": "player",
+            "x": 680,
+            "y": 400,
+            "w": 32,
+            "h": 48,
+            "behaviours": {
+              "controller": {
+                "speed": 260,
+                "jump": 640
+              }
+            }
+          }
+        ],
+        "ui": {
+          "score": true
+        }
+      },
+      "expect": {
+        "errors": [
+          "player_falls"
+        ],
+        "warnings": [],
+        "finishReachable": false
+      },
+      "notes": "Without ledge B (which spans 560..740), x 680..712 lies over the gap between the grounds at 640 and 760; nothing below. The check stops, no finish_unreachable."
+    },
+    {
+      "name": "a coin in the sky",
+      "scene": {
+        "format": "skittles-scene",
+        "version": 1,
+        "name": "Sky coin",
+        "template": "platformer",
+        "size": {
+          "w": 1600,
+          "h": 900
+        },
+        "theme": "forest",
+        "physics": {
+          "gravity": 1800
+        },
+        "objects": [
+          {
+            "id": "ground-1",
+            "name": "Ground",
+            "type": "platform",
+            "x": 0,
+            "y": 820,
+            "w": 640,
+            "h": 80
+          },
+          {
+            "id": "ground-2",
+            "name": "Ground",
+            "type": "platform",
+            "x": 760,
+            "y": 820,
+            "w": 840,
+            "h": 80
+          },
+          {
+            "id": "ledge-a",
+            "name": "Ledge A",
+            "type": "platform",
+            "x": 300,
+            "y": 720,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "ledge-b",
+            "name": "Ledge B",
+            "type": "platform",
+            "x": 560,
+            "y": 620,
+            "w": 180,
+            "h": 24
+          },
+          {
+            "id": "ledge-c",
+            "name": "Ledge C",
+            "type": "platform",
+            "x": 840,
+            "y": 540,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "coin-1",
+            "name": "Coin",
+            "type": "coin",
+            "x": 380,
+            "y": 660,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "coin-2",
+            "name": "Coin",
+            "type": "coin",
+            "x": 900,
+            "y": 480,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "enemy-1",
+            "name": "Enemy",
+            "type": "enemy",
+            "x": 1000,
+            "y": 784,
+            "w": 40,
+            "h": 36,
+            "behaviours": {
+              "patrol": {
+                "from": 900,
+                "to": 1300,
+                "speed": 90
+              }
+            }
+          },
+          {
+            "id": "finish",
+            "name": "Finish",
+            "type": "finish",
+            "x": 1480,
+            "y": 700,
+            "w": 60,
+            "h": 120
+          },
+          {
+            "id": "player",
+            "name": "Player",
+            "type": "player",
+            "x": 80,
+            "y": 772,
+            "w": 32,
+            "h": 48,
+            "behaviours": {
+              "controller": {
+                "speed": 260,
+                "jump": 640
+              }
+            }
+          },
+          {
+            "id": "coin-3",
+            "name": "Coin",
+            "type": "coin",
+            "x": 1200,
+            "y": 300,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          }
+        ],
+        "ui": {
+          "score": true
+        }
+      },
+      "expect": {
+        "errors": [],
+        "warnings": [
+          "coin_unreachable"
+        ],
+        "finishReachable": true
+      },
+      "notes": "From the ground the player touches up to y 658.2; ledge C's touch zone ends at x 1123.2."
+    },
+    {
+      "name": "a platform off the edge",
+      "scene": {
+        "format": "skittles-scene",
+        "version": 1,
+        "name": "Off the edge",
+        "template": "platformer",
+        "size": {
+          "w": 1600,
+          "h": 900
+        },
+        "theme": "forest",
+        "physics": {
+          "gravity": 1800
+        },
+        "objects": [
+          {
+            "id": "ground-1",
+            "name": "Ground",
+            "type": "platform",
+            "x": 0,
+            "y": 820,
+            "w": 640,
+            "h": 80
+          },
+          {
+            "id": "ground-2",
+            "name": "Ground",
+            "type": "platform",
+            "x": 760,
+            "y": 820,
+            "w": 840,
+            "h": 80
+          },
+          {
+            "id": "ledge-a",
+            "name": "Ledge A",
+            "type": "platform",
+            "x": 300,
+            "y": 720,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "ledge-b",
+            "name": "Ledge B",
+            "type": "platform",
+            "x": 560,
+            "y": 620,
+            "w": 180,
+            "h": 24
+          },
+          {
+            "id": "ledge-c",
+            "name": "Ledge C",
+            "type": "platform",
+            "x": 840,
+            "y": 540,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "coin-1",
+            "name": "Coin",
+            "type": "coin",
+            "x": 380,
+            "y": 660,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "coin-2",
+            "name": "Coin",
+            "type": "coin",
+            "x": 900,
+            "y": 480,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "enemy-1",
+            "name": "Enemy",
+            "type": "enemy",
+            "x": 1000,
+            "y": 784,
+            "w": 40,
+            "h": 36,
+            "behaviours": {
+              "patrol": {
+                "from": 900,
+                "to": 1300,
+                "speed": 90
+              }
+            }
+          },
+          {
+            "id": "finish",
+            "name": "Finish",
+            "type": "finish",
+            "x": 1480,
+            "y": 700,
+            "w": 60,
+            "h": 120
+          },
+          {
+            "id": "player",
+            "name": "Player",
+            "type": "player",
+            "x": 80,
+            "y": 772,
+            "w": 32,
+            "h": 48,
+            "behaviours": {
+              "controller": {
+                "speed": 260,
+                "jump": 640
+              }
+            }
+          },
+          {
+            "id": "ledge-e",
+            "name": "Ledge E",
+            "type": "platform",
+            "x": 1500,
+            "y": 860,
+            "w": 200,
+            "h": 24
+          }
+        ],
+        "ui": {
+          "score": true
+        }
+      },
+      "expect": {
+        "errors": [
+          "out_of_bounds"
+        ],
+        "warnings": [],
+        "finishReachable": true
+      },
+      "notes": "1500 + 200 > 1600. Other errors do not stop reachability."
+    },
+    {
+      "name": "an enemy patrolling backwards",
+      "scene": {
+        "format": "skittles-scene",
+        "version": 1,
+        "name": "Bad patrol",
+        "template": "platformer",
+        "size": {
+          "w": 1600,
+          "h": 900
+        },
+        "theme": "forest",
+        "physics": {
+          "gravity": 1800
+        },
+        "objects": [
+          {
+            "id": "ground-1",
+            "name": "Ground",
+            "type": "platform",
+            "x": 0,
+            "y": 820,
+            "w": 640,
+            "h": 80
+          },
+          {
+            "id": "ground-2",
+            "name": "Ground",
+            "type": "platform",
+            "x": 760,
+            "y": 820,
+            "w": 840,
+            "h": 80
+          },
+          {
+            "id": "ledge-a",
+            "name": "Ledge A",
+            "type": "platform",
+            "x": 300,
+            "y": 720,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "ledge-b",
+            "name": "Ledge B",
+            "type": "platform",
+            "x": 560,
+            "y": 620,
+            "w": 180,
+            "h": 24
+          },
+          {
+            "id": "ledge-c",
+            "name": "Ledge C",
+            "type": "platform",
+            "x": 840,
+            "y": 540,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "coin-1",
+            "name": "Coin",
+            "type": "coin",
+            "x": 380,
+            "y": 660,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "coin-2",
+            "name": "Coin",
+            "type": "coin",
+            "x": 900,
+            "y": 480,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "enemy-1",
+            "name": "Enemy",
+            "type": "enemy",
+            "x": 1000,
+            "y": 784,
+            "w": 40,
+            "h": 36,
+            "behaviours": {
+              "patrol": {
+                "from": 1300,
+                "to": 900,
+                "speed": 90
+              }
+            }
+          },
+          {
+            "id": "finish",
+            "name": "Finish",
+            "type": "finish",
+            "x": 1480,
+            "y": 700,
+            "w": 60,
+            "h": 120
+          },
+          {
+            "id": "player",
+            "name": "Player",
+            "type": "player",
+            "x": 80,
+            "y": 772,
+            "w": 32,
+            "h": 48,
+            "behaviours": {
+              "controller": {
+                "speed": 260,
+                "jump": 640
+              }
+            }
+          }
+        ],
+        "ui": {
+          "score": true
+        }
+      },
+      "expect": {
+        "errors": [
+          "bad_patrol"
+        ],
+        "warnings": [],
+        "finishReachable": true
+      },
+      "notes": "from > to."
+    },
+    {
+      "name": "an enemy patrolling through the start",
+      "scene": {
+        "format": "skittles-scene",
+        "version": 1,
+        "name": "Enemy at start",
+        "template": "platformer",
+        "size": {
+          "w": 1600,
+          "h": 900
+        },
+        "theme": "forest",
+        "physics": {
+          "gravity": 1800
+        },
+        "objects": [
+          {
+            "id": "ground-1",
+            "name": "Ground",
+            "type": "platform",
+            "x": 0,
+            "y": 820,
+            "w": 640,
+            "h": 80
+          },
+          {
+            "id": "ground-2",
+            "name": "Ground",
+            "type": "platform",
+            "x": 760,
+            "y": 820,
+            "w": 840,
+            "h": 80
+          },
+          {
+            "id": "ledge-a",
+            "name": "Ledge A",
+            "type": "platform",
+            "x": 300,
+            "y": 720,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "ledge-b",
+            "name": "Ledge B",
+            "type": "platform",
+            "x": 560,
+            "y": 620,
+            "w": 180,
+            "h": 24
+          },
+          {
+            "id": "ledge-c",
+            "name": "Ledge C",
+            "type": "platform",
+            "x": 840,
+            "y": 540,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "coin-1",
+            "name": "Coin",
+            "type": "coin",
+            "x": 380,
+            "y": 660,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "coin-2",
+            "name": "Coin",
+            "type": "coin",
+            "x": 900,
+            "y": 480,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "enemy-1",
+            "name": "Enemy",
+            "type": "enemy",
+            "x": 1000,
+            "y": 784,
+            "w": 40,
+            "h": 36,
+            "behaviours": {
+              "patrol": {
+                "from": 900,
+                "to": 1300,
+                "speed": 90
+              }
+            }
+          },
+          {
+            "id": "finish",
+            "name": "Finish",
+            "type": "finish",
+            "x": 1480,
+            "y": 700,
+            "w": 60,
+            "h": 120
+          },
+          {
+            "id": "player",
+            "name": "Player",
+            "type": "player",
+            "x": 80,
+            "y": 772,
+            "w": 32,
+            "h": 48,
+            "behaviours": {
+              "controller": {
+                "speed": 260,
+                "jump": 640
+              }
+            }
+          },
+          {
+            "id": "enemy-2",
+            "name": "Enemy",
+            "type": "enemy",
+            "x": 100,
+            "y": 784,
+            "w": 40,
+            "h": 36,
+            "behaviours": {
+              "patrol": {
+                "from": 0,
+                "to": 300,
+                "speed": 90
+              }
+            }
+          }
+        ],
+        "ui": {
+          "score": true
+        }
+      },
+      "expect": {
+        "errors": [],
+        "warnings": [
+          "enemy_on_start"
+        ],
+        "finishReachable": true
+      },
+      "notes": "The patrol covers x 0..340, the player starts at 80..112."
+    },
+    {
+      "name": "a player stuck in a ledge",
+      "scene": {
+        "format": "skittles-scene",
+        "version": 1,
+        "name": "Stuck",
+        "template": "platformer",
+        "size": {
+          "w": 1600,
+          "h": 900
+        },
+        "theme": "forest",
+        "physics": {
+          "gravity": 1800
+        },
+        "objects": [
+          {
+            "id": "ground-1",
+            "name": "Ground",
+            "type": "platform",
+            "x": 0,
+            "y": 820,
+            "w": 640,
+            "h": 80
+          },
+          {
+            "id": "ground-2",
+            "name": "Ground",
+            "type": "platform",
+            "x": 760,
+            "y": 820,
+            "w": 840,
+            "h": 80
+          },
+          {
+            "id": "ledge-a",
+            "name": "Ledge A",
+            "type": "platform",
+            "x": 300,
+            "y": 720,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "ledge-b",
+            "name": "Ledge B",
+            "type": "platform",
+            "x": 560,
+            "y": 620,
+            "w": 180,
+            "h": 24
+          },
+          {
+            "id": "ledge-c",
+            "name": "Ledge C",
+            "type": "platform",
+            "x": 840,
+            "y": 540,
+            "w": 200,
+            "h": 24
+          },
+          {
+            "id": "coin-1",
+            "name": "Coin",
+            "type": "coin",
+            "x": 380,
+            "y": 660,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "coin-2",
+            "name": "Coin",
+            "type": "coin",
+            "x": 900,
+            "y": 480,
+            "w": 24,
+            "h": 24,
+            "behaviours": {
+              "collectible": {
+                "points": 10
+              }
+            }
+          },
+          {
+            "id": "enemy-1",
+            "name": "Enemy",
+            "type": "enemy",
+            "x": 1000,
+            "y": 784,
+            "w": 40,
+            "h": 36,
+            "behaviours": {
+              "patrol": {
+                "from": 900,
+                "to": 1300,
+                "speed": 90
+              }
+            }
+          },
+          {
+            "id": "finish",
+            "name": "Finish",
+            "type": "finish",
+            "x": 1480,
+            "y": 700,
+            "w": 60,
+            "h": 120
+          },
+          {
+            "id": "player",
+            "name": "Player",
+            "type": "player",
+            "x": 310,
+            "y": 690,
+            "w": 32,
+            "h": 48,
+            "behaviours": {
+              "controller": {
+                "speed": 260,
+                "jump": 640
+              }
+            }
+          }
+        ],
+        "ui": {
+          "score": true
+        }
+      },
+      "expect": {
+        "errors": [],
+        "warnings": [
+          "player_in_platform"
+        ],
+        "finishReachable": true
+      },
+      "notes": "The player (y 690..738) overlaps ledge A (y 720..744). Its feet are at 738, so it starts on the ground below, at 820."
+    }
+  ]
+}

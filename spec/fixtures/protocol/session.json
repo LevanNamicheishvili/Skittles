@@ -1,0 +1,3737 @@
+{
+  "$comment": "Recorded by server/scripts/record-protocol.ts from the real room code. Do not edit by hand; run the script again.",
+  "members": {
+    "nino": "author-1",
+    "giorgi": "author-2",
+    "luka": "player-3"
+  },
+  "snapshot": {
+    "you": {
+      "id": "author-1",
+      "name": "Nino",
+      "role": "author",
+      "letter": "A",
+      "color": "#3b82f6"
+    },
+    "members": [
+      {
+        "id": "author-1",
+        "name": "Nino",
+        "role": "author",
+        "letter": "A",
+        "color": "#3b82f6"
+      },
+      {
+        "id": "author-2",
+        "name": "Giorgi",
+        "role": "author",
+        "letter": "B",
+        "color": "#f97316"
+      },
+      {
+        "id": "player-3",
+        "name": "Luka",
+        "role": "player",
+        "letter": "P",
+        "color": "#64748b"
+      },
+      {
+        "id": "stage-4",
+        "name": "Stage",
+        "role": "stage",
+        "letter": "V",
+        "color": "#64748b"
+      }
+    ],
+    "state": {
+      "world": {
+        "schemaVersion": 1,
+        "grid": {
+          "w": 24,
+          "h": 14
+        },
+        "start": {
+          "x": 1,
+          "y": 7
+        },
+        "flag": {
+          "x": 22,
+          "y": 7
+        },
+        "entities": [
+          {
+            "id": "S1",
+            "type": "wall",
+            "owner": {
+              "kind": "system"
+            },
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 1,
+            "label": "North cliffs"
+          },
+          {
+            "id": "S2",
+            "type": "wall",
+            "owner": {
+              "kind": "system"
+            },
+            "x": 0,
+            "y": 13,
+            "w": 24,
+            "h": 1,
+            "label": "South cliffs"
+          },
+          {
+            "id": "S3",
+            "type": "wall",
+            "owner": {
+              "kind": "system"
+            },
+            "x": 5,
+            "y": 3,
+            "w": 2,
+            "h": 2,
+            "label": "Boulders"
+          },
+          {
+            "id": "S4",
+            "type": "wall",
+            "owner": {
+              "kind": "system"
+            },
+            "x": 16,
+            "y": 9,
+            "w": 3,
+            "h": 2,
+            "label": "Boulders"
+          },
+          {
+            "id": "A1",
+            "type": "lava",
+            "owner": {
+              "kind": "assistant",
+              "playerId": "author-1"
+            },
+            "x": 11,
+            "y": 1,
+            "w": 2,
+            "h": 3,
+            "label": "Lava river"
+          },
+          {
+            "id": "A2",
+            "type": "lava",
+            "owner": {
+              "kind": "assistant",
+              "playerId": "author-1"
+            },
+            "x": 11,
+            "y": 5,
+            "w": 2,
+            "h": 8,
+            "label": "Lava river"
+          }
+        ],
+        "objectives": []
+      },
+      "rev": 4,
+      "solve": {
+        "solvable": true,
+        "steps": 27,
+        "path": [
+          "up",
+          "up",
+          "right",
+          "right",
+          "right",
+          "right",
+          "right",
+          "right",
+          "up",
+          "right",
+          "right",
+          "right",
+          "right",
+          "right",
+          "right",
+          "down",
+          "down",
+          "down",
+          "right",
+          "right",
+          "right",
+          "right",
+          "right",
+          "right",
+          "right",
+          "right",
+          "right"
+        ],
+        "unreachable": []
+      },
+      "deferred": 0,
+      "solveMs": 0.13
+    },
+    "log": [
+      {
+        "by": "author-1",
+        "summary": "Lava river with one gap",
+        "ops": [
+          {
+            "op": "create",
+            "entity": {
+              "id": "A1",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 1,
+              "w": 2,
+              "h": 3,
+              "label": "Lava river"
+            }
+          },
+          {
+            "op": "create",
+            "entity": {
+              "id": "A2",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 5,
+              "w": 2,
+              "h": 8,
+              "label": "Lava river"
+            }
+          }
+        ],
+        "rev": 1,
+        "at": 1792279915383
+      },
+      {
+        "by": "author-2",
+        "summary": "Statue in the gap",
+        "ops": [
+          {
+            "op": "create",
+            "entity": {
+              "id": "B1",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 11,
+              "y": 4,
+              "w": 2,
+              "h": 1,
+              "label": "Statue"
+            }
+          }
+        ],
+        "fix": {
+          "summary": "Build a stone bridge. A 2-tile bridge at (11, 7) over Nino's lava. Both ideas stay.",
+          "ops": [
+            {
+              "op": "create",
+              "entity": {
+                "id": "M1",
+                "type": "bridge",
+                "owner": {
+                  "kind": "mediator"
+                },
+                "x": 11,
+                "y": 7,
+                "w": 2,
+                "h": 1,
+                "label": "Stone bridge"
+              }
+            }
+          ],
+          "approvedBy": [
+            "author-1"
+          ]
+        },
+        "rev": 2,
+        "at": 1792279915388
+      },
+      {
+        "by": "author-2",
+        "summary": "added wall 1×1 at (1, 6)",
+        "ops": [
+          {
+            "op": "create",
+            "entity": {
+              "id": "B2",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 1,
+              "y": 6,
+              "w": 1,
+              "h": 1,
+              "label": "Pillar"
+            }
+          }
+        ],
+        "rev": 3,
+        "at": 1792279915389
+      },
+      {
+        "by": "author-1",
+        "summary": "Restored version 1",
+        "ops": [
+          {
+            "op": "replace_world",
+            "world": {
+              "schemaVersion": 1,
+              "grid": {
+                "w": 24,
+                "h": 14
+              },
+              "start": {
+                "x": 1,
+                "y": 7
+              },
+              "flag": {
+                "x": 22,
+                "y": 7
+              },
+              "entities": [
+                {
+                  "id": "S1",
+                  "type": "wall",
+                  "owner": {
+                    "kind": "system"
+                  },
+                  "x": 0,
+                  "y": 0,
+                  "w": 24,
+                  "h": 1,
+                  "label": "North cliffs"
+                },
+                {
+                  "id": "S2",
+                  "type": "wall",
+                  "owner": {
+                    "kind": "system"
+                  },
+                  "x": 0,
+                  "y": 13,
+                  "w": 24,
+                  "h": 1,
+                  "label": "South cliffs"
+                },
+                {
+                  "id": "S3",
+                  "type": "wall",
+                  "owner": {
+                    "kind": "system"
+                  },
+                  "x": 5,
+                  "y": 3,
+                  "w": 2,
+                  "h": 2,
+                  "label": "Boulders"
+                },
+                {
+                  "id": "S4",
+                  "type": "wall",
+                  "owner": {
+                    "kind": "system"
+                  },
+                  "x": 16,
+                  "y": 9,
+                  "w": 3,
+                  "h": 2,
+                  "label": "Boulders"
+                },
+                {
+                  "id": "A1",
+                  "type": "lava",
+                  "owner": {
+                    "kind": "assistant",
+                    "playerId": "author-1"
+                  },
+                  "x": 11,
+                  "y": 1,
+                  "w": 2,
+                  "h": 3,
+                  "label": "Lava river"
+                },
+                {
+                  "id": "A2",
+                  "type": "lava",
+                  "owner": {
+                    "kind": "assistant",
+                    "playerId": "author-1"
+                  },
+                  "x": 11,
+                  "y": 5,
+                  "w": 2,
+                  "h": 8,
+                  "label": "Lava river"
+                }
+              ],
+              "objectives": []
+            }
+          }
+        ],
+        "revertTo": 1,
+        "rev": 4,
+        "at": 1792279915390
+      }
+    ],
+    "chats": {
+      "author-1": [
+        {
+          "id": "C5",
+          "authorId": "author-1",
+          "from": "you",
+          "text": "Add a lava river down the middle. Leave one gap.",
+          "at": 1792279915381
+        },
+        {
+          "id": "C6",
+          "authorId": "author-1",
+          "from": "agent",
+          "text": "Done: a river at column 11 with one gap at row 4. Still winnable.",
+          "at": 1792279915384
+        },
+        {
+          "id": "C11",
+          "authorId": "author-1",
+          "from": "agent",
+          "text": "Giorgi's change would have broken your work. I proposed a compromise: Keep the statue and open a gap in my river at row 8.",
+          "at": 1792279915388
+        },
+        {
+          "id": "C12",
+          "authorId": "author-1",
+          "from": "mediator",
+          "text": "Giorgi wants to build a stone bridge. A 2-tile bridge at (11, 7) over Nino's lava. Both ideas stay. It touches your object. Approve?",
+          "at": 1792279915388,
+          "proposalId": "P8"
+        },
+        {
+          "id": "C15",
+          "authorId": "author-1",
+          "from": "playtest",
+          "text": "Luka fell into lava at (11, 8) 2 times.",
+          "at": 1792279915389,
+          "reportId": "R14"
+        },
+        {
+          "id": "C17",
+          "authorId": "author-1",
+          "from": "agent",
+          "text": "Shorten the river by one row, so the crossing is fair.",
+          "at": 1792279915389,
+          "suggestionId": "G16"
+        }
+      ],
+      "author-2": [
+        {
+          "id": "C7",
+          "authorId": "author-2",
+          "from": "you",
+          "text": "Put a big statue right in the gap.",
+          "at": 1792279915384
+        },
+        {
+          "id": "C9",
+          "authorId": "author-2",
+          "from": "mediator",
+          "text": "This would make the flag unreachable: Giorgi's wall B1 closes the old route, and Nino's lava A2 leaves no way around. Nothing has changed yet. Pick a fix.",
+          "at": 1792279915387,
+          "proposalId": "P8"
+        },
+        {
+          "id": "C10",
+          "authorId": "author-2",
+          "from": "mediator",
+          "text": "Nino's agent proposes a compromise: Keep the statue and open a gap in my river at row 8.",
+          "at": 1792279915388,
+          "proposalId": "P8"
+        },
+        {
+          "id": "C13",
+          "authorId": "author-2",
+          "from": "system",
+          "text": "Waiting for Nino to approve.",
+          "at": 1792279915388,
+          "proposalId": "P8"
+        },
+        {
+          "id": "C18",
+          "authorId": "author-2",
+          "from": "system",
+          "text": "The player is standing where this change lands. It goes live as soon as they step away.",
+          "at": 1792279915389
+        },
+        {
+          "id": "C19",
+          "authorId": "author-2",
+          "from": "system",
+          "text": "The player stepped away, so your change is live now.",
+          "at": 1792279915389
+        }
+      ]
+    },
+    "proposals": [],
+    "reports": [
+      {
+        "id": "R14",
+        "by": "player-3",
+        "kind": "signal",
+        "text": "Luka fell into lava at (11, 8) 2 times.",
+        "at": 1792279915389,
+        "rev": 2,
+        "spot": {
+          "x": 11,
+          "y": 8
+        },
+        "position": {
+          "x": 1,
+          "y": 7
+        },
+        "keys": [],
+        "fallsHere": 2,
+        "falls": 2,
+        "trail": [],
+        "suspects": [
+          {
+            "id": "A2",
+            "type": "lava",
+            "ownerId": "author-1",
+            "mediator": false,
+            "label": "Lava river",
+            "distance": 0
+          },
+          {
+            "id": "M1",
+            "type": "bridge",
+            "mediator": true,
+            "label": "Stone bridge",
+            "distance": 1
+          }
+        ],
+        "routedTo": [
+          "author-1"
+        ]
+      }
+    ],
+    "suggestions": [
+      {
+        "id": "G16",
+        "authorId": "author-1",
+        "reportId": "R14",
+        "status": "open",
+        "message": "Shorten the river by one row, so the crossing is fair.",
+        "summary": "Shorter lava river",
+        "ops": [
+          {
+            "op": "update",
+            "id": "A1",
+            "set": {
+              "h": 2
+            }
+          }
+        ]
+      }
+    ],
+    "play": {
+      "x": 1,
+      "y": 7,
+      "keys": [],
+      "collected": [],
+      "deaths": 2,
+      "won": false,
+      "trail": [
+        {
+          "x": 1,
+          "y": 6
+        },
+        {
+          "x": 1,
+          "y": 7
+        }
+      ],
+      "falls": []
+    }
+  },
+  "results": {
+    "committed": {
+      "status": "committed",
+      "rev": 1
+    },
+    "conflict": {
+      "status": "conflict",
+      "proposal": {
+        "id": "P8",
+        "requesterId": "author-2",
+        "summary": "Statue in the gap",
+        "ops": [
+          {
+            "op": "create",
+            "entity": {
+              "id": "B1",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 11,
+              "y": 4,
+              "w": 2,
+              "h": 1,
+              "label": "Statue"
+            }
+          }
+        ],
+        "diagnosis": {
+          "unreachable": [
+            "flag"
+          ],
+          "blockers": [
+            {
+              "id": "A2",
+              "type": "lava",
+              "ownerId": "author-1"
+            }
+          ],
+          "closedBy": [
+            {
+              "id": "B1",
+              "type": "wall",
+              "ownerId": "author-2"
+            }
+          ]
+        },
+        "text": "This would make the flag unreachable: Giorgi's wall B1 closes the old route, and Nino's lava A2 leaves no way around.",
+        "options": [
+          {
+            "id": "bridge",
+            "kind": "bridge",
+            "title": "Build a stone bridge",
+            "detail": "A 2-tile bridge at (11, 7) over Nino's lava. Both ideas stay.",
+            "ops": [
+              {
+                "op": "create",
+                "entity": {
+                  "id": "M1",
+                  "type": "bridge",
+                  "owner": {
+                    "kind": "mediator"
+                  },
+                  "x": 11,
+                  "y": 7,
+                  "w": 2,
+                  "h": 1,
+                  "label": "Stone bridge"
+                }
+              }
+            ],
+            "touches": [
+              "author-1"
+            ]
+          },
+          {
+            "id": "cancel",
+            "kind": "cancel",
+            "title": "Cancel my change",
+            "detail": "Keep the level as it is now.",
+            "ops": [],
+            "touches": []
+          }
+        ],
+        "status": "open",
+        "negotiating": [],
+        "approvals": {}
+      }
+    },
+    "awaiting_approval": {
+      "status": "awaiting_approval",
+      "proposal": {
+        "id": "P8",
+        "requesterId": "author-2",
+        "summary": "Statue in the gap",
+        "ops": [
+          {
+            "op": "create",
+            "entity": {
+              "id": "B1",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 11,
+              "y": 4,
+              "w": 2,
+              "h": 1,
+              "label": "Statue"
+            }
+          }
+        ],
+        "diagnosis": {
+          "unreachable": [
+            "flag"
+          ],
+          "blockers": [
+            {
+              "id": "A2",
+              "type": "lava",
+              "ownerId": "author-1"
+            }
+          ],
+          "closedBy": [
+            {
+              "id": "B1",
+              "type": "wall",
+              "ownerId": "author-2"
+            }
+          ]
+        },
+        "text": "This would make the flag unreachable: Giorgi's wall B1 closes the old route, and Nino's lava A2 leaves no way around.",
+        "options": [
+          {
+            "id": "bridge",
+            "kind": "bridge",
+            "title": "Build a stone bridge",
+            "detail": "A 2-tile bridge at (11, 7) over Nino's lava. Both ideas stay.",
+            "ops": [
+              {
+                "op": "create",
+                "entity": {
+                  "id": "M1",
+                  "type": "bridge",
+                  "owner": {
+                    "kind": "mediator"
+                  },
+                  "x": 11,
+                  "y": 7,
+                  "w": 2,
+                  "h": 1,
+                  "label": "Stone bridge"
+                }
+              }
+            ],
+            "touches": [
+              "author-1"
+            ]
+          },
+          {
+            "id": "agent-author-1",
+            "kind": "agent",
+            "from": "author-1",
+            "title": "Nino's agent: open a gap further down",
+            "detail": "Keep the statue and open a gap in my river at row 8.",
+            "ops": [
+              {
+                "op": "update",
+                "id": "A2",
+                "set": {
+                  "y": 9,
+                  "h": 4
+                }
+              },
+              {
+                "op": "create",
+                "entity": {
+                  "id": "new4",
+                  "type": "lava",
+                  "owner": {
+                    "kind": "assistant"
+                  },
+                  "x": 11,
+                  "y": 5,
+                  "w": 2,
+                  "h": 3,
+                  "label": "Lava river"
+                }
+              }
+            ],
+            "touches": [
+              "author-1"
+            ]
+          },
+          {
+            "id": "cancel",
+            "kind": "cancel",
+            "title": "Cancel my change",
+            "detail": "Keep the level as it is now.",
+            "ops": [],
+            "touches": []
+          }
+        ],
+        "status": "awaiting_approval",
+        "negotiating": [],
+        "approvals": {
+          "author-1": null
+        },
+        "chosen": "bridge"
+      }
+    },
+    "rejected": {
+      "status": "rejected",
+      "code": "unknown_id",
+      "message": "there is no object Z9"
+    },
+    "deferred": {
+      "status": "deferred"
+    },
+    "revert": {
+      "status": "committed",
+      "rev": 4
+    }
+  },
+  "events": [
+    {
+      "type": "members",
+      "payload": [
+        {
+          "id": "author-1",
+          "name": "Nino",
+          "role": "author",
+          "letter": "A",
+          "color": "#3b82f6"
+        }
+      ]
+    },
+    {
+      "type": "members",
+      "payload": [
+        {
+          "id": "author-1",
+          "name": "Nino",
+          "role": "author",
+          "letter": "A",
+          "color": "#3b82f6"
+        },
+        {
+          "id": "author-2",
+          "name": "Giorgi",
+          "role": "author",
+          "letter": "B",
+          "color": "#f97316"
+        }
+      ]
+    },
+    {
+      "type": "members",
+      "payload": [
+        {
+          "id": "author-1",
+          "name": "Nino",
+          "role": "author",
+          "letter": "A",
+          "color": "#3b82f6"
+        },
+        {
+          "id": "author-2",
+          "name": "Giorgi",
+          "role": "author",
+          "letter": "B",
+          "color": "#f97316"
+        },
+        {
+          "id": "player-3",
+          "name": "Luka",
+          "role": "player",
+          "letter": "P",
+          "color": "#64748b"
+        }
+      ]
+    },
+    {
+      "type": "members",
+      "payload": [
+        {
+          "id": "author-1",
+          "name": "Nino",
+          "role": "author",
+          "letter": "A",
+          "color": "#3b82f6"
+        },
+        {
+          "id": "author-2",
+          "name": "Giorgi",
+          "role": "author",
+          "letter": "B",
+          "color": "#f97316"
+        },
+        {
+          "id": "player-3",
+          "name": "Luka",
+          "role": "player",
+          "letter": "P",
+          "color": "#64748b"
+        },
+        {
+          "id": "stage-4",
+          "name": "Stage",
+          "role": "stage",
+          "letter": "V",
+          "color": "#64748b"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "payload": {
+        "id": "C5",
+        "authorId": "author-1",
+        "from": "you",
+        "text": "Add a lava river down the middle. Leave one gap.",
+        "at": 1792279915381
+      }
+    },
+    {
+      "type": "log",
+      "payload": {
+        "by": "author-1",
+        "summary": "Lava river with one gap",
+        "ops": [
+          {
+            "op": "create",
+            "entity": {
+              "id": "A1",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 1,
+              "w": 2,
+              "h": 3,
+              "label": "Lava river"
+            }
+          },
+          {
+            "op": "create",
+            "entity": {
+              "id": "A2",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 5,
+              "w": 2,
+              "h": 8,
+              "label": "Lava river"
+            }
+          }
+        ],
+        "rev": 1,
+        "at": 1792279915383
+      }
+    },
+    {
+      "type": "state",
+      "payload": {
+        "world": {
+          "schemaVersion": 1,
+          "grid": {
+            "w": 24,
+            "h": 14
+          },
+          "start": {
+            "x": 1,
+            "y": 7
+          },
+          "flag": {
+            "x": 22,
+            "y": 7
+          },
+          "entities": [
+            {
+              "id": "S1",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 0,
+              "y": 0,
+              "w": 24,
+              "h": 1,
+              "label": "North cliffs"
+            },
+            {
+              "id": "S2",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 0,
+              "y": 13,
+              "w": 24,
+              "h": 1,
+              "label": "South cliffs"
+            },
+            {
+              "id": "S3",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 5,
+              "y": 3,
+              "w": 2,
+              "h": 2,
+              "label": "Boulders"
+            },
+            {
+              "id": "S4",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 16,
+              "y": 9,
+              "w": 3,
+              "h": 2,
+              "label": "Boulders"
+            },
+            {
+              "id": "A1",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 1,
+              "w": 2,
+              "h": 3,
+              "label": "Lava river"
+            },
+            {
+              "id": "A2",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 5,
+              "w": 2,
+              "h": 8,
+              "label": "Lava river"
+            }
+          ],
+          "objectives": []
+        },
+        "rev": 1,
+        "solve": {
+          "solvable": true,
+          "steps": 27,
+          "path": [
+            "up",
+            "up",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "up",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "down",
+            "down",
+            "down",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "unreachable": []
+        },
+        "deferred": 0,
+        "solveMs": 0.14
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 1,
+        "y": 7,
+        "keys": [],
+        "collected": [],
+        "deaths": 0,
+        "won": false,
+        "trail": [],
+        "falls": []
+      }
+    },
+    {
+      "type": "chat",
+      "payload": {
+        "id": "C6",
+        "authorId": "author-1",
+        "from": "agent",
+        "text": "Done: a river at column 11 with one gap at row 4. Still winnable.",
+        "at": 1792279915384
+      }
+    },
+    {
+      "type": "chat",
+      "payload": {
+        "id": "C7",
+        "authorId": "author-2",
+        "from": "you",
+        "text": "Put a big statue right in the gap.",
+        "at": 1792279915384
+      }
+    },
+    {
+      "type": "proposal",
+      "payload": {
+        "id": "P8",
+        "requesterId": "author-2",
+        "summary": "Statue in the gap",
+        "ops": [
+          {
+            "op": "create",
+            "entity": {
+              "id": "B1",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 11,
+              "y": 4,
+              "w": 2,
+              "h": 1,
+              "label": "Statue"
+            }
+          }
+        ],
+        "diagnosis": {
+          "unreachable": [
+            "flag"
+          ],
+          "blockers": [
+            {
+              "id": "A2",
+              "type": "lava",
+              "ownerId": "author-1"
+            }
+          ],
+          "closedBy": [
+            {
+              "id": "B1",
+              "type": "wall",
+              "ownerId": "author-2"
+            }
+          ]
+        },
+        "text": "This would make the flag unreachable: Giorgi's wall B1 closes the old route, and Nino's lava A2 leaves no way around.",
+        "options": [
+          {
+            "id": "bridge",
+            "kind": "bridge",
+            "title": "Build a stone bridge",
+            "detail": "A 2-tile bridge at (11, 7) over Nino's lava. Both ideas stay.",
+            "ops": [
+              {
+                "op": "create",
+                "entity": {
+                  "id": "M1",
+                  "type": "bridge",
+                  "owner": {
+                    "kind": "mediator"
+                  },
+                  "x": 11,
+                  "y": 7,
+                  "w": 2,
+                  "h": 1,
+                  "label": "Stone bridge"
+                }
+              }
+            ],
+            "touches": [
+              "author-1"
+            ]
+          },
+          {
+            "id": "cancel",
+            "kind": "cancel",
+            "title": "Cancel my change",
+            "detail": "Keep the level as it is now.",
+            "ops": [],
+            "touches": []
+          }
+        ],
+        "status": "open",
+        "negotiating": [],
+        "approvals": {}
+      }
+    },
+    {
+      "type": "chat",
+      "payload": {
+        "id": "C9",
+        "authorId": "author-2",
+        "from": "mediator",
+        "text": "This would make the flag unreachable: Giorgi's wall B1 closes the old route, and Nino's lava A2 leaves no way around. Nothing has changed yet. Pick a fix.",
+        "at": 1792279915387,
+        "proposalId": "P8"
+      }
+    },
+    {
+      "type": "proposal",
+      "payload": {
+        "id": "P8",
+        "requesterId": "author-2",
+        "summary": "Statue in the gap",
+        "ops": [
+          {
+            "op": "create",
+            "entity": {
+              "id": "B1",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 11,
+              "y": 4,
+              "w": 2,
+              "h": 1,
+              "label": "Statue"
+            }
+          }
+        ],
+        "diagnosis": {
+          "unreachable": [
+            "flag"
+          ],
+          "blockers": [
+            {
+              "id": "A2",
+              "type": "lava",
+              "ownerId": "author-1"
+            }
+          ],
+          "closedBy": [
+            {
+              "id": "B1",
+              "type": "wall",
+              "ownerId": "author-2"
+            }
+          ]
+        },
+        "text": "This would make the flag unreachable: Giorgi's wall B1 closes the old route, and Nino's lava A2 leaves no way around.",
+        "options": [
+          {
+            "id": "bridge",
+            "kind": "bridge",
+            "title": "Build a stone bridge",
+            "detail": "A 2-tile bridge at (11, 7) over Nino's lava. Both ideas stay.",
+            "ops": [
+              {
+                "op": "create",
+                "entity": {
+                  "id": "M1",
+                  "type": "bridge",
+                  "owner": {
+                    "kind": "mediator"
+                  },
+                  "x": 11,
+                  "y": 7,
+                  "w": 2,
+                  "h": 1,
+                  "label": "Stone bridge"
+                }
+              }
+            ],
+            "touches": [
+              "author-1"
+            ]
+          },
+          {
+            "id": "cancel",
+            "kind": "cancel",
+            "title": "Cancel my change",
+            "detail": "Keep the level as it is now.",
+            "ops": [],
+            "touches": []
+          }
+        ],
+        "status": "open",
+        "negotiating": [
+          "author-1"
+        ],
+        "approvals": {}
+      }
+    },
+    {
+      "type": "proposal",
+      "payload": {
+        "id": "P8",
+        "requesterId": "author-2",
+        "summary": "Statue in the gap",
+        "ops": [
+          {
+            "op": "create",
+            "entity": {
+              "id": "B1",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 11,
+              "y": 4,
+              "w": 2,
+              "h": 1,
+              "label": "Statue"
+            }
+          }
+        ],
+        "diagnosis": {
+          "unreachable": [
+            "flag"
+          ],
+          "blockers": [
+            {
+              "id": "A2",
+              "type": "lava",
+              "ownerId": "author-1"
+            }
+          ],
+          "closedBy": [
+            {
+              "id": "B1",
+              "type": "wall",
+              "ownerId": "author-2"
+            }
+          ]
+        },
+        "text": "This would make the flag unreachable: Giorgi's wall B1 closes the old route, and Nino's lava A2 leaves no way around.",
+        "options": [
+          {
+            "id": "bridge",
+            "kind": "bridge",
+            "title": "Build a stone bridge",
+            "detail": "A 2-tile bridge at (11, 7) over Nino's lava. Both ideas stay.",
+            "ops": [
+              {
+                "op": "create",
+                "entity": {
+                  "id": "M1",
+                  "type": "bridge",
+                  "owner": {
+                    "kind": "mediator"
+                  },
+                  "x": 11,
+                  "y": 7,
+                  "w": 2,
+                  "h": 1,
+                  "label": "Stone bridge"
+                }
+              }
+            ],
+            "touches": [
+              "author-1"
+            ]
+          },
+          {
+            "id": "agent-author-1",
+            "kind": "agent",
+            "from": "author-1",
+            "title": "Nino's agent: open a gap further down",
+            "detail": "Keep the statue and open a gap in my river at row 8.",
+            "ops": [
+              {
+                "op": "update",
+                "id": "A2",
+                "set": {
+                  "y": 9,
+                  "h": 4
+                }
+              },
+              {
+                "op": "create",
+                "entity": {
+                  "id": "new4",
+                  "type": "lava",
+                  "owner": {
+                    "kind": "assistant"
+                  },
+                  "x": 11,
+                  "y": 5,
+                  "w": 2,
+                  "h": 3,
+                  "label": "Lava river"
+                }
+              }
+            ],
+            "touches": [
+              "author-1"
+            ]
+          },
+          {
+            "id": "cancel",
+            "kind": "cancel",
+            "title": "Cancel my change",
+            "detail": "Keep the level as it is now.",
+            "ops": [],
+            "touches": []
+          }
+        ],
+        "status": "open",
+        "negotiating": [],
+        "approvals": {}
+      }
+    },
+    {
+      "type": "chat",
+      "payload": {
+        "id": "C10",
+        "authorId": "author-2",
+        "from": "mediator",
+        "text": "Nino's agent proposes a compromise: Keep the statue and open a gap in my river at row 8.",
+        "at": 1792279915388,
+        "proposalId": "P8"
+      }
+    },
+    {
+      "type": "chat",
+      "payload": {
+        "id": "C11",
+        "authorId": "author-1",
+        "from": "agent",
+        "text": "Giorgi's change would have broken your work. I proposed a compromise: Keep the statue and open a gap in my river at row 8.",
+        "at": 1792279915388
+      }
+    },
+    {
+      "type": "proposal",
+      "payload": {
+        "id": "P8",
+        "requesterId": "author-2",
+        "summary": "Statue in the gap",
+        "ops": [
+          {
+            "op": "create",
+            "entity": {
+              "id": "B1",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 11,
+              "y": 4,
+              "w": 2,
+              "h": 1,
+              "label": "Statue"
+            }
+          }
+        ],
+        "diagnosis": {
+          "unreachable": [
+            "flag"
+          ],
+          "blockers": [
+            {
+              "id": "A2",
+              "type": "lava",
+              "ownerId": "author-1"
+            }
+          ],
+          "closedBy": [
+            {
+              "id": "B1",
+              "type": "wall",
+              "ownerId": "author-2"
+            }
+          ]
+        },
+        "text": "This would make the flag unreachable: Giorgi's wall B1 closes the old route, and Nino's lava A2 leaves no way around.",
+        "options": [
+          {
+            "id": "bridge",
+            "kind": "bridge",
+            "title": "Build a stone bridge",
+            "detail": "A 2-tile bridge at (11, 7) over Nino's lava. Both ideas stay.",
+            "ops": [
+              {
+                "op": "create",
+                "entity": {
+                  "id": "M1",
+                  "type": "bridge",
+                  "owner": {
+                    "kind": "mediator"
+                  },
+                  "x": 11,
+                  "y": 7,
+                  "w": 2,
+                  "h": 1,
+                  "label": "Stone bridge"
+                }
+              }
+            ],
+            "touches": [
+              "author-1"
+            ]
+          },
+          {
+            "id": "agent-author-1",
+            "kind": "agent",
+            "from": "author-1",
+            "title": "Nino's agent: open a gap further down",
+            "detail": "Keep the statue and open a gap in my river at row 8.",
+            "ops": [
+              {
+                "op": "update",
+                "id": "A2",
+                "set": {
+                  "y": 9,
+                  "h": 4
+                }
+              },
+              {
+                "op": "create",
+                "entity": {
+                  "id": "new4",
+                  "type": "lava",
+                  "owner": {
+                    "kind": "assistant"
+                  },
+                  "x": 11,
+                  "y": 5,
+                  "w": 2,
+                  "h": 3,
+                  "label": "Lava river"
+                }
+              }
+            ],
+            "touches": [
+              "author-1"
+            ]
+          },
+          {
+            "id": "cancel",
+            "kind": "cancel",
+            "title": "Cancel my change",
+            "detail": "Keep the level as it is now.",
+            "ops": [],
+            "touches": []
+          }
+        ],
+        "status": "awaiting_approval",
+        "negotiating": [],
+        "approvals": {
+          "author-1": null
+        },
+        "chosen": "bridge"
+      }
+    },
+    {
+      "type": "chat",
+      "payload": {
+        "id": "C12",
+        "authorId": "author-1",
+        "from": "mediator",
+        "text": "Giorgi wants to build a stone bridge. A 2-tile bridge at (11, 7) over Nino's lava. Both ideas stay. It touches your object. Approve?",
+        "at": 1792279915388,
+        "proposalId": "P8"
+      }
+    },
+    {
+      "type": "chat",
+      "payload": {
+        "id": "C13",
+        "authorId": "author-2",
+        "from": "system",
+        "text": "Waiting for Nino to approve.",
+        "at": 1792279915388,
+        "proposalId": "P8"
+      }
+    },
+    {
+      "type": "proposal",
+      "payload": {
+        "id": "P8",
+        "requesterId": "author-2",
+        "summary": "Statue in the gap",
+        "ops": [
+          {
+            "op": "create",
+            "entity": {
+              "id": "B1",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 11,
+              "y": 4,
+              "w": 2,
+              "h": 1,
+              "label": "Statue"
+            }
+          }
+        ],
+        "diagnosis": {
+          "unreachable": [
+            "flag"
+          ],
+          "blockers": [
+            {
+              "id": "A2",
+              "type": "lava",
+              "ownerId": "author-1"
+            }
+          ],
+          "closedBy": [
+            {
+              "id": "B1",
+              "type": "wall",
+              "ownerId": "author-2"
+            }
+          ]
+        },
+        "text": "This would make the flag unreachable: Giorgi's wall B1 closes the old route, and Nino's lava A2 leaves no way around.",
+        "options": [
+          {
+            "id": "bridge",
+            "kind": "bridge",
+            "title": "Build a stone bridge",
+            "detail": "A 2-tile bridge at (11, 7) over Nino's lava. Both ideas stay.",
+            "ops": [
+              {
+                "op": "create",
+                "entity": {
+                  "id": "M1",
+                  "type": "bridge",
+                  "owner": {
+                    "kind": "mediator"
+                  },
+                  "x": 11,
+                  "y": 7,
+                  "w": 2,
+                  "h": 1,
+                  "label": "Stone bridge"
+                }
+              }
+            ],
+            "touches": [
+              "author-1"
+            ]
+          },
+          {
+            "id": "agent-author-1",
+            "kind": "agent",
+            "from": "author-1",
+            "title": "Nino's agent: open a gap further down",
+            "detail": "Keep the statue and open a gap in my river at row 8.",
+            "ops": [
+              {
+                "op": "update",
+                "id": "A2",
+                "set": {
+                  "y": 9,
+                  "h": 4
+                }
+              },
+              {
+                "op": "create",
+                "entity": {
+                  "id": "new4",
+                  "type": "lava",
+                  "owner": {
+                    "kind": "assistant"
+                  },
+                  "x": 11,
+                  "y": 5,
+                  "w": 2,
+                  "h": 3,
+                  "label": "Lava river"
+                }
+              }
+            ],
+            "touches": [
+              "author-1"
+            ]
+          },
+          {
+            "id": "cancel",
+            "kind": "cancel",
+            "title": "Cancel my change",
+            "detail": "Keep the level as it is now.",
+            "ops": [],
+            "touches": []
+          }
+        ],
+        "status": "done",
+        "negotiating": [],
+        "approvals": {
+          "author-1": true
+        },
+        "chosen": "bridge"
+      }
+    },
+    {
+      "type": "log",
+      "payload": {
+        "by": "author-2",
+        "summary": "Statue in the gap",
+        "ops": [
+          {
+            "op": "create",
+            "entity": {
+              "id": "B1",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 11,
+              "y": 4,
+              "w": 2,
+              "h": 1,
+              "label": "Statue"
+            }
+          }
+        ],
+        "fix": {
+          "summary": "Build a stone bridge. A 2-tile bridge at (11, 7) over Nino's lava. Both ideas stay.",
+          "ops": [
+            {
+              "op": "create",
+              "entity": {
+                "id": "M1",
+                "type": "bridge",
+                "owner": {
+                  "kind": "mediator"
+                },
+                "x": 11,
+                "y": 7,
+                "w": 2,
+                "h": 1,
+                "label": "Stone bridge"
+              }
+            }
+          ],
+          "approvedBy": [
+            "author-1"
+          ]
+        },
+        "rev": 2,
+        "at": 1792279915388
+      }
+    },
+    {
+      "type": "state",
+      "payload": {
+        "world": {
+          "schemaVersion": 1,
+          "grid": {
+            "w": 24,
+            "h": 14
+          },
+          "start": {
+            "x": 1,
+            "y": 7
+          },
+          "flag": {
+            "x": 22,
+            "y": 7
+          },
+          "entities": [
+            {
+              "id": "S1",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 0,
+              "y": 0,
+              "w": 24,
+              "h": 1,
+              "label": "North cliffs"
+            },
+            {
+              "id": "S2",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 0,
+              "y": 13,
+              "w": 24,
+              "h": 1,
+              "label": "South cliffs"
+            },
+            {
+              "id": "S3",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 5,
+              "y": 3,
+              "w": 2,
+              "h": 2,
+              "label": "Boulders"
+            },
+            {
+              "id": "S4",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 16,
+              "y": 9,
+              "w": 3,
+              "h": 2,
+              "label": "Boulders"
+            },
+            {
+              "id": "A1",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 1,
+              "w": 2,
+              "h": 3,
+              "label": "Lava river"
+            },
+            {
+              "id": "A2",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 5,
+              "w": 2,
+              "h": 8,
+              "label": "Lava river"
+            },
+            {
+              "id": "B1",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 11,
+              "y": 4,
+              "w": 2,
+              "h": 1,
+              "label": "Statue"
+            },
+            {
+              "id": "M1",
+              "type": "bridge",
+              "owner": {
+                "kind": "mediator"
+              },
+              "x": 11,
+              "y": 7,
+              "w": 2,
+              "h": 1,
+              "label": "Stone bridge"
+            }
+          ],
+          "objectives": []
+        },
+        "rev": 2,
+        "solve": {
+          "solvable": true,
+          "steps": 21,
+          "path": [
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "unreachable": []
+        },
+        "deferred": 0,
+        "solveMs": 0.04
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 1,
+        "y": 7,
+        "keys": [],
+        "collected": [],
+        "deaths": 0,
+        "won": false,
+        "trail": [],
+        "falls": []
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 1,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 0,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          }
+        ],
+        "falls": []
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 2,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 0,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          }
+        ],
+        "falls": []
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 3,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 0,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          }
+        ],
+        "falls": []
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 4,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 0,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          }
+        ],
+        "falls": []
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 5,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 0,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 5,
+            "y": 8
+          }
+        ],
+        "falls": []
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 6,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 0,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 5,
+            "y": 8
+          },
+          {
+            "x": 6,
+            "y": 8
+          }
+        ],
+        "falls": []
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 7,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 0,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 5,
+            "y": 8
+          },
+          {
+            "x": 6,
+            "y": 8
+          },
+          {
+            "x": 7,
+            "y": 8
+          }
+        ],
+        "falls": []
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 8,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 0,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 5,
+            "y": 8
+          },
+          {
+            "x": 6,
+            "y": 8
+          },
+          {
+            "x": 7,
+            "y": 8
+          },
+          {
+            "x": 8,
+            "y": 8
+          }
+        ],
+        "falls": []
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 9,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 0,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 5,
+            "y": 8
+          },
+          {
+            "x": 6,
+            "y": 8
+          },
+          {
+            "x": 7,
+            "y": 8
+          },
+          {
+            "x": 8,
+            "y": 8
+          },
+          {
+            "x": 9,
+            "y": 8
+          }
+        ],
+        "falls": []
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 10,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 0,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 5,
+            "y": 8
+          },
+          {
+            "x": 6,
+            "y": 8
+          },
+          {
+            "x": 7,
+            "y": 8
+          },
+          {
+            "x": 8,
+            "y": 8
+          },
+          {
+            "x": 9,
+            "y": 8
+          },
+          {
+            "x": 10,
+            "y": 8
+          }
+        ],
+        "falls": []
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 1,
+        "y": 7,
+        "keys": [],
+        "collected": [],
+        "deaths": 1,
+        "won": false,
+        "trail": [],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          }
+        ]
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 1,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 1,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          }
+        ],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          }
+        ]
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 2,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 1,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          }
+        ],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          }
+        ]
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 3,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 1,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          }
+        ],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          }
+        ]
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 4,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 1,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          }
+        ],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          }
+        ]
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 5,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 1,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 5,
+            "y": 8
+          }
+        ],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          }
+        ]
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 6,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 1,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 5,
+            "y": 8
+          },
+          {
+            "x": 6,
+            "y": 8
+          }
+        ],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          }
+        ]
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 7,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 1,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 5,
+            "y": 8
+          },
+          {
+            "x": 6,
+            "y": 8
+          },
+          {
+            "x": 7,
+            "y": 8
+          }
+        ],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          }
+        ]
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 8,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 1,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 5,
+            "y": 8
+          },
+          {
+            "x": 6,
+            "y": 8
+          },
+          {
+            "x": 7,
+            "y": 8
+          },
+          {
+            "x": 8,
+            "y": 8
+          }
+        ],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          }
+        ]
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 9,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 1,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 5,
+            "y": 8
+          },
+          {
+            "x": 6,
+            "y": 8
+          },
+          {
+            "x": 7,
+            "y": 8
+          },
+          {
+            "x": 8,
+            "y": 8
+          },
+          {
+            "x": 9,
+            "y": 8
+          }
+        ],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          }
+        ]
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 10,
+        "y": 8,
+        "keys": [],
+        "collected": [],
+        "deaths": 1,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 5,
+            "y": 8
+          },
+          {
+            "x": 6,
+            "y": 8
+          },
+          {
+            "x": 7,
+            "y": 8
+          },
+          {
+            "x": 8,
+            "y": 8
+          },
+          {
+            "x": 9,
+            "y": 8
+          },
+          {
+            "x": 10,
+            "y": 8
+          }
+        ],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          }
+        ]
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 1,
+        "y": 7,
+        "keys": [],
+        "collected": [],
+        "deaths": 2,
+        "won": false,
+        "trail": [],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          },
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915389
+          }
+        ]
+      }
+    },
+    {
+      "type": "report",
+      "payload": {
+        "id": "R14",
+        "by": "player-3",
+        "kind": "signal",
+        "text": "Luka fell into lava at (11, 8) 2 times.",
+        "at": 1792279915389,
+        "rev": 2,
+        "spot": {
+          "x": 11,
+          "y": 8
+        },
+        "position": {
+          "x": 1,
+          "y": 7
+        },
+        "keys": [],
+        "fallsHere": 2,
+        "falls": 2,
+        "trail": [],
+        "suspects": [
+          {
+            "id": "A2",
+            "type": "lava",
+            "ownerId": "author-1",
+            "mediator": false,
+            "label": "Lava river",
+            "distance": 0
+          },
+          {
+            "id": "M1",
+            "type": "bridge",
+            "mediator": true,
+            "label": "Stone bridge",
+            "distance": 1
+          }
+        ],
+        "routedTo": [
+          "author-1"
+        ]
+      }
+    },
+    {
+      "type": "chat",
+      "payload": {
+        "id": "C15",
+        "authorId": "author-1",
+        "from": "playtest",
+        "text": "Luka fell into lava at (11, 8) 2 times.",
+        "at": 1792279915389,
+        "reportId": "R14"
+      }
+    },
+    {
+      "type": "suggestion",
+      "payload": {
+        "id": "G16",
+        "authorId": "author-1",
+        "reportId": "R14",
+        "status": "drafting"
+      }
+    },
+    {
+      "type": "suggestion",
+      "payload": {
+        "id": "G16",
+        "authorId": "author-1",
+        "reportId": "R14",
+        "status": "open",
+        "message": "Shorten the river by one row, so the crossing is fair.",
+        "summary": "Shorter lava river",
+        "ops": [
+          {
+            "op": "update",
+            "id": "A1",
+            "set": {
+              "h": 2
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "chat",
+      "payload": {
+        "id": "C17",
+        "authorId": "author-1",
+        "from": "agent",
+        "text": "Shorten the river by one row, so the crossing is fair.",
+        "at": 1792279915389,
+        "suggestionId": "G16"
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 1,
+        "y": 6,
+        "keys": [],
+        "collected": [],
+        "deaths": 2,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 6
+          }
+        ],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          },
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915389
+          }
+        ]
+      }
+    },
+    {
+      "type": "chat",
+      "payload": {
+        "id": "C18",
+        "authorId": "author-2",
+        "from": "system",
+        "text": "The player is standing where this change lands. It goes live as soon as they step away.",
+        "at": 1792279915389
+      }
+    },
+    {
+      "type": "state",
+      "payload": {
+        "world": {
+          "schemaVersion": 1,
+          "grid": {
+            "w": 24,
+            "h": 14
+          },
+          "start": {
+            "x": 1,
+            "y": 7
+          },
+          "flag": {
+            "x": 22,
+            "y": 7
+          },
+          "entities": [
+            {
+              "id": "S1",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 0,
+              "y": 0,
+              "w": 24,
+              "h": 1,
+              "label": "North cliffs"
+            },
+            {
+              "id": "S2",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 0,
+              "y": 13,
+              "w": 24,
+              "h": 1,
+              "label": "South cliffs"
+            },
+            {
+              "id": "S3",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 5,
+              "y": 3,
+              "w": 2,
+              "h": 2,
+              "label": "Boulders"
+            },
+            {
+              "id": "S4",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 16,
+              "y": 9,
+              "w": 3,
+              "h": 2,
+              "label": "Boulders"
+            },
+            {
+              "id": "A1",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 1,
+              "w": 2,
+              "h": 3,
+              "label": "Lava river"
+            },
+            {
+              "id": "A2",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 5,
+              "w": 2,
+              "h": 8,
+              "label": "Lava river"
+            },
+            {
+              "id": "B1",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 11,
+              "y": 4,
+              "w": 2,
+              "h": 1,
+              "label": "Statue"
+            },
+            {
+              "id": "M1",
+              "type": "bridge",
+              "owner": {
+                "kind": "mediator"
+              },
+              "x": 11,
+              "y": 7,
+              "w": 2,
+              "h": 1,
+              "label": "Stone bridge"
+            }
+          ],
+          "objectives": []
+        },
+        "rev": 2,
+        "solve": {
+          "solvable": true,
+          "steps": 21,
+          "path": [
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "unreachable": []
+        },
+        "deferred": 1,
+        "solveMs": 0.04
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 1,
+        "y": 7,
+        "keys": [],
+        "collected": [],
+        "deaths": 2,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 6
+          },
+          {
+            "x": 1,
+            "y": 7
+          }
+        ],
+        "falls": [
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915388
+          },
+          {
+            "x": 11,
+            "y": 8,
+            "rev": 2,
+            "at": 1792279915389
+          }
+        ]
+      }
+    },
+    {
+      "type": "log",
+      "payload": {
+        "by": "author-2",
+        "summary": "added wall 1×1 at (1, 6)",
+        "ops": [
+          {
+            "op": "create",
+            "entity": {
+              "id": "B2",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 1,
+              "y": 6,
+              "w": 1,
+              "h": 1,
+              "label": "Pillar"
+            }
+          }
+        ],
+        "rev": 3,
+        "at": 1792279915389
+      }
+    },
+    {
+      "type": "state",
+      "payload": {
+        "world": {
+          "schemaVersion": 1,
+          "grid": {
+            "w": 24,
+            "h": 14
+          },
+          "start": {
+            "x": 1,
+            "y": 7
+          },
+          "flag": {
+            "x": 22,
+            "y": 7
+          },
+          "entities": [
+            {
+              "id": "S1",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 0,
+              "y": 0,
+              "w": 24,
+              "h": 1,
+              "label": "North cliffs"
+            },
+            {
+              "id": "S2",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 0,
+              "y": 13,
+              "w": 24,
+              "h": 1,
+              "label": "South cliffs"
+            },
+            {
+              "id": "S3",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 5,
+              "y": 3,
+              "w": 2,
+              "h": 2,
+              "label": "Boulders"
+            },
+            {
+              "id": "S4",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 16,
+              "y": 9,
+              "w": 3,
+              "h": 2,
+              "label": "Boulders"
+            },
+            {
+              "id": "A1",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 1,
+              "w": 2,
+              "h": 3,
+              "label": "Lava river"
+            },
+            {
+              "id": "A2",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 5,
+              "w": 2,
+              "h": 8,
+              "label": "Lava river"
+            },
+            {
+              "id": "B1",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 11,
+              "y": 4,
+              "w": 2,
+              "h": 1,
+              "label": "Statue"
+            },
+            {
+              "id": "M1",
+              "type": "bridge",
+              "owner": {
+                "kind": "mediator"
+              },
+              "x": 11,
+              "y": 7,
+              "w": 2,
+              "h": 1,
+              "label": "Stone bridge"
+            },
+            {
+              "id": "B2",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 1,
+              "y": 6,
+              "w": 1,
+              "h": 1,
+              "label": "Pillar"
+            }
+          ],
+          "objectives": []
+        },
+        "rev": 3,
+        "solve": {
+          "solvable": true,
+          "steps": 21,
+          "path": [
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "unreachable": []
+        },
+        "deferred": 0,
+        "solveMs": 0.13
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 1,
+        "y": 7,
+        "keys": [],
+        "collected": [],
+        "deaths": 2,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 6
+          },
+          {
+            "x": 1,
+            "y": 7
+          }
+        ],
+        "falls": []
+      }
+    },
+    {
+      "type": "chat",
+      "payload": {
+        "id": "C19",
+        "authorId": "author-2",
+        "from": "system",
+        "text": "The player stepped away, so your change is live now.",
+        "at": 1792279915389
+      }
+    },
+    {
+      "type": "state",
+      "payload": {
+        "world": {
+          "schemaVersion": 1,
+          "grid": {
+            "w": 24,
+            "h": 14
+          },
+          "start": {
+            "x": 1,
+            "y": 7
+          },
+          "flag": {
+            "x": 22,
+            "y": 7
+          },
+          "entities": [
+            {
+              "id": "S1",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 0,
+              "y": 0,
+              "w": 24,
+              "h": 1,
+              "label": "North cliffs"
+            },
+            {
+              "id": "S2",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 0,
+              "y": 13,
+              "w": 24,
+              "h": 1,
+              "label": "South cliffs"
+            },
+            {
+              "id": "S3",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 5,
+              "y": 3,
+              "w": 2,
+              "h": 2,
+              "label": "Boulders"
+            },
+            {
+              "id": "S4",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 16,
+              "y": 9,
+              "w": 3,
+              "h": 2,
+              "label": "Boulders"
+            },
+            {
+              "id": "A1",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 1,
+              "w": 2,
+              "h": 3,
+              "label": "Lava river"
+            },
+            {
+              "id": "A2",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 5,
+              "w": 2,
+              "h": 8,
+              "label": "Lava river"
+            },
+            {
+              "id": "B1",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 11,
+              "y": 4,
+              "w": 2,
+              "h": 1,
+              "label": "Statue"
+            },
+            {
+              "id": "M1",
+              "type": "bridge",
+              "owner": {
+                "kind": "mediator"
+              },
+              "x": 11,
+              "y": 7,
+              "w": 2,
+              "h": 1,
+              "label": "Stone bridge"
+            },
+            {
+              "id": "B2",
+              "type": "wall",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-2"
+              },
+              "x": 1,
+              "y": 6,
+              "w": 1,
+              "h": 1,
+              "label": "Pillar"
+            }
+          ],
+          "objectives": []
+        },
+        "rev": 3,
+        "solve": {
+          "solvable": true,
+          "steps": 21,
+          "path": [
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "unreachable": []
+        },
+        "deferred": 0,
+        "solveMs": 0.13
+      }
+    },
+    {
+      "type": "log",
+      "payload": {
+        "by": "author-1",
+        "summary": "Restored version 1",
+        "ops": [
+          {
+            "op": "replace_world",
+            "world": {
+              "schemaVersion": 1,
+              "grid": {
+                "w": 24,
+                "h": 14
+              },
+              "start": {
+                "x": 1,
+                "y": 7
+              },
+              "flag": {
+                "x": 22,
+                "y": 7
+              },
+              "entities": [
+                {
+                  "id": "S1",
+                  "type": "wall",
+                  "owner": {
+                    "kind": "system"
+                  },
+                  "x": 0,
+                  "y": 0,
+                  "w": 24,
+                  "h": 1,
+                  "label": "North cliffs"
+                },
+                {
+                  "id": "S2",
+                  "type": "wall",
+                  "owner": {
+                    "kind": "system"
+                  },
+                  "x": 0,
+                  "y": 13,
+                  "w": 24,
+                  "h": 1,
+                  "label": "South cliffs"
+                },
+                {
+                  "id": "S3",
+                  "type": "wall",
+                  "owner": {
+                    "kind": "system"
+                  },
+                  "x": 5,
+                  "y": 3,
+                  "w": 2,
+                  "h": 2,
+                  "label": "Boulders"
+                },
+                {
+                  "id": "S4",
+                  "type": "wall",
+                  "owner": {
+                    "kind": "system"
+                  },
+                  "x": 16,
+                  "y": 9,
+                  "w": 3,
+                  "h": 2,
+                  "label": "Boulders"
+                },
+                {
+                  "id": "A1",
+                  "type": "lava",
+                  "owner": {
+                    "kind": "assistant",
+                    "playerId": "author-1"
+                  },
+                  "x": 11,
+                  "y": 1,
+                  "w": 2,
+                  "h": 3,
+                  "label": "Lava river"
+                },
+                {
+                  "id": "A2",
+                  "type": "lava",
+                  "owner": {
+                    "kind": "assistant",
+                    "playerId": "author-1"
+                  },
+                  "x": 11,
+                  "y": 5,
+                  "w": 2,
+                  "h": 8,
+                  "label": "Lava river"
+                }
+              ],
+              "objectives": []
+            }
+          }
+        ],
+        "revertTo": 1,
+        "rev": 4,
+        "at": 1792279915390
+      }
+    },
+    {
+      "type": "state",
+      "payload": {
+        "world": {
+          "schemaVersion": 1,
+          "grid": {
+            "w": 24,
+            "h": 14
+          },
+          "start": {
+            "x": 1,
+            "y": 7
+          },
+          "flag": {
+            "x": 22,
+            "y": 7
+          },
+          "entities": [
+            {
+              "id": "S1",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 0,
+              "y": 0,
+              "w": 24,
+              "h": 1,
+              "label": "North cliffs"
+            },
+            {
+              "id": "S2",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 0,
+              "y": 13,
+              "w": 24,
+              "h": 1,
+              "label": "South cliffs"
+            },
+            {
+              "id": "S3",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 5,
+              "y": 3,
+              "w": 2,
+              "h": 2,
+              "label": "Boulders"
+            },
+            {
+              "id": "S4",
+              "type": "wall",
+              "owner": {
+                "kind": "system"
+              },
+              "x": 16,
+              "y": 9,
+              "w": 3,
+              "h": 2,
+              "label": "Boulders"
+            },
+            {
+              "id": "A1",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 1,
+              "w": 2,
+              "h": 3,
+              "label": "Lava river"
+            },
+            {
+              "id": "A2",
+              "type": "lava",
+              "owner": {
+                "kind": "assistant",
+                "playerId": "author-1"
+              },
+              "x": 11,
+              "y": 5,
+              "w": 2,
+              "h": 8,
+              "label": "Lava river"
+            }
+          ],
+          "objectives": []
+        },
+        "rev": 4,
+        "solve": {
+          "solvable": true,
+          "steps": 27,
+          "path": [
+            "up",
+            "up",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "up",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "down",
+            "down",
+            "down",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "unreachable": []
+        },
+        "deferred": 0,
+        "solveMs": 0.13
+      }
+    },
+    {
+      "type": "play",
+      "payload": {
+        "x": 1,
+        "y": 7,
+        "keys": [],
+        "collected": [],
+        "deaths": 2,
+        "won": false,
+        "trail": [
+          {
+            "x": 1,
+            "y": 6
+          },
+          {
+            "x": 1,
+            "y": 7
+          }
+        ],
+        "falls": []
+      }
+    },
+    {
+      "type": "reset",
+      "payload": {
+        "rev": 0
+      }
+    }
+  ]
+}

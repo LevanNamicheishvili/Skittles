@@ -143,7 +143,7 @@ export function apiBackend(options: { client?: MessagesClient; model?: string; e
 // Runs the CLI with the prompt on stdin and returns its stdout.
 export type Runner = (args: string[], stdin: string) => Promise<string>;
 
-const runClaude: Runner = (args, stdin) =>
+export const runClaude: Runner = (args, stdin) =>
   new Promise((resolve, reject) => {
     // A clean working directory, so no project instructions or settings leak into the agent.
     const cwd = join(tmpdir(), "skittles-agent");

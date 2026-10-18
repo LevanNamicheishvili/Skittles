@@ -8,6 +8,8 @@ import type { Direction } from "./game/types.ts";
 import type { Op } from "./room/ops.ts";
 import type { PlaytestReport } from "./room/playtest.ts";
 import { Room, type Proposal, type Role } from "./room/room.ts";
+import { StudioHub } from "./studio/hub.ts";
+import type { SceneAssistant, SceneDocument } from "./studio/sceneAgent.ts";
 
 // The agent sits outside the room: it may take seconds, and it reports back through room commands.
 export type AgentHandler = (room: Room, authorId: string, text: string) => Promise<void>;
@@ -18,7 +20,40 @@ export type NegotiateHandler = (room: Room, proposal: Proposal, ownerId: string)
 // Drafts a fix for one author from a playtest report.
 export type SuggestHandler = (room: Room, authorId: string, report: PlaytestReport) => Promise<void>;
 
-export type ServerOptions = { room: Room; staticDir?: string; agent?: AgentHandler; suggester?: SuggestHandler; negotiator?: NegotiateHandler };
+export type ServerOptions = {
+  room: Room;
+  staticDir?: string;
+  agent?: AgentHandler;
+  suggester?: SuggestHandler;
+  negotiator?: NegotiateHandler;
+  // The studio's AI assistant, behind POST /api/scene/ask and every agent in a shared project.
+  sceneAssistant?: SceneAssistant;
+  // The shared studio projects on /studio. One without saving is made when none is given.
+  studio?: StudioHub;
+};
+
+// Reads a JSON request body, refusing anything over the limit.
+function readJson(req: import("node:http").IncomingMessage, limit = 512 * 1024): Promise<unknown> {
+  return new Promise((resolve, reject) => {
+    let size = 0;
+    const chunks: Buffer[] = [];
+    req.on("data", (chunk: Buffer) => {
+      size += chunk.length;
+      if (size > limit) {
+        reject(new Error("too large"));
+        req.destroy();
+      } else chunks.push(chunk);
+    });
+    req.on("end", () => {
+      try {
+        resolve(JSON.parse(Buffer.concat(chunks).toString("utf8")));
+      } catch {
+        reject(new Error("not JSON"));
+      }
+    });
+    req.on("error", reject);
+  });
+}
 
 const TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
@@ -36,8 +71,35 @@ const DIRS: readonly Direction[] = ["up", "down", "left", "right"];
 type Ack = (response: unknown) => void;
 const noAck: Ack = () => {};
 
-export function createRoomServer({ room, staticDir, agent, suggester, negotiator }: ServerOptions): { http: HttpServer; io: Server } {
+export function createRoomServer({ room, staticDir, agent, suggester, negotiator, sceneAssistant, studio = new StudioHub({ assistant: sceneAssistant }) }: ServerOptions): { http: HttpServer; io: Server; studio: StudioHub } {
   const http = createServer(async (req, res) => {
+    if (req.url === "/api/projects") {
+      return res.writeHead(200, { "content-type": "application/json" }).end(JSON.stringify(studio.list()));
+    }
+    // The studio asks its AI assistant: { scene, prompt } in, { message, actions } out.
+    if (req.url?.startsWith("/api/scene/ask")) {
+      const send = (status: number, body: unknown) => res.writeHead(status, { "content-type": "application/json" }).end(JSON.stringify(body));
+      if (req.method !== "POST") return send(405, { error: "Use POST." });
+      if (!sceneAssistant) return send(503, { error: "No AI is configured on this server. Sign in to the Claude Code CLI or set ANTHROPIC_API_KEY." });
+      let body: { scene?: SceneDocument; prompt?: unknown };
+      try {
+        body = (await readJson(req)) as typeof body;
+      } catch (e) {
+        return send(400, { error: `The request was ${(e as Error).message}.` });
+      }
+      const prompt = typeof body.prompt === "string" ? body.prompt.trim().slice(0, 1000) : "";
+      const scene = body.scene;
+      if (!prompt || !scene || !Array.isArray(scene.objects) || !scene.size) return send(400, { error: "Send a scene and a prompt." });
+      if (scene.objects.length > 300) return send(400, { error: "The scene has too many objects for one request." });
+      const started = Date.now();
+      try {
+        const reply = await sceneAssistant(scene, prompt);
+        return send(200, { ...reply, ms: Date.now() - started });
+      } catch (e) {
+        console.error("scene assistant failed", e);
+        return send(502, { error: `The AI did not answer: ${(e as Error).message}` });
+      }
+    }
     if (!staticDir) {
       res.writeHead(404).end();
       return;
@@ -59,6 +121,7 @@ export function createRoomServer({ room, staticDir, agent, suggester, negotiator
   });
 
   const io = new Server(http, { cors: { origin: true }, connectionStateRecovery: {} });
+  studio.attach(io);
   const negotiated = new Set<string>();
   room.onEvent = (e) => {
     io.emit(e.type, e.payload);
@@ -156,5 +219,5 @@ export function createRoomServer({ room, staticDir, agent, suggester, negotiator
     });
   });
 
-  return { http, io };
+  return { http, io, studio };
 }
