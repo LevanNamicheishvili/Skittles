@@ -57,6 +57,31 @@ describe("socket server", () => {
     assert.deepEqual(play.trail, [{ x: 2, y: 7 }]);
   });
 
+  test("only people with a window open are here; someone who comes back is the same member", async () => {
+    const visitor = client();
+    const ana = client();
+    const anaAgain = client();
+    await ana.emitWithAck("join", { name: "Ana", role: "author" });
+    await anaAgain.emitWithAck("join", { name: "Ana", role: "author" }); // a second window
+    const here = (await visitor.emitWithAck("room:who", {})) as { name: string; online: boolean }[];
+    assert.ok(here.some((m) => m.name === "Ana"));
+    assert.ok(here.every((m) => m.online));
+    // Closing one of two windows: still here.
+    ana.disconnect();
+    await new Promise((r) => setTimeout(r, 50));
+    assert.ok(((await visitor.emitWithAck("room:who", {})) as { name: string }[]).some((m) => m.name === "Ana"));
+    // Closing the last: gone, and everyone hears it.
+    const update = next<{ name: string; online: boolean }[]>(visitor, "members");
+    anaAgain.disconnect();
+    assert.equal((await update).find((m) => m.name === "Ana")?.online, false);
+    assert.ok(!((await visitor.emitWithAck("room:who", {})) as { name: string }[]).some((m) => m.name === "Ana"));
+    // Back again: the same member, online.
+    const back = client();
+    const joined = await back.emitWithAck("join", { name: "ana", role: "author" });
+    assert.equal(joined.you.name, "Ana");
+    assert.equal(joined.you.online, true);
+  });
+
   test("a player cannot edit the level", async () => {
     const player = client();
     await player.emitWithAck("join", { name: "Luka", role: "player" });

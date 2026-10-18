@@ -245,10 +245,10 @@ function LiveSky() {
 
 // The demo, scripted on the real board and both agents' chats: Nino's lava river, Giorgi's statue in its only
 // gap, the room holding it back, the mediator's checked bridge, both humans approving.
-const NINO: Member = { id: "nino", name: "Nino", role: "author", letter: "A", color: "#3b82f6" };
-const GIORGI: Member = { id: "giorgi", name: "Giorgi", role: "author", letter: "B", color: "#f97316" };
-const ANA: Member = { id: "ana", name: "Ana", role: "author", letter: "C", color: "#10b981" };
-const DATO: Member = { id: "dato", name: "Dato", role: "author", letter: "D", color: "#e11d48" };
+const NINO: Member = { id: "nino", name: "Nino", role: "author", letter: "A", color: "#3b82f6", online: true };
+const GIORGI: Member = { id: "giorgi", name: "Giorgi", role: "author", letter: "B", color: "#f97316", online: true };
+const ANA: Member = { id: "ana", name: "Ana", role: "author", letter: "C", color: "#10b981", online: true };
+const DATO: Member = { id: "dato", name: "Dato", role: "author", letter: "D", color: "#e11d48", online: true };
 const by = (m: Member) => ({ kind: "player" as const, playerId: m.id });
 const RIVER: Entity[] = [
   { id: "A1", type: "lava", owner: by(NINO), x: 11, y: 1, w: 2, h: 3, label: "Lava river" },
@@ -384,9 +384,11 @@ function Showcase() {
         </span>
         <span className={`status ${blocked ? "bad" : "ok"}`}>{blocked ? "Blocked · flag unreachable" : `Winnable · ${steps} steps`}</span>
         <span className="version">v{b.version}</span>
+        {/* A scripted demo, not the live room: no presence dots on these people. */}
+        <span className="demo-tag">Scripted demo</span>
         <span className="spacer" />
         {[NINO, GIORGI, ANA, DATO].map((m) => (
-          <span key={m.id} className="chip">
+          <span key={m.id} className="chip demo">
             <i style={{ background: m.color }}>{m.letter}</i>
             {m.name}
           </span>
@@ -500,44 +502,31 @@ function PresenceDemo() {
   );
 }
 
-// People keep joining the room, each with their own agent.
-const CROWD = [
-  { name: "Nino", color: "#3b82f6" },
-  { name: "Giorgi", color: "#f97316" },
-  { name: "Ana", color: "#10b981" },
-  { name: "Dato", color: "#e11d48" },
-  { name: "Mariam", color: "#a855f7" },
-  { name: "Saba", color: "#eab308" },
-];
-
-function Crowd() {
-  // Fills once, then holds: re-adding everyone every few seconds was busy for no gain.
-  const [step, setRef] = useSteps([...CROWD.map(() => 1300), 0], false);
-  const shown = Math.min(step + 1, CROWD.length);
-  const latest = CROWD[step];
+/// Who is in the room right now: real people only, as the server reports them.
+function Crowd({ people }: { people: Member[] }) {
+  if (!people.length) {
+    return (
+      <div className="crowd">
+        <span className="crowd-text">
+          Nobody is building right now. <b>Be the first.</b>
+        </span>
+      </div>
+    );
+  }
+  const names = people.map((p) => p.name);
+  const who = names.length === 1 ? `${names[0]} is` : names.length === 2 ? `${names[0]} and ${names[1]} are` : `${names.slice(0, 2).join(", ")} and ${names.length - 2} more are`;
   return (
-    <div className="crowd" ref={setRef}>
+    <div className="crowd">
       <span className="crowd-stack">
-        {CROWD.slice(0, shown).map((p) => (
-          <span key={p.name} className="crowd-face" style={{ background: p.color }} title={`${p.name} and their agent`}>
-            {p.name[0]}
-            <i aria-hidden>✦</i>
+        {people.slice(0, 6).map((p) => (
+          <span key={p.id} className="crowd-face" style={{ background: p.color }} title={p.role === "author" ? `${p.name} and their agent` : `${p.name}, playing`}>
+            {p.name[0]?.toUpperCase()}
+            {p.role === "author" && <i aria-hidden>✦</i>}
           </span>
         ))}
       </span>
-      <span className="crowd-text" key={step}>
-        {latest ? (
-          <>
-            <b>{latest.name}</b> joined with their own agent
-          </>
-        ) : (
-          <>
-            <b>
-              {CROWD.length} people · {CROWD.length} agents
-            </b>{" "}
-            · one live world
-          </>
-        )}
+      <span className="crowd-text">
+        <b>{people.length} here now</b> · {who} in the room
       </span>
     </div>
   );
@@ -643,7 +632,7 @@ const STATS = [
   { value: "47 s", label: "the whole demo, end to end, real agents" },
 ];
 
-export function Landing({ onJoin, busy }: { onJoin: (name: string, role: Role) => void; busy: boolean }) {
+export function Landing({ onJoin, busy, people }: { onJoin: (name: string, role: Role) => void; busy: boolean; people: Member[] }) {
   const [name, setName] = useState("");
   const input = useRef<HTMLInputElement>(null);
   const pick = (role: Role) => (e: FormEvent) => {
@@ -688,7 +677,7 @@ export function Landing({ onJoin, busy }: { onJoin: (name: string, role: Role) =
               A live room where your whole team builds one world, each person by talking to their own AI agent. Every agent knows what the others changed, and every
               change is proved before it goes live, so nobody's work breaks anybody else's.
             </p>
-            <Crowd />
+            <Crowd people={people} />
           </div>
           <form className="hero-join">
             <input ref={input} autoFocus placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />

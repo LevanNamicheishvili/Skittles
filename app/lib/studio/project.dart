@@ -200,8 +200,8 @@ class SharedProject extends ChangeNotifier {
   Member? get me => members[you];
   List<ThreadMessage> get myThread => threads[you] ?? const [];
 
-  /// The members, you first.
-  List<Member> get people => [?members[you], for (final m in members.values) if (m.id != you) m];
+  /// The people here now, you first. Members who left are not shown, though their work keeps their names.
+  List<Member> get people => [?members[you], for (final m in members.values) if (m.id != you && m.online) m];
 
   String nameOf(String? id) {
     if (id == null) return 'someone';

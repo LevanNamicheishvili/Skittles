@@ -5,7 +5,7 @@
 #
 #   scripts/go-live.sh
 #
-# Needs the server running (cd server && npm start; port 3001, or SKITTLES_PORT), cloudflared (brew install
+# Starts the room server too if it is not running (port 3001, or SKITTLES_PORT). Needs cloudflared (brew install
 # cloudflared) and the Vercel CLI logged in. The downloads it publishes sit in .deploy/site/download.
 set -euo pipefail
 
@@ -15,10 +15,16 @@ PORT="${SKITTLES_PORT:-3001}"
 LOG="$ROOT/.deploy/tunnel.log"
 mkdir -p "$DEPLOY/download"
 
-curl -fsS -m 5 "http://localhost:$PORT/api/projects" >/dev/null || {
-  echo "No Skittles server on port $PORT. Start it first: cd server && npm start"
-  exit 1
-}
+# The server: start it in the background if it is not running (it keeps running after this script ends).
+if ! curl -fsS -m 5 "http://localhost:$PORT/api/projects" >/dev/null 2>&1; then
+  (cd "$ROOT/server" && PORT="$PORT" nohup node --env-file-if-exists=.env src/index.ts >"$ROOT/.deploy/server.log" 2>&1 &)
+  for _ in $(seq 30); do
+    curl -fsS -m 2 "http://localhost:$PORT/api/projects" >/dev/null 2>&1 && break
+    sleep 1
+  done
+  curl -fsS -m 5 "http://localhost:$PORT/api/projects" >/dev/null 2>&1 || { echo "The server did not start; see .deploy/server.log"; exit 1; }
+  echo "Started the server on port $PORT (log: .deploy/server.log)"
+fi
 
 # Reuse a working tunnel; otherwise start one that keeps running after this script (and this terminal) ends.
 url=""

@@ -141,6 +141,15 @@ export function createRoomServer({ room, staticDir, agent, suggester, negotiator
     }
   };
 
+  // Open windows per member: a member is online while they have at least one.
+  const windows = new Map<string, number>();
+  const left = (id: string) => {
+    const n = (windows.get(id) ?? 1) - 1;
+    if (n > 0) return windows.set(id, n);
+    windows.delete(id);
+    room.leave(id);
+  };
+
   io.on("connection", (socket) => {
     let memberId: string | null = null;
     const author = (): string | null => (memberId && room.members.get(memberId)?.role === "author" ? memberId : null);
@@ -148,8 +157,19 @@ export function createRoomServer({ room, staticDir, agent, suggester, negotiator
     socket.on("join", (payload: { name?: unknown; role?: unknown }, ack: Ack = noAck) => {
       const role = ROLES.includes(payload?.role as Role) ? (payload.role as Role) : "stage";
       const member = room.join(String(payload?.name ?? ""), role);
+      if (memberId !== member.id) {
+        if (memberId) left(memberId);
+        windows.set(member.id, (windows.get(member.id) ?? 0) + 1);
+      }
       memberId = member.id;
       ack(room.snapshotFor(member.id));
+    });
+
+    // The landing page asks who is building right now, without joining.
+    socket.on("room:who", (_payload: unknown, ack: Ack = noAck) => ack(room.present()));
+
+    socket.on("disconnect", () => {
+      if (memberId) left(memberId);
     });
 
     socket.on("agent:say", (payload: { text?: unknown }, ack: Ack = noAck) => {

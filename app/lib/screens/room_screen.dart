@@ -81,7 +81,7 @@ class _TopBar extends StatelessWidget {
           ],
           const Spacer(),
           ...() {
-            final people = store.members.where((m) => m.role != Role.stage).toList();
+            final people = store.members.where((m) => m.role != Role.stage && m.online).toList();
             return [
               for (final m in people.take(4)) ...[PresenceChip(name: m.name, letter: m.letter, color: m.color), const SizedBox(width: 8)],
               if (people.length > 4) ...[

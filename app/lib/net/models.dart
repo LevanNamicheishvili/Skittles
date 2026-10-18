@@ -29,7 +29,7 @@ Color _hex(String hex) {
 enum Role { author, player, stage }
 
 class Member {
-  const Member({required this.id, required this.name, required this.role, required this.letter, required this.color});
+  const Member({required this.id, required this.name, required this.role, required this.letter, required this.color, this.online = true});
 
   factory Member.fromJson(Json j) => Member(
         id: j['id'] as String,
@@ -37,6 +37,8 @@ class Member {
         role: _enum(Role.values, j['role']),
         letter: j['letter'] as String,
         color: _hex(j['color'] as String),
+        // Rooms before presence did not say; everyone counted as here.
+        online: j['online'] as bool? ?? true,
       );
 
   final String id;
@@ -44,6 +46,9 @@ class Member {
   final Role role;
   final String letter;
   final Color color;
+
+  /// Has a window open now. Members who left stay known (their changes keep their names) but are not shown as here.
+  final bool online;
 }
 
 class SolveSummary {

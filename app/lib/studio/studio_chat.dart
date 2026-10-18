@@ -216,7 +216,8 @@ class _Offline extends StatelessWidget {
   }
 }
 
-/// Who is in the project. Each row says what that person's agent is doing; a teammate's row asks their agent.
+/// Who is in the project now (people who left are not listed). Each row says what that person's agent is doing; a
+/// teammate's row asks their agent.
 class _People extends StatelessWidget {
   const _People({required this.shared, required this.onAsk});
 
@@ -253,7 +254,7 @@ class _People extends StatelessWidget {
                         decoration: BoxDecoration(color: s.hovered ? c.muted : null, borderRadius: BorderRadius.circular(SkTokens.radiusControl)),
                         child: Row(
                           children: [
-                            Opacity(opacity: m.online ? 1 : 0.45, child: SkAvatar(letter: m.letter, color: m.color, online: m.online)),
+                            SkAvatar(letter: m.letter, color: m.color, online: true),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Column(
@@ -263,7 +264,6 @@ class _People extends StatelessWidget {
                                     TextSpan(children: [
                                       TextSpan(text: m.name, style: context.sans(size: SkTokens.textSmall, weight: FontWeight.w500)),
                                       if (m.id == shared.you) TextSpan(text: '  you', style: context.mono(size: SkTokens.textCaption, color: c.mutedForeground)),
-                                      if (!m.online) TextSpan(text: '  away', style: context.mono(size: SkTokens.textCaption, color: c.mutedForeground)),
                                     ]),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,

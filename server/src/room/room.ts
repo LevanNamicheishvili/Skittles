@@ -13,7 +13,8 @@ import { suspectsNear, type Fall, type PlaytestReport, type Suggestion } from ".
 
 export type Role = "author" | "player" | "stage";
 
-export type Member = { id: string; name: string; role: Role; letter: string; color: string };
+// online: has a window open now. Members who left stay (their changes keep their names) but are not shown as here.
+export type Member = { id: string; name: string; role: Role; letter: string; color: string; online: boolean };
 
 // What a log entry holds besides its position; a deferred change waits in this form.
 export type Draft = {
@@ -140,7 +141,11 @@ export class Room {
   join(name: string, role: Role): Member {
     const clean = name.trim().slice(0, 24) || (role === "author" ? "Author" : role === "player" ? "Player" : "Stage");
     const existing = [...this.members.values()].find((m) => m.role === role && m.name.toLowerCase() === clean.toLowerCase());
-    if (existing) return existing;
+    if (existing) {
+      existing.online = true;
+      this.emit({ type: "members", payload: [...this.members.values()] });
+      return existing;
+    }
     const authors = [...this.members.values()].filter((m) => m.role === "author").length;
     const member: Member = {
       id: `${role}-${++this.seq}`,
@@ -148,11 +153,25 @@ export class Room {
       role,
       letter: role === "author" ? String.fromCharCode(65 + authors) : role === "player" ? "P" : "V",
       color: role === "author" ? AUTHOR_COLORS[authors % AUTHOR_COLORS.length]! : "#64748b",
+      online: true,
     };
     this.members.set(member.id, member);
     if (role === "author") this.chats.set(member.id, []);
     this.emit({ type: "members", payload: [...this.members.values()] });
     return member;
+  }
+
+  /// The member closed their last window.
+  leave(memberId: string): void {
+    const m = this.members.get(memberId);
+    if (!m || !m.online) return;
+    m.online = false;
+    this.emit({ type: "members", payload: [...this.members.values()] });
+  }
+
+  /// Who is here now, for the landing page (stage screens are not people).
+  present(): Member[] {
+    return [...this.members.values()].filter((m) => m.online && m.role !== "stage");
   }
 
   snapshotFor(memberId: string) {

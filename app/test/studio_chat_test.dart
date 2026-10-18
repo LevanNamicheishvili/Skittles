@@ -25,9 +25,9 @@ void main() {
     await pumpShared(tester);
     expect(find.text('Nino  you', findRichText: true), findsOneWidget);
     expect(find.text('Giorgi', findRichText: true), findsWidgets);
-    expect(find.text('Ana  away', findRichText: true), findsOneWidget);
+    expect(find.text('Ana', findRichText: true), findsNothing); // Ana left: only people who are here are shown
     expect(find.text('make the right ground a lava pit'), findsOneWidget); // Giorgi's agent at work
-    expect(find.text('Agent idle'), findsNWidgets(2)); // Nino's and Ana's
+    expect(find.text('Agent idle'), findsOneWidget); // Nino's; Ana left
     expect(find.text('Giorgi → your agent'), findsOneWidget);
     expect(find.text('Held: The finish cannot be reached.'), findsOneWidget);
     expect(find.text('Invite · k3x9ab'), findsOneWidget);

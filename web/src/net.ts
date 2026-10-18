@@ -90,6 +90,8 @@ async function rejoin(): Promise<void> {
 
 socket.on("connect", () => {
   set({ connected: true });
+  // Before joining, ask who is here, so the landing page shows the real people in the room.
+  if (!joined) socket.emit("room:who", {}, (members: Member[]) => set({ members }));
   void rejoin();
 });
 socket.on("disconnect", () => set({ connected: false }));

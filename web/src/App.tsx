@@ -109,6 +109,7 @@ export function App() {
   if (!store.you || !store.state) {
     return (
       <Landing
+        people={store.members.filter((m) => m.online && m.role !== "stage")}
         busy={pending}
         onJoin={async (name, role) => {
           setPending(true);
@@ -167,7 +168,7 @@ function useCursors(store: Store): Cursor[] {
   const world = store.state?.world;
   if (!world) return [];
   return store.members
-    .filter((m) => m.role === "author")
+    .filter((m) => m.role === "author" && m.online)
     .map((m) => {
       const drafting = Object.values(store.suggestions).filter((g) => g.authorId === m.id && (g.status === "drafting" || g.status === "open")).at(-1);
       const negotiating = Object.values(store.proposals).find((p) => p.status !== "done" && p.negotiating.includes(m.id));
@@ -275,7 +276,7 @@ function TopBar({ store, showRoute, onToggleRoute, onToggleConsole }: { store: S
       </button>
       <div className="members">
         {store.members
-          .filter((m) => m.role !== "stage")
+          .filter((m) => m.role !== "stage" && m.online)
           .map((m) => (
             <span key={m.id} className="chip">
               <i style={{ background: m.color }}>{m.letter}</i>

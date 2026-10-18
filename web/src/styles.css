@@ -987,6 +987,21 @@ kbd {
   animation: msg-in 0.3s ease-out both;
 }
 
+/* The scripted demo window: labelled, and its people show no presence dots. */
+
+.demo-tag {
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.chip.demo i::after {
+  display: none;
+}
+
 /* Downloads */
 
 .downloads {
