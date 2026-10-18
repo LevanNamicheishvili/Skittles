@@ -1,0 +1,38 @@
+# Builds the Windows app on GitHub's Windows machines, after checking the shared rules there too. The zip it leaves
+# as an artifact is what the website offers for download (scripts/go-live.sh puts it there).
+name: Windows app
+
+on:
+  push:
+    branches: [main]
+    paths: ["app/**", "spec/**", ".github/workflows/windows.yml"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.7
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - name: The shared rules, on Windows
+        run: flutter test test/scene_conformance_test.dart test/actions_conformance_test.dart test/scene_runs_conformance_test.dart test/patch_test.dart
+      - run: flutter build windows --release
+      - name: Pack Skittles with the Visual C++ runtime
+        shell: pwsh
+        run: |
+          Copy-Item -Recurse build/windows/x64/runner/Release Skittles
+          foreach ($dll in "msvcp140.dll", "vcruntime140.dll", "vcruntime140_1.dll") { Copy-Item "C:/Windows/System32/$dll" Skittles/ }
+          Compress-Archive -Path Skittles -DestinationPath Skittles-windows.zip
+          Get-ChildItem Skittles
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Skittles-windows
+          path: app/Skittles-windows.zip

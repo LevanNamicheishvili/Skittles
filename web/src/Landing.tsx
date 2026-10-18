@@ -664,6 +664,7 @@ export function Landing({ onJoin, busy }: { onJoin: (name: string, role: Role) =
           Skittles
         </a>
         <nav>
+          <a href="#download">Download</a>
           <a href="#how">How it works</a>
           <a href="#demo">Demo</a>
           <a href="/docs">Docs</a>
@@ -764,6 +765,8 @@ export function Landing({ onJoin, busy }: { onJoin: (name: string, role: Role) =
         </Feature>
       </div>
 
+      <Downloads />
+
       <section className="cta">
         <h2>Open the room.</h2>
         <p>Invite your team. Everyone brings their own agent.</p>
@@ -788,3 +791,56 @@ export function Landing({ onJoin, busy }: { onJoin: (name: string, role: Role) =
     </div>
   );
 }
+
+// The desktop studio. The files sit next to the site; the Windows one only once its build is in (VITE_WINDOWS_READY).
+const DOWNLOADS = {
+  mac: "/download/Skittles-mac.dmg",
+  windows: import.meta.env.VITE_WINDOWS_READY ? "/download/Skittles-windows.zip" : null,
+};
+
+function Downloads() {
+  return (
+    <section className="downloads" id="download">
+      <h2>Get the studio.</h2>
+      <p className="downloads-lede">
+        Build a 2D platformer with the tools or by asking your agent, press Play, and let the AI playtest it. Projects are shared: invite your team with the code in the
+        title bar.
+      </p>
+      <div className="downloads-grid">
+        <div className="download-card">
+          <h3>macOS</h3>
+          <p className="download-meta">macOS 12 or newer · Apple silicon and Intel · 20 MB</p>
+          <a className="button" href={DOWNLOADS.mac} download>
+            Download for Mac
+          </a>
+          <ol>
+            <li>Open the downloaded file and drag Skittles into Applications.</li>
+            <li>
+              The first time, macOS says it cannot check the app (it is not from the App Store). Open <b>System Settings → Privacy &amp; Security</b> and choose{" "}
+              <b>Open Anyway</b>. Once is enough.
+            </li>
+          </ol>
+        </div>
+        <div className="download-card">
+          <h3>Windows</h3>
+          <p className="download-meta">Windows 10 or 11 · 64-bit</p>
+          {DOWNLOADS.windows ? (
+            <a className="button" href={DOWNLOADS.windows} download>
+              Download for Windows
+            </a>
+          ) : (
+            <span className="button disabled">Windows build coming soon</span>
+          )}
+          <ol>
+            <li>Unzip the folder anywhere and open Skittles.exe inside it.</li>
+            <li>
+              If Windows SmartScreen warns about an unknown app, choose <b>More info → Run anyway</b>.
+            </li>
+          </ol>
+        </div>
+      </div>
+      <p className="downloads-note">Agents and shared projects need the Skittles server to be up; without it the studio still edits and plays on its own.</p>
+    </section>
+  );
+}
+

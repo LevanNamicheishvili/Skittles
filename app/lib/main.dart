@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'net/models.dart';
 import 'net/room_client.dart';
 import 'net/room_store.dart';
+import 'net/server_config.dart';
 import 'screens/connect_screen.dart';
 import 'screens/gallery_screen.dart';
 import 'screens/room_screen.dart';
@@ -18,26 +19,32 @@ import 'ui/theme.dart' show appName;
 
 // Launch settings, as --dart-define or, for a second copy of the app, as environment variables
 // (open -n Skittles.app --env SKITTLES_NAME=Giorgi --env SKITTLES_PROJECT=abc123 --env SKITTLES_SCREEN=studio):
-//   SKITTLES_SERVER   the Skittles server, http://localhost:3001 by default
+//   SKITTLES_SERVER   the Skittles server; by default the one the website publishes (server_config.dart), and
+//                     http://localhost:3001 when that cannot be read
 //   SKITTLES_NAME     your name; SKITTLES_ROLE joins the grid demo room straight away as author, player or stage
 //   SKITTLES_SCREEN   studio opens the studio at once (a new project, or SKITTLES_PROJECT); gallery the components
 String _setting(String define, String key, [String fallback = '']) => define.isNotEmpty ? define : (Platform.environment[key] ?? fallback);
 
-final _server = _setting(const String.fromEnvironment('SKITTLES_SERVER'), 'SKITTLES_SERVER', 'http://localhost:3001');
 final _name = _setting(const String.fromEnvironment('SKITTLES_NAME'), 'SKITTLES_NAME');
 final _role = _setting(const String.fromEnvironment('SKITTLES_ROLE'), 'SKITTLES_ROLE');
 final _screen = _setting(const String.fromEnvironment('SKITTLES_SCREEN'), 'SKITTLES_SCREEN');
 final _project = _setting(const String.fromEnvironment('SKITTLES_PROJECT'), 'SKITTLES_PROJECT');
 
-void main() {
-  runApp(const SkittlesApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final explicit = _setting(const String.fromEnvironment('SKITTLES_SERVER'), 'SKITTLES_SERVER');
+  final server = explicit.isNotEmpty ? explicit : (await publishedServer(publishedConfig) ?? 'http://localhost:3001');
+  runApp(SkittlesApp(server: server));
 }
 
 /// Dark by default, like the site. The welcome screen until you open a project or join the demo room.
 class SkittlesApp extends StatefulWidget {
-  const SkittlesApp({super.key, this.fonts = const SkFonts(), this.client, this.openLink = SocketStudioLink.open});
+  const SkittlesApp({super.key, this.fonts = const SkFonts(), this.client, this.openLink = SocketStudioLink.open, this.server = 'http://localhost:3001'});
 
   final SkFonts fonts;
+
+  /// The server the welcome screen offers and the studio opens on.
+  final String server;
 
   /// Tests pass their own client and their own line to a project.
   final RoomClient? client;
@@ -57,7 +64,7 @@ class _SkittlesAppState extends State<SkittlesApp> {
   void initState() {
     super.initState();
     if (_screen == 'studio') {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _startStudio(server: _server, name: _name.isEmpty ? 'Guest' : _name, project: _project.isEmpty ? null : _project));
+      WidgetsBinding.instance.addPostFrameCallback((_) => _startStudio(server: widget.server, name: _name.isEmpty ? 'Guest' : _name, project: _project.isEmpty ? null : _project));
     }
   }
 
@@ -128,7 +135,7 @@ class _SkittlesAppState extends State<SkittlesApp> {
                       ? StudioScreen(studio: _studio!, onHome: () => _openStudio(null))
                       : ConnectScreen(
                           client: _client,
-                          server: _server,
+                          server: widget.server,
                           name: _name,
                           autoRole: Role.values.where((r) => r.name == _role).firstOrNull,
                           onNewProject: ({required server, required name, project}) => _startStudio(server: server, name: name),

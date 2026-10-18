@@ -62,9 +62,9 @@ export function useStore(): Store {
   );
 }
 
-// The room server: ?server=https://… in the link, otherwise VITE_SKITTLES_SERVER from the build, otherwise this
-// site's own origin (the server serves the site in development and when self-hosted).
-export const roomServer = new URLSearchParams(location.search).get("server") ?? (import.meta.env.VITE_SKITTLES_SERVER as string | undefined) ?? undefined;
+// The room server main.tsx found (the link, the published config.json or the build); none means this site's own
+// origin, as in development and when the server serves the site itself.
+export const roomServer = (globalThis as { SKITTLES_SERVER?: string }).SKITTLES_SERVER;
 const socket = roomServer ? io(roomServer, { transports: ["websocket"] }) : io({ transports: ["websocket"] });
 let joined: { name: string; role: Role } | null = null;
 

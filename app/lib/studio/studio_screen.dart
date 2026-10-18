@@ -3,6 +3,8 @@
 // team chat and your thread with your own agent. Every edit re-runs the validation, so the status line always says
 // whether the finish can still be reached. A new project starts empty, with an invitation to describe the game.
 
+import 'dart:io' show Platform;
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +19,10 @@ import 'starter.dart';
 import 'studio_chat.dart';
 import 'studio_controller.dart';
 import 'studio_panels.dart';
+
+// Shortcut names as each system writes them.
+final _key = Platform.isMacOS ? '⌘' : 'Ctrl+';
+final _shift = Platform.isMacOS ? '⇧' : 'Shift+';
 
 const _toolIcons = {
   StudioTool.select: Icons.near_me_outlined,
@@ -150,7 +156,7 @@ class _StudioScreenState extends State<StudioScreen> {
   Future<void> _save() async {
     try {
       final path = await saveScene(studio);
-      if (path != null) _toast('Saved a copy to ${path.split('/').last}.');
+      if (path != null) _toast('Saved a copy to ${path.split(RegExp(r'[\\/]')).last}.');
     } catch (e) {
       _toast('Could not save: $e', bad: true);
     }
@@ -169,6 +175,9 @@ class _StudioScreenState extends State<StudioScreen> {
       bindings: {
         const SingleActivator(LogicalKeyboardKey.keyS, meta: true): _save,
         const SingleActivator(LogicalKeyboardKey.keyO, meta: true): _open,
+        // Windows and Linux use Ctrl.
+        const SingleActivator(LogicalKeyboardKey.keyS, control: true): _save,
+        const SingleActivator(LogicalKeyboardKey.keyO, control: true): _open,
       },
       child: ListenableBuilder(
         listenable: studio,
@@ -273,7 +282,7 @@ class _TopBar extends StatelessWidget {
             ),
             const SizedBox(width: 8),
           ],
-          Tooltip(message: 'Save a copy (⌘S)', child: SkButton('', kind: SkButtonKind.ghost, icon: Icons.save_outlined, onPressed: onSave)),
+          Tooltip(message: 'Save a copy (${_key}S)', child: SkButton('', kind: SkButtonKind.ghost, icon: Icons.save_outlined, onPressed: onSave)),
           const SizedBox(width: 8),
           if (shared != null) ...[
             Tooltip(
@@ -338,8 +347,8 @@ class _Toolbar extends StatelessWidget {
           gap(),
           for (final t in StudioTool.values.where((t) => t.creates != null)) tool(t),
           gap(),
-          button(Icons.undo_rounded, 'Undo (⌘Z)', studio.canUndo ? studio.undo : null),
-          button(Icons.redo_rounded, 'Redo (⇧⌘Z)', studio.canRedo ? studio.redo : null),
+          button(Icons.undo_rounded, 'Undo (${_key}Z)', studio.canUndo ? studio.undo : null),
+          button(Icons.redo_rounded, 'Redo ($_shift${_key}Z)', studio.canRedo ? studio.redo : null),
           gap(),
           button(Icons.grid_4x4_rounded, 'Grid (G)', studio.toggleGrid, on: studio.showGrid),
           button(Icons.alt_route_rounded, 'Show what the player can reach (R)', studio.toggleReach, on: studio.showReach),

@@ -7,3 +7,6 @@ my-clone/
 
 # Studio projects saved by the server
 server/data/
+
+# Website deploy folder: the built site, the app downloads, the Vercel link (scripts/go-live.sh)
+.deploy/

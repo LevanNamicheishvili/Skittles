@@ -987,6 +987,96 @@ kbd {
   animation: msg-in 0.3s ease-out both;
 }
 
+/* Downloads */
+
+.downloads {
+  max-width: 1000px;
+  margin: 128px auto 0;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.downloads-lede {
+  max-width: 640px;
+  margin: 12px auto 32px;
+  color: var(--muted-foreground);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.downloads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  text-align: left;
+}
+
+.download-card {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--background);
+}
+
+.download-card h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.download-meta {
+  margin: 4px 0 16px;
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.download-card .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 6px;
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.download-card .button:hover {
+  opacity: 0.9;
+}
+
+.download-card .button.disabled {
+  background: var(--muted);
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+}
+
+.download-card ol {
+  margin: 18px 0 0;
+  padding-left: 18px;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.download-card li + li {
+  margin-top: 6px;
+}
+
+.download-card b {
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+.downloads-note {
+  margin: 20px auto 0;
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+
 /* Call to action and footer */
 
 .cta {
