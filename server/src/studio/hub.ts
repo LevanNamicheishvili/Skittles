@@ -13,7 +13,8 @@ import type { SceneAssistant } from "./sceneAgent.ts";
 type Ack = (response: unknown) => void;
 const noAck: Ack = () => {};
 
-export type ProjectSummary = { id: string; name: string; objects: number; members: number; online: number; version: number };
+/// people: the names of whoever is in the project now, so a second window can find its team and join it.
+export type ProjectSummary = { id: string; name: string; objects: number; members: number; online: number; people: string[]; version: number };
 
 export class StudioHub {
   readonly projects = new Map<string, StudioProject>();
@@ -49,15 +50,14 @@ export class StudioHub {
     return project;
   }
 
+  /// Every project, the ones with people in them first.
   list(): ProjectSummary[] {
-    return [...this.projects.values()].map((p) => ({
-      id: p.id,
-      name: p.scene.name,
-      objects: p.scene.objects.length,
-      members: p.members.size,
-      online: [...p.members.values()].filter((m) => m.online).length,
-      version: p.version,
-    }));
+    return [...this.projects.values()]
+      .map((p) => {
+        const here = [...p.members.values()].filter((m) => m.online);
+        return { id: p.id, name: p.scene.name, objects: p.scene.objects.length, members: p.members.size, online: here.length, people: here.map((m) => m.name), version: p.version };
+      })
+      .sort((a, b) => b.online - a.online);
   }
 
   // Saves a second after the last change, through a temporary file so a crash never leaves half a project.

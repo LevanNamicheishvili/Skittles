@@ -296,8 +296,8 @@ describe("the /studio namespace", () => {
     assert.equal((await said).text, "hello");
 
     assert.equal((await call<{ ok: boolean }>(a, "join", { project: "nope", name: "X" })).ok, false);
-    const list = (await (await fetch(`${server.url}/api/projects`)).json()) as { id: string; objects: number }[];
-    assert.deepEqual(list.map((p) => [p.id, p.objects]), [[created.project, 1]]);
+    const list = (await (await fetch(`${server.url}/api/projects`)).json()) as { id: string; objects: number; people: string[] }[];
+    assert.deepEqual(list.map((p) => [p.id, p.objects, p.people]), [[created.project, 1, ["Nino", "Giorgi"]]]);
     hub.flushAll();
     assert.deepEqual(readdirSync(dataDir), [`${created.project}.json`]);
     await server.close();

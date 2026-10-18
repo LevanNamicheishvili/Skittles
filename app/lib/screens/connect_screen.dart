@@ -2,11 +2,14 @@
 // the left (one lit, advancing on their own, click to pick), a live preview of the lit one on the right with a
 // progress bar, and the way in. Skittles for Mac is a 2D game studio: tools and AI, together. Always dark.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../game/model.dart';
 import '../game/solver.dart';
 import '../net/models.dart';
+import '../net/projects_api.dart';
 import '../net/room_client.dart';
 import '../ui/kit.dart';
 import '../ui/kit/live_sky.dart';
@@ -17,7 +20,20 @@ import '../ui/level_map.dart';
 typedef OpenStudio = Future<String?> Function({required String server, required String name, String? project});
 
 class ConnectScreen extends StatefulWidget {
-  const ConnectScreen({super.key, required this.client, this.server = 'http://localhost:3001', this.name = '', this.autoRole, this.onNewProject, this.onOpenProject, this.onJoinProject});
+  const ConnectScreen({
+    super.key,
+    required this.client,
+    this.server = 'http://localhost:3001',
+    this.name = '',
+    this.autoRole,
+    this.onNewProject,
+    this.onOpenProject,
+    this.onJoinProject,
+    this.findProjects = listOpenProjects,
+  });
+
+  /// The projects someone is in right now on a server, listed so a second window can join its team in one click.
+  final Future<List<OpenProject>> Function(String server) findProjects;
 
   final RoomClient client;
 
@@ -47,6 +63,10 @@ class _ConnectScreenState extends State<ConnectScreen> with SingleTickerProvider
   late final _server = TextEditingController(text: widget.server);
   late final _name = TextEditingController(text: widget.name);
   final _code = TextEditingController();
+
+  /// Projects with people in them on the server, refreshed every few seconds.
+  List<OpenProject> _here = const [];
+  Timer? _poll;
   Role? _joining;
 
   /// What is being opened ('new', 'open' or 'join'), and why it could not be.
@@ -68,6 +88,17 @@ class _ConnectScreenState extends State<ConnectScreen> with SingleTickerProvider
     super.initState();
     final role = widget.autoRole;
     if (role != null) WidgetsBinding.instance.addPostFrameCallback((_) => _join(role));
+    if (widget.onJoinProject != null) {
+      _findProjects();
+      _poll = Timer.periodic(const Duration(seconds: 3), (_) => _findProjects());
+    }
+  }
+
+  Future<void> _findProjects() async {
+    final found = await widget.findProjects(_server.text.trim());
+    if (!mounted) return;
+    final same = found.length == _here.length && [for (var i = 0; i < found.length; i++) found[i].id == _here[i].id && found[i].people.join() == _here[i].people.join()].every((x) => x);
+    if (!same) setState(() => _here = found);
   }
 
   @override
@@ -83,6 +114,7 @@ class _ConnectScreenState extends State<ConnectScreen> with SingleTickerProvider
 
   @override
   void dispose() {
+    _poll?.cancel();
     _progress.dispose();
     _server.dispose();
     _name.dispose();
@@ -95,9 +127,10 @@ class _ConnectScreenState extends State<ConnectScreen> with SingleTickerProvider
     if (!reducedMotion(context)) _progress.forward(from: 0);
   }
 
-  Future<void> _studio(String kind, OpenStudio? open) async {
+  /// [project]: a project picked from the list; otherwise the code typed or pasted (the whole invite works too).
+  Future<void> _studio(String kind, OpenStudio? open, {String? project}) async {
     final name = _name.text.trim();
-    final code = _code.text.trim();
+    final code = project ?? projectCode(_code.text);
     String? error;
     if (open == null) return;
     if (name.isEmpty) {
@@ -226,9 +259,15 @@ class _ConnectScreenState extends State<ConnectScreen> with SingleTickerProvider
                   const SizedBox(height: 16),
                   Text("JOIN YOUR TEAM'S PROJECT", style: context.mono(size: SkTokens.textCaption, color: c.mutedForeground, spacing: 0.66)),
                   const SizedBox(height: 8),
+                  // At most two, so the smallest window still shows the code field and the demo room below.
+                  for (final p in _here.take(2))
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: _OpenProjectRow(project: p, busy: _opening != null, onJoin: () => _studio('join', widget.onJoinProject, project: p.id)),
+                    ),
                   Row(
                     children: [
-                      Expanded(child: SkTextField(controller: _code, placeholder: 'Project code', height: 32, onSubmitted: (_) => _studio('join', widget.onJoinProject))),
+                      Expanded(child: SkTextField(controller: _code, placeholder: _here.isEmpty ? 'Project code from Invite' : 'Or paste a project code', height: 32, onSubmitted: (_) => _studio('join', widget.onJoinProject))),
                       const SizedBox(width: 8),
                       SkButton(_opening == 'join' ? 'Joining…' : 'Join', kind: SkButtonKind.secondary, onPressed: _opening == null ? () => _studio('join', widget.onJoinProject) : null),
                     ],
@@ -304,6 +343,43 @@ class _ConnectScreenState extends State<ConnectScreen> with SingleTickerProvider
           ),
         ),
       ],
+    );
+  }
+}
+
+/// A project someone is in right now: its name, who is there, and Join.
+class _OpenProjectRow extends StatelessWidget {
+  const _OpenProjectRow({required this.project, required this.busy, required this.onJoin});
+
+  final OpenProject project;
+  final bool busy;
+  final VoidCallback onJoin;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.sk;
+    final people = project.people.length <= 2 ? project.people.join(' and ') : '${project.people.take(2).join(', ')} and ${project.people.length - 2} more';
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 6, 6, 6),
+      decoration: BoxDecoration(color: c.muted, borderRadius: BorderRadius.circular(SkTokens.radiusControl), border: Border.all(color: c.border)),
+      child: Row(
+        children: [
+          LiveDot(color: c.positive),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text.rich(
+              TextSpan(children: [
+                TextSpan(text: project.name, style: context.sans(size: SkTokens.textSmall, weight: FontWeight.w600)),
+                TextSpan(text: '  ·  $people here now', style: context.sans(size: SkTokens.textSmall, color: c.mutedForeground)),
+              ]),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const SizedBox(width: 8),
+          SkButton('Join', height: 28, onPressed: busy ? null : onJoin),
+        ],
+      ),
     );
   }
 }

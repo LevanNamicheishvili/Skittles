@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:skittles/net/projects_api.dart';
 import 'package:skittles/studio/play.dart';
 import 'package:skittles/studio/scene.dart';
 import 'package:skittles/studio/starter.dart';
@@ -49,6 +50,18 @@ void main() {
 
   Future<StudioController> open(String name, {String? project, Scene? scene}) async =>
       StudioController.join(await SocketStudioLink.open(_server), server: _server, name: name, project: project, scene: scene);
+
+  test('a second window finds the project its teammate is in, and joins it', () async {
+    final nino = await open('Nino');
+    addTearDown(nino.dispose);
+    final listed = await listOpenProjects(_server.toString());
+    final mine = listed.where((p) => p.id == nino.shared!.id).single;
+    expect(mine.people, ['Nino']);
+    final giorgi = await open('Giorgi', project: mine.id);
+    addTearDown(giorgi.dispose);
+    await until(() => nino.shared!.people.length == 2);
+    expect((await listOpenProjects(_server.toString())).where((p) => p.id == mine.id).single.people, ['Nino', 'Giorgi']);
+  }, skip: !_haveNode);
 
   test('a new project starts empty, and a teammate joins it by its code', () async {
     final nino = await open('Nino');
