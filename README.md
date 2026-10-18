@@ -6,6 +6,33 @@ Built for **Hacktoberfest Georgia 2026, Track 02: Multiplayer agentic experience
 
 > **ქართულად.** ორი ავტორი, თითო თავისი აგენტით, ერთ ცოცხალ თამაშს ცვლის, სანამ მესამე თამაშობს. ოთახი ყველა ცვლილებას სოლვერით ამოწმებს. თუ ორი სწორი ცვლილება ერთად თამაშს ტეხს, მედიატორი შემოწმებულ გამოსავლებს სთავაზობს, მეორე ავტორის აგენტი კომპრომისზე ვაჭრობს, გადაწყვეტილებას კი ადამიანები იღებენ. კვლევა და დასაბუთება: [docs/research.ka.md](docs/research.ka.md). სამუშაო გეგმა, დემოს სცენარი და შემდეგი ნაბიჯები: [docs/skittles-plan.md](docs/skittles-plan.md).
 
+## Try it
+
+| | |
+| --- | --- |
+| **Website** | https://skittles-gamma.vercel.app |
+| **Download the studio** | [macOS](https://skittles-gamma.vercel.app/download/Skittles-mac.dmg) (12 or newer, Apple silicon and Intel) · Windows 10/11 from the [download section](https://skittles-gamma.vercel.app/#download) |
+| **Demo video** | *coming soon* |
+| **Docs** | https://skittles-gamma.vercel.app/docs (English and Georgian) |
+
+The app is not signed by Apple or Microsoft yet: on the first open, macOS needs **System Settings → Privacy & Security → Open Anyway**, and Windows SmartScreen needs **More info → Run anyway**.
+
+## The studio (Mac and Windows app)
+
+Build a 2D platformer together, each person with their own agent, and test it with the AI.
+
+- **Describe it or draw it.** A new project starts empty: describe the game to your agent, or place players, platforms, coins, enemies and the finish with the tools. Both make the same checked changes ([spec/scene.md](spec/scene.md)).
+- **Your agent, the team's chat.** Talk to your agent in *My agent*; talk to everyone in *Team*. `@Giorgi's agent …` in the team chat gives a teammate's agent a request: it acts at once, Giorgi sees it in his thread, and anyone can undo it. Every agent knows the team chat and what the others changed.
+- **Never unwinnable.** Every edit re-checks that the finish can be reached with the player's real jump. An agent change that would break it is retried once, then held for a human: Apply anyway or Discard.
+- **Press Play.** Exact physics in steps of 1/120 s ([spec/scene-play.md](spec/scene-play.md)), the same in the app (Dart), on the server (TypeScript) and in a Python reference; all three agree on the shared cases.
+- **AI playtest.** An AI player plays the level for real (a search over inputs with the same physics), then an AI review names the objects behind each problem and sends it to whoever made them, with a button to ask their agent for a fix.
+- **People's playtests.** Share a run with the team; the server replays it on the version it was played on, so the result shown is the real one. Anyone can watch any run.
+- **Live together.** One server writes every change, with versions and per-person undo. Teammates' cursors and selections show in their colours.
+
+Code: `app/lib/studio/` (Flutter), `server/src/studio/` (Node). Tests: 156 in the app, 170 on the server. The plan and what each step added: [docs/flutter-plan.md](docs/flutter-plan.md).
+
+The original track demo, the live grid room in the browser, is described below.
+
 ## Documentation
 
 The user guide and reference, in English and Georgian, are at `/docs` on a running server (for example `http://localhost:3001/docs`), and on GitHub: [docs/guide/en.md](docs/guide/en.md) · [docs/guide/ka.md](docs/guide/ka.md) (ქართულად).
